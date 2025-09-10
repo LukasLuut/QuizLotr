@@ -1,0 +1,81 @@
+*{
+   box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+    
+}
+
+.bg{
+    background-image: url(../assets/images/marble.jpg);
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    
+
+}
+
+.loader__container{
+    width: 25%;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.loader__inscription:hover{
+    transform: scale(1.1);
+}
+.loader__inscription {
+  width: 60%;  
+  animation: ring 60s linear infinite;
+  cursor: pointer;
+  
+}
+
+.loader__inscription2{
+    position:absolute;
+    z-index: 1;
+    bottom: 0px;
+    animation:ring 60s linear infinite,  opacity 1.5s linear infinite alternate;
+    
+}
+
+.loader__inscription2:hover{
+    transform: scale(1.1);
+}
+
+
+.btn-start{
+    display: flex;
+    position: absolute;
+    bottom: 130px;
+    font-family: 'Uncial Antiqua', cursive;
+  cursor: pointer;
+}
+
+
+
+@keyframes ring {
+  from {
+    transform: rotateZ(0deg);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+@keyframes opacity {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.2;
+  }
+}
+

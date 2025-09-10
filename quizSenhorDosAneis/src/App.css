@@ -1,0 +1,25 @@
+.text {
+  position: relative;
+  display: inline-block;
+}
+
+.text span {
+  position: absolute;
+  
+  top: 0;
+  left: 0;
+  transition: opacity 0.4s ease;
+  
+}
+
+.text .alt {
+  opacity: 0;
+}
+
+.text:hover .alt {
+  opacity: 1;
+}
+
+.text:hover .main {
+  opacity: 0;
+}

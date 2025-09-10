@@ -1,14 +1,17 @@
 import "./Login.css";
 import bgVideo from "../assets/videos/The-Argonath-Animated-Wallpaper.mp4.mp4";
+import Button from "../components/Button";
+import { useState } from "react";
 
 function Login() {
+  const [mostrarEmail, setMostrarEmail] = useState(false);
   return (
     <div className="login-page">
       
       {/* Aqui o Formulário */}
       <div className="form-container ">
         <div className="title-container ">
-           <h2>Quiz da Terra-média</h2>
+           <h2 className="title-login">Quiz da Terra-médiA</h2>
         </div>
        
         <form>
@@ -19,11 +22,13 @@ function Login() {
             <input type="text" id="username" placeholder="Ex: Frodo"/>
           </div>
 
-          {/* Input de Email*/}
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input type="email" id="email" placeholder="Ex: frodo@shire.me"/>
-          </div>
+          {/* Input de Email*/}          
+            {mostrarEmail && (
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input type="email" id="email" placeholder="Ex: frodo@shire.me"/>
+              </div>
+            )}
 
           {/* Input de senha*/}
           <div className="form-group">
@@ -31,12 +36,10 @@ function Login() {
             <input type="password" id="password" placeholder="••••••••" />
           </div>
 
-          <button type="submit" className="btn">
-            Entrar
-          </button>
+          <Button texto="Entrar"/>
         </form>
 
-        <a href="#" className="link">Criar nova conta</a>
+        <a href="#" className="link" onClick={() => setMostrarEmail(true)}>Criar nova conta</a>
       </div>
 
       {/* vídeo de plano de fundo */}
