@@ -42,7 +42,7 @@ body {
 }
 
 /* Fonte do título*/
-h2 {
+.title-login {
   font-family: 'Ringbearer', serif;
   font-size: 100px;
   color: var(--color-text-heading);
@@ -56,7 +56,7 @@ h2 {
 
 .title-container{
     
-    width: 60%;
+    width: 70%;
 }
 
 .form-group {
@@ -95,26 +95,7 @@ input::placeholder{
     color: var(--color-text-placeholder);
 }
 
-.btn {
-  width: 200px;
-  padding: 12px;
-  font-family: 'Ringbearer', serif;
-  font-weight: 700;
-  background: linear-gradient(180deg, var(--color-bg-button-top), var(--color-bg-button-bottom));
-  color: var(--color-text-main);
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 16px;
-  text-shadow: 0 1px 1px var(--shadow-soft);
-  transition: transform 0.2s, box-shadow 0.3s;
-}
 
-.btn:hover {
-    
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 15px var(--shadow-hover);
-}
 
 .link {
   display: block;
