@@ -29,10 +29,9 @@
   --shadow-glow: rgba(201,162,39,0.4);
 }
 
-body {
+.login-body {
   font-family: 'Inter', sans-serif;
-  background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEssHQq_1XQUVpBJXxSqrXWglMI0NihrbqYOhGPu1j9HTZssMgYIbGWzvJO4e5jUh1-ZM&usqp=CAU');
-  background-repeat: repeat;
+
   display: flex;
   justify-content: center;
   align-items: center;

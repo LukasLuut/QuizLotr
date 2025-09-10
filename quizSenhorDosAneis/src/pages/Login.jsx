@@ -5,7 +5,9 @@ import { useState } from "react";
 
 function Login() {
   const [mostrarEmail, setMostrarEmail] = useState(false);
+  
   return (
+  <div className="login-body">
     <div className="login-page">
       
       {/* Aqui o Formulário */}
@@ -47,6 +49,7 @@ function Login() {
         <source src={bgVideo} type="video/mp4" />
       </video>
     </div>
+  </div>
   )
 }
 
