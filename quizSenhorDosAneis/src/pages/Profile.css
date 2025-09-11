@@ -6,6 +6,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    display: flex;
 }
 
 .profile-container{
@@ -37,6 +38,12 @@
 
 .portrait-container{
     background-image:url(../assets/images/Gandalf.jpg) ;
-    background-size: cover;
-    height: 50%;
+    background-size: cover;    
+}
+
+.map-container{
+    width: 50vw;
+    height: 50vh;
+    border: solid red 2px;
+    overflow: hidden;
 }
