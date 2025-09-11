@@ -29,6 +29,15 @@
     justify-content: center;
     position: relative;
 }
+
+.loader__ring{
+  transition: all 0.3s ease;
+}
+
+.loader__ring:hover{
+    transform: scale(1.1);
+}
+
 .loader__inscription:hover{
     transform: scale(1.1);
 }

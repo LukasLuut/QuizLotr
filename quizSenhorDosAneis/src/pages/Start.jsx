@@ -8,16 +8,19 @@ import lordOfTheRings from '../assets/images/lordOfTheRings.png'
 function Start() {
   return (
     <div className='bg'>
-        <div class="loader__container">
-            <img src={lordOfTheRings} alt=" title: Lord of the Rings" />
-            <img class="loader__inscription" src={circleOneRing} alt="The One Ring Inscription" />
-            <img class="loader__inscription loader__inscription2" src={circleOneRing2} alt="The One Ring Inscription" />
-            <h2 className='btn-start'>INICIAR</h2>
-            
+      <div class="loader__container">
+        <img src={lordOfTheRings} alt=" title: Lord of the Rings" />
+        <div class="loader__ring">
+          <img class="loader__inscription" src={circleOneRing} alt="The One Ring Inscription" />
+          <img class="loader__inscription loader__inscription2" src={circleOneRing2} alt="The One Ring Inscription" />
         </div>
 
-            
-        
+        <h2 className='btn-start'>INICIAR</h2>
+
+      </div>
+
+
+
     </div>
   )
 }
