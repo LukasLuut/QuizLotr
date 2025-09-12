@@ -1,8 +1,7 @@
 import React from 'react'
 import './Profile.css'
-import windowPerfil from '../assets/images/window.png'
 import Map from '../components/Map'
-import bgVideo2 from "../assets/videos/the-shire.mp4";
+import bgVideo2 from "../assets/videos/Hobbington.mp4";
 import flag from "../assets/images/scroll.png"
 
 
