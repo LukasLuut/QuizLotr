@@ -1,8 +1,13 @@
+@font-face {
+  font-family: 'Hobbington';
+  src: url('../assets/fonts/Hobbington.ttf') format('truetype');
+}
+
 *{
    box-sizing: border-box;
    margin: 0;
    padding: 0;
-    
+   
 }
 
 .bg{
@@ -15,76 +20,121 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
-    
-
 }
 
 .loader__container{
-    width: 25%;
-    
+    width: 40%;    
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: relative;
+    position: absolute;
+    top: 10px;    
+}
+
+svg{
+  width:500px;
+  height:450px;
 }
 
 .loader__ring{
-  transition: all 0.3s ease;
+  width: 300px;
+  height: 300px;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;  
+  position: absolute;
+  
+  
 }
 
+/* Hover do anel inteiro */
 .loader__ring:hover{
     transform: scale(1.1);
 }
 
-.loader__inscription:hover{
-    transform: scale(1.1);
+/* Hover da inscrição secundária */
+.rings:hover .loader__inscription2{
+    transform: scale(1.1); 
+    animation: ring 60s linear infinite, fadeOpacity 1.5s linear infinite alternate;   
 }
-.loader__inscription {
-  width: 60%;  
-  animation: ring 60s linear infinite;
-  cursor: pointer;
+
+.rings{
+  width: 450px;
+  height: 350px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding-top: -10px;
+  position: absolute;
+  bottom: -350px;
   
 }
 
+/* Hover do texto circular */
+.rings:hover .circle-text{
+  animation: grow 1s ease forwards, fadeOpacity 1.5s linear forwards, glow 1.5s linear infinite alternate ;
+ 
+  
+}
+
+.circle-text {
+  font-size: 20px;               
+  fill: rgb(0, 0, 0);                     
+  font-family: 'Hobbington';
+  letter-spacing: 1px;            
+  position: absolute;
+  transform-origin: center;
+  transition: all 0.3s ease;
+  opacity: 0;
+  bottom: 20px;
+  
+}
+
+.loader__inscription {
+  width: 100%;  
+  animation: ring 60s linear infinite;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0px;
+  transition: transform 0.3s ease;
+}
+
 .loader__inscription2{
-    position:absolute;
+    position: absolute;
     z-index: 1;
     bottom: 0px;
-    animation:ring 60s linear infinite,  opacity 1.5s linear infinite alternate;
-    
+    opacity: 0;
+    transition: all 0.3s ease;
 }
-
-.loader__inscription2:hover{
-    transform: scale(1.1);
-}
-
 
 .btn-start{
     display: flex;
     position: absolute;
-    bottom: 130px;
+    bottom: 165px;
     font-family: 'Uncial Antiqua', cursive;
-  cursor: pointer;
+    cursor: pointer;
+    z-index: 1;
 }
 
+.btn-start:hover{
+  animation:  1.5s linear infinite alternate
+}
 
-
+/* Keyframes */
 @keyframes ring {
-  from {
-    transform: rotateZ(0deg);
-  }
-  to {
-    transform: rotateZ(360deg);
-  }
-}
-@keyframes opacity {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0.2;
-  }
+  from { transform: rotateZ(0deg); }
+  to   { transform: rotateZ(360deg); }
 }
 
+@keyframes fadeOpacity {
+  0%   { opacity: 0; }
+  50%  { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+@keyframes grow {
+  from { transform: scale(0.8); }
+  to   { transform: scale(1.1); }
+}
