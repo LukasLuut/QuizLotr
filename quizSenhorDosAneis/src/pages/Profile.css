@@ -1,67 +1,80 @@
-.body-container-profile{
-    background-image: url(../assets/videos/the-shire.mp4);
+.body-container-profile {
     width: 100vw;
     height: 100vh;
-    background-size: cover;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     display: flex;
+    overflow: hidden; /* evita barra de rolagem */
 }
 
-.profile-container{
+.profile-container {
     height: 100vh;
     width: 30vw;
     margin: 0;
     padding: 0;
     position: relative;
-    position: relative;
-    margin: 0;
-    padding: 0;
     border-radius: 1px;
     box-shadow: 10px 10px 10px black;
     display: flex;
     flex-direction: column;
     background-color: rgba(0, 0, 0, 0.856);
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
-.flag-profile{
-    
+.flag-profile {
     height: 99.6%;
     padding-top: 4%;
-    
-    
-
+    position: relative;   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;   
 }
-.flagg{
+
+.flagg {
     width: 100%;
-    height: 100%;
+    height: 98%;
+    position: absolute;
 }
 
-.stone-container{
-    position: absolute;    
-    bottom: 0px;
-    width: 100%;
-    height: 50%;
-    background-image:url(../assets/images/stone.png) ;
-    background-size: cover;
-    background-repeat: no-repeat;    
+.btn-box {
+    position: absolute;
+    left: 15%;
+    top: 43%;
+    display: flex;
+    flex-direction: column;
 }
 
-.window-perfil{
-    width: 22vw;
+.border-profile {
+    position: absolute;
+    width: 60%;
+    left: 20%;
+    top: 12%;
+    z-index: 1;
 }
 
-.portrait-container{
-    background-image:url(../assets/images/Gandalf.jpg) ;
-    background-size: cover;    
+.img-profile {
+    position: absolute;
+    border-radius: 100%;
+    width: 30%;
+    left: 35%;
+    top: 17%;
+    z-index: 0;
 }
 
-.map-container{
-    width: 50vw;
-    height: 50vh;
-    border: solid red 2px;
-    overflow: hidden;
+/* vídeos de fundo */
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;   
+  height: 100vh;  
+  object-fit: cover;
+  transform: scaleX(-1);
+  transition: opacity 1s ease;
+  z-index: -1; /* sempre no fundo */
 }
+
+
+
+

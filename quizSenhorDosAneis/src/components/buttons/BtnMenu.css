@@ -1,0 +1,24 @@
+.btn-menu{
+    width: 400px;
+    height: 105px;
+    background-image: url(../../assets/images/button/btn-marrom.png);
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0);
+    background-size: contain;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    scale: 0.82;
+    font-family: 'Ringbearer', serif;
+    font-size: 30px;
+    filter: drop-shadow(10px 15px 21px rgba(0,0,0,1));
+    color: rgb(184, 184, 184)
+}
+.btn-menu:hover{
+     background-image: url(../../assets/images/button/btn-dourado.png);
+     transform: translateY(-2px) scale(1.02);
+     color: rgb(187, 139, 17);
+     filter: drop-shadow(4px 20px 15px rgba(0,0,0,2));
+  
+}
+

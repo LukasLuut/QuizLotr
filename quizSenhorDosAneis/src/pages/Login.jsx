@@ -1,6 +1,6 @@
 import "./Login.css";
 import bgVideo from "../assets/videos/The-Argonath-Animated-Wallpaper.mp4.mp4";
-import Button from "../components/Button";
+import Button from "../components/buttons/Button";
 import { useState } from "react";
 
 function Login() {
