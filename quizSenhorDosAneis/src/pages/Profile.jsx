@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import React from 'react'
 import './Profile.css'
 import Map from '../components/Map'
@@ -7,7 +6,7 @@ import flag from "../assets/images/scroll.png"
 import BtnMenu from '../components/buttons/BtnMenu';
 import borderProfile from '../assets/images/perfil-border.png'
 import gandalf from '../assets/images/Gandalf.jpg'
-import bgVideo3 from "../assets/videos/Prologue.mp4";
+import bgVideo3 from "../assets/videos/EyeOfSauron.mp4";
 
 function Profile() {
   
@@ -20,6 +19,9 @@ function Profile() {
           <img className='flagg' src={flag} alt=""/>
           <img className='border-profile' src={borderProfile} alt="" />
           <img className='img-profile' src={gandalf} alt="" />
+          {/* <video  className="img-profile" autoPlay muted loop playsInline>
+            <source src={bgVideo3} type="video/mp4" />
+          </video> */}
           <div className='btn-box'> 
             <BtnMenu texto='New Game'></BtnMenu>            
             <BtnMenu texto='Continue'></BtnMenu>
@@ -32,9 +34,7 @@ function Profile() {
         <source src={bgVideo2} type="video/mp4" />
       </video>
 
-      {/* <video  className="bg-video bg-video-second" >
-        <source src={bgVideo3} type="video/mp4" />
-      </video> */}
+      
     </div>
   )
 }
