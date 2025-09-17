@@ -11,7 +11,8 @@ function Quiz() {
 
   const [questions, setQuestions] = useState([]);
 
-  let questionNumber = 3;
+  let questionNumber = 1;
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,35 +26,34 @@ function Quiz() {
     fetchData()
   }, []);
 
-  // Verifique se 'questions' tem dados antes de tentar acessar a resposta
-  let pergunta = questions.question;
-  let opcao1, opcao2, opcao3, opcao4;
+  let pergunta = questions.question
+  console.log(questions.answers[0].answer)
 
-
-  if (questions.answers && questions.answers.length > 0) {
-    opcao1 = questions.answers[0].answer;
-    opcao2 = questions.answers[1]?.answer; // Usando o optional chaining (?.) para evitar erro se answers[1] não existir
-    opcao3 = questions.answers[2]?.answer;
-    opcao4 = questions.answers[3]?.answer;
-  }
-  
+  //let opcao1 = questions.answers[0].answer
+  // let opcao2 = questions.answers[1].answer
+  // let opcao3 = questions.answers[2].answer
+  // let opcao4 = questions.answers[3].answer
+  //console.log(questions)
+  //console.log(questions.answers[0])
 
   return (
+
     <div className="quiz-page">
-      <QuizContainer
-        pergunta={pergunta}
-        opcao1={opcao1}  // Corrigindo a forma de passar as props, sem as aspas
-        opcao2={opcao2}
-        opcao3={opcao3}
-        opcao4={opcao4}
+      <QuizContainer pergunta={pergunta}
+        opcao1='{opcao1}'
+        opcao2='{opcao2}'
+        opcao3='{opcao3}'
+        opcao4='{opcao4}'
       ></QuizContainer>
 
       {/* <MapBox ></MapBox> */}
+
 
       <video className="bg-video2" autoPlay muted loop playsInline>
         <source src={bgShire} type="video/mp4" />
       </video>
     </div>
+
   );
 }
 
