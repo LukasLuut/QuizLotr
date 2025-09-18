@@ -7,9 +7,17 @@ import bgShire from "../assets/videos/Hobbington.mp4";
 import QuizContainer from "../components/layout/QuizContainer";
 import React, { useEffect, useState } from "react";
 import MovingCharacter from '../components/Map'
+import Sidebar from '../components/layout/Sidebar'
+import BoxWoodenR from '../assets/images/box/box-aviso-gg.png'
 
 
 function Quiz() {
+   
+    /*Essas variáveis servem para o quadro lateral Sidebar*/
+  const [playerName] = useState("Leandra");
+  const [score, setScore] = useState(0);
+  const [current, setCurrent] = useState(1);
+  const total = 10;
 
  
 
@@ -44,23 +52,37 @@ function Quiz() {
   
   // let teste = paths.bri
 
-  //const [caminho, setCaminho] = React.useEffect("bri");
+  const [caminho, setCaminho] = React.useState("bri");
 
 
-  // useEffect(() => {
-  //     if(1 > 0) setCaminho("moria")
-  // }, []);
+  useEffect(() => {
+      if(1 > 0) setCaminho("rivendel")
+  }, []);
 
   return (
     <div className="quiz-page">
+      <div className='box-lateral'>
+         {/* Quadro lateral */}
+      <Sidebar
+        playerName={playerName}
+        score={score}
+        current={current}
+        total={total}
+      />
+      </div>
       <QuizContainer
-        path='bri'
+        path={caminho}
         pergunta='{pergunta}'
         opcao1='{opcao1}  '
         opcao2='{opcao2}'
         opcao3='{opcao3}'
         opcao4='{opcao4}'
       ></QuizContainer>
+
+      <div className='box-lateral-r '>
+       <img className='box-lateral-img ' src={BoxWoodenR} alt="" />
+      </div>
+      
 
       <video className="bg-video2" autoPlay muted loop playsInline>
         <source src={bgShire} type="video/mp4" />

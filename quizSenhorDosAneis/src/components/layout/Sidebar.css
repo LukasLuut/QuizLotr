@@ -1,0 +1,17 @@
+.sidebar{
+    
+    background-image:url('../../assets/images/box/box-lateral.png') ;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    height: 73vh;
+    margin-top: 30%;
+    color: aliceblue;
+    
+
+}
+
+.player-info2{
+    width: 100%;
+    height: 200px;
+}
