@@ -8,6 +8,7 @@ import Map from '../Map'
 
 
 
+
 function QuizContainer(props) {
   const w = '400px';
   const h = '90px';
@@ -24,9 +25,9 @@ function QuizContainer(props) {
       <div className="quiz-container">
         <h1 className='title-responda'>RespondA</h1>
         <img className='box-question' src={boxQuestion} alt="" />
-        {/* Imagem ilustrativa */}
+        {/* Imagem do mapa */}
         <div className="quiz-image">
-          <Map />
+          <Map path={props.path} />
         </div>
 
         {/* Pergunta */}
