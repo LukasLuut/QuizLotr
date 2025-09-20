@@ -39,9 +39,9 @@ function Start() {
                 </textPath>
               </text>
             </svg>
-            <h2 className='btn-start'>INICIAR</h2>
+            <h2 className='btn-start'>START</h2>
         </div>
-      </div>
+      </div>      
     </div>
   )
 }

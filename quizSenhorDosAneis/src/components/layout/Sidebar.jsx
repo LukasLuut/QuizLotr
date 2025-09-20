@@ -1,7 +1,10 @@
 // Sidebar.jsx
 import React from "react";
 import './Sidebar.css'
-import imgBox1 from '../../assets/images/box/box-aviso.png' 
+import imgBox1 from '../../assets/images/box/box-aviso.png'
+import borderProfile from '../../assets/images/perfil-border.webp'
+import Cronometro from "./Cronometro";
+
 
 export default function Sidebar({ playerName, score, current, total }) {
   return (
@@ -11,9 +14,12 @@ export default function Sidebar({ playerName, score, current, total }) {
       {/* Nome do jogador */}
       <div className="player-info">
         <img className="player-info2" src={imgBox1}alt="" />
-        <h2>{playerName}</h2>
+        <img className="border-profile-side" src={borderProfile} alt="" />
+        <h2 className="player-name">{playerName}<br/>
+          <span className="span-title">Rainha dos 7 mares</span>
+        </h2>
       </div>
-
+        
       {/* Pontuação */}
       <div className="score">
         <p>Pontuação: {score}</p>
@@ -36,7 +42,7 @@ export default function Sidebar({ playerName, score, current, total }) {
       <div className="message">
         <p>Você está mandando bem!</p>
       </div>
-      
+      <Cronometro></Cronometro>
     </aside>
   );
 }

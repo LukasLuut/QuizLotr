@@ -1,7 +1,7 @@
 import React from 'react'
 import './Profile.css'
 import Map from '../components/Map'
-import bgVideo2 from "../assets/videos/Boromir.mp4";
+// import bgVideo2 from "../assets/videos/Boromir.mp4";
 import flag from "../assets/images/scroll.png"
 import BtnMenu from '../components/buttons/BtnMenu';
 import borderProfile from '../assets/images/perfil-border.png'
@@ -30,9 +30,9 @@ function Profile() {
         </div>
       </div>
 
-      <video  className="bg-video" autoPlay muted loop playsInline>
+      {/* <video  className="bg-video" autoPlay muted loop playsInline>
         <source src={bgVideo2} type="video/mp4" />
-      </video>
+      </video> */}
 
       
     </div>

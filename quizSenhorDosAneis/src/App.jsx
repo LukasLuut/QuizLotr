@@ -10,6 +10,7 @@ import Profile from './pages/Profile'
 import Map from './components/Map'
 import BtnQuestion from './components/buttons/btnQuestion'
 import MapBox from './components/MapBox'
+import QuizContainer from './components/layout/QuizContainer'
 
 
 function App() {

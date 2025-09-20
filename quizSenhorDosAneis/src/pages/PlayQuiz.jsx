@@ -1,5 +1,4 @@
 import "./PlayQuiz.css";
-import exampleImg from "../assets/images/rivendell.webp";
 import Map from '../components/Map'
 import BoxMap from '../assets/images/map-box.png'
 import MapBox from "../components/MapBox";
@@ -52,11 +51,11 @@ function Quiz() {
   
   // let teste = paths.bri
 
-  const [caminho, setCaminho] = React.useState("bri");
+  const [caminho, setCaminho] = React.useState("mordor");
 
 
   useEffect(() => {
-      if(1 > 0) setCaminho("rivendel")
+      if(1 > 0) setCaminho("bri")
   }, []);
 
   return (
@@ -81,6 +80,16 @@ function Quiz() {
 
       <div className='box-lateral-r '>
        <img className='box-lateral-img ' src={BoxWoodenR} alt="" />
+        
+        <div className="box-leaderboard">
+          <h1>Hall dos heroiS</h1>
+          <div className="leaderboard">
+            <h1>Nome:</h1>
+            <h1>Pontuação:</h1>
+            {/*Aqui deve ir a implementação do Ranking*/}
+          </div>
+         
+        </div>
       </div>
       
 
