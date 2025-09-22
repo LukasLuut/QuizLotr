@@ -1,0 +1,48 @@
+
+.archivement-box{
+    height: 500px;
+    width: 350px;
+    position:relative;
+}
+
+.archivement-box img{
+    height: 100%;
+    width: 100%;
+}
+.archivement-box h1{
+    position: absolute;
+    top: 9%;
+    left: 28%;
+    font-family: 'Ringbearer';
+    font-weight: 100;
+    font-size: 30px;
+    color: rgb(187, 139, 17);
+    filter: drop-shadow(4px 2px 5px rgba(0,0,0,1));
+}
+
+.archivement-box h2{
+    text-align: center;
+    position: absolute;
+    top: 25%;
+    left: 15%;
+    font-family: 'Uncial Antiqua';
+    font-weight: 100;
+    font-size: 22.5px;
+    color: rgb(187, 139, 17);
+    filter: drop-shadow(4px 2px 5px rgba(0,0,0,1));
+}
+
+.archivement-box span{
+    position: absolute;
+    font-family: 'Ringbearer';
+    text-align: center;
+    position: absolute;
+    top: 45%;
+    left: 13%;
+    padding-right: 19%;
+    font-weight: 100;
+    font-size: 45px;
+    text-wrap: wrap;
+    color: rgb(187, 139, 17);
+    filter: drop-shadow(4px 2px 5px rgba(0,0,0,1));
+}

@@ -1,16 +1,21 @@
 .btn {
   width: 200px;
+  height: 72px;
   padding: 12px;
   font-family: 'Ringbearer', serif;
   font-weight: 500;
-  background: linear-gradient(180deg, var(--color-bg-button-top), var(--color-bg-button-bottom));
+  background-image: url('../../assets/images/button/btn-marrom-dourado.png');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
   color: var(--color-text-main);
   border: none;
-  border-radius: 12px;
+  border-radius: 5px;
   cursor: pointer;
   font-size: 20px;
   text-shadow: 0 1px 1px var(--shadow-soft);
   transition: transform 0.2s, box-shadow 0.3s;
+  transition: all 0.3s ease;
   
 }
 
@@ -18,4 +23,5 @@
     
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 6px 15px var(--shadow-hover);
+  background-image: url('../../assets/images/button/btn-dourado-2.png');
 }

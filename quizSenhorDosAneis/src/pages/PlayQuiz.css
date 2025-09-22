@@ -8,6 +8,8 @@
   justify-content: center;
   align-items: center;
   padding: 40px;
+  opacity: 0;
+  transition: opacity 2s ease;
    
 }
 
@@ -84,4 +86,17 @@ filter: drop-shadow(0px 7px 5px rgb(28, 19, 0));
   
 
   
+}
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 2s ease;
+}
+
+.bg-black-quiz{
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    z-index: -2;
+    position: fixed;
 }

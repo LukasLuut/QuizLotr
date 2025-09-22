@@ -10,16 +10,14 @@ import Sidebar from '../components/layout/Sidebar'
 import BoxWoodenR from '../assets/images/box/box-aviso-gg.png'
 
 
-function Quiz() {
-   
+
+function Quiz({ setMusicaAtual }) {
+  const [fadeIn, setFadeIn] = useState(false); // para o efeito de fadeIN quando a página abre
     /*Essas variáveis servem para o quadro lateral Sidebar*/
   const [playerName] = useState("Leandra");
   const [score, setScore] = useState(0);
   const [current, setCurrent] = useState(1);
   const total = 10;
-
- 
-
   const [questions, setQuestions] = useState([]);
 
   let questionNumber = 3;
@@ -53,49 +51,60 @@ function Quiz() {
 
   const [caminho, setCaminho] = React.useState("mordor");
 
-
+ 
   useEffect(() => {
       if(1 > 0) setCaminho("bri")
   }, []);
 
-  return (
-    <div className="quiz-page">
-      <div className='box-lateral'>
-         {/* Quadro lateral */}
-      <Sidebar
-        playerName={playerName}
-        score={score}
-        current={current}
-        total={total}
-      />
-      </div>
-      <QuizContainer
-        path={caminho}
-        pergunta='{pergunta}'
-        opcao1='{opcao1}  '
-        opcao2='{opcao2}'
-        opcao3='{opcao3}'
-        opcao4='{opcao4}'
-      ></QuizContainer>
 
-      <div className='box-lateral-r '>
-       <img className='box-lateral-img ' src={BoxWoodenR} alt="" />
+  useEffect(() => {
+        setFadeIn(true); // ativa fade in ao entrar
         
-        <div className="box-leaderboard">
-          <h1>Hall dos heroiS</h1>
-          <div className="leaderboard">
-            <h1>Nome:</h1>
-            <h1>Pontuação:</h1>
-            {/*Aqui deve ir a implementação do Ranking*/}
-          </div>
-         
-        </div>
-      </div>
-      
+      }, []);
 
-      <video className="bg-video2" autoPlay muted loop playsInline>
-        <source src={bgShire} type="video/mp4" />
-      </video>
+ 
+
+  return (
+    <div className='bg-black-quiz'>
+      <div className={`quiz-page ${fadeIn ? 'fade-in' : ''} `}>
+        <div className='box-lateral'>
+          {/* Quadro lateral */}
+        <Sidebar
+          playerName={playerName}
+          score={score}
+          current={current}
+          total={total}
+        />
+        </div>
+        <QuizContainer
+          path={caminho}
+          pergunta='{pergunta}'
+          opcao1='{opcao1}  '
+          opcao2='{opcao2}'
+          opcao3='{opcao3}'
+          opcao4='{opcao4}'
+        ></QuizContainer>
+
+        <div className='box-lateral-r '>
+        <img className='box-lateral-img ' src={BoxWoodenR} alt="" />
+          
+          <div className="box-leaderboard">
+            <h1>Hall dos heroiS</h1>
+            <div className="leaderboard">
+              <h1>Nome:</h1>
+              <h1>Pontuação:</h1>
+              {/*Aqui deve ir a implementação do Ranking*/}
+              
+            </div>
+          
+          </div>
+        </div>
+        
+
+        <video className="bg-video2" autoPlay muted loop playsInline>
+          <source src={bgShire} type="video/mp4" />
+        </video>
+      </div>
     </div>
   );
 }
