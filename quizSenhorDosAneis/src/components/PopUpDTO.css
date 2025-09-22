@@ -1,0 +1,44 @@
+.pop-up-dto{
+    width: 400px;
+    height: 110px;
+    position: relative;    
+    
+}
+
+.pop-up-dto img{
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(4px 15px 15px rgba(0,0,0,2));
+}
+
+.box-txt-DTO{
+    position: absolute;
+    top: 15%;
+    left: 29%;
+    font-family: Ringbearer;
+}
+
+.box-txt-DTO h2{
+    color:rgb(255, 247, 240);
+    font-size: 16px;
+    position: fixed;
+    left: 40px;
+    text-wrap: wrap;
+    width: 17%;
+    filter: drop-shadow(1px 1px 2px rgba(0,0,0,2));
+    text-align: center;
+    font-weight: 100;
+    text-justify: center;
+
+}
+
+.box-txt-DTO h1{
+    font-size: 25px;
+    text-align: center;
+    position: relative;
+    left: 30%;
+    color: goldenrod;
+    font-weight: 100;
+    filter: drop-shadow(4px 1px 3px rgba(0,0,0,2));
+    
+}

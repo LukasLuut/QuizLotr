@@ -4,6 +4,7 @@ import mapImage from "../assets/images/map.webp";
 import L from "leaflet";
 import { useEffect } from "react";
 
+
 // 🔹 Importe o plugin MovingMarker manualmente
 import "../public/plugins/leaflet-moving-maker/MovingMarker"; // coloque o arquivo MovingMarker.js em public/plugins/
 
@@ -28,7 +29,7 @@ export default function MapaTerraMedia(props) {
   // Coordenadas do caminho do bonequinho (pixels na imagem)
  const paths = {
   bri: [
-    [3183, 1484],
+    [3185, 1485],
     [3133, 1497],
     [3110, 1544],
     [3126, 1614],
@@ -143,15 +144,15 @@ export default function MapaTerraMedia(props) {
       style={{ height: "100%", width: "100%" }}
       minZoom={-2.5}
       center={[3185, 1595]}
-      zoom={0.2}
+      zoom={0}
       zoomControl={false}
       attributionControl={false}
     >
       <ImageOverlay url={mapImage} bounds={bounds} zIndex={1} />
 
-     
+      <IntroZoom></IntroZoom>
       {/* Bonequinho animado */}
-      <MovingCharacter path={caminho} />
+      {/* <MovingCharacter path={paths.bri} /> */}
 
       {/* Marcadores temáticos */}
       <Marker position={[3185, 1485]} icon={shireIcon}>
@@ -171,8 +172,28 @@ export default function MapaTerraMedia(props) {
   );
 }
 
-export function MovingCharacter({ path, startZoom = 0.1, endZoom = 0.2, normalZoom = 0.2 }) {
-  console.log("LUUT É GAY")
+export function IntroZoom() {
+  const map = useMap();
+
+  useEffect(() => {
+  if (!map) return;
+
+  // começa no zoomOut máximo
+  map.setView([2200, 2500], -2.5, { animate: false });
+
+  // animação de zoom suave até o ponto
+  setTimeout(() => {
+    map.flyTo([3185, 1595], -1, {
+      duration: 7, // maior duração = mais suave
+      easeLinearity: 0.25 // controla suavidade
+    });
+  }, 500);
+}, [map]);
+
+  return null;
+}
+
+export function MovingCharacter({ path, startZoom = 0.2, endZoom = -1, normalZoom = -1 }) {
   const map = useMap();
 
 
@@ -184,7 +205,7 @@ export function MovingCharacter({ path, startZoom = 0.1, endZoom = 0.2, normalZo
 
     // Zoom in no início
     marker.on("start", () => {
-      map.setZoom(startZoom, { animate: true, duration: 0.5 });
+      map.setZoom(startZoom, { animate: true, duration: 1 });
     });
 
     // Zoom out no final
@@ -210,9 +231,3 @@ export function MovingCharacter({ path, startZoom = 0.1, endZoom = 0.2, normalZo
 
   return null;
 }
-
-
-
-
-
-

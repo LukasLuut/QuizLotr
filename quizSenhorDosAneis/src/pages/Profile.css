@@ -6,6 +6,16 @@
     box-sizing: border-box;
     display: flex;
     overflow: hidden; /* evita barra de rolagem */
+    opacity: 0;
+    transition: opacity 2s ease;
+    
+}
+.bg-black-profile{
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    z-index: -2;
+    position: fixed;
 }
 
 .profile-container {
@@ -74,6 +84,60 @@
   transition: opacity 1s ease;
   z-index: -1; /* sempre no fundo */
 }
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 2s ease;
+}
+
+/* overlay preta */
+.fade-overlay-black {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  opacity: 0;
+  transition: opacity 3s ease;
+  z-index: 9997;
+  pointer-events: none;
+}
+
+.active {
+  opacity: 1;
+}
+
+/* vídeo de transição sobre a tela */
+.transition-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9998;
+  object-fit: cover;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.pular-intro{
+  position:absolute;
+  bottom: 20px;
+  right: 20px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 9999;
+  transition: opacity 1s ease;
+}
+
+
+.fade-out {
+  opacity: 0;
+}
+
 
 
 

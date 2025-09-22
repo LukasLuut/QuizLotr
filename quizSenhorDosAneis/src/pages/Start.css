@@ -116,6 +116,8 @@ svg{
     font-family: 'Uncial Antiqua', cursive;
     cursor: pointer;
     z-index: 1;
+    border: none;
+    font-size: 25px;
 }
 
 .btn-start:hover{

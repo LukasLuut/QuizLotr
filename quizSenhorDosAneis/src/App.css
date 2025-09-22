@@ -1,4 +1,4 @@
-.text {
+/* .text {
   position: relative;
   display: inline-block;
 }
@@ -22,4 +22,21 @@
 
 .text:hover .main {
   opacity: 0;
+} */
+
+.fade-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  pointer-events: none; /* deixa clicar nos elementos atrás se necessário */
+  opacity: 0;
+  transition: opacity 3s ease; /* duração do fade */
+  z-index: 9999;
+}
+
+.fade-overlay.active {
+  opacity: 1;
 }
