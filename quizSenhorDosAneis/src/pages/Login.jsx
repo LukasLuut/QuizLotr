@@ -2,8 +2,8 @@ import "./Login.css";
 import bgVideo from "../assets/videos/The-Argonath-Animated-Wallpaper.mp4.mp4";
 import Button from "../components/buttons/Button";
 import { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom'
-import MusicaArgonath from "../assets/audio/the-argonath-song.mp3"
+import { useNavigate } from "react-router-dom";
+import MusicaArgonath from "../assets/audio/the-argonath-song.mp3";
 import BtnMenu from "../components/buttons/BtnMenu";
 import PopUpDTO from "../components/PopUpDTO";
 
@@ -15,21 +15,16 @@ function Login() {
 
   useEffect(() => {
     setFadeIn(true); // ativa fade in ao entrar
-
   }, []);
 
-  const handleStartQuiz = () => {
-    // setFadeToBlack(true);       // ativa overlay preta    
-    // setTimeout(() => navigate('/Profile'), 3500); // depois do fade, toca vídeo
-  };
+  const handleStartQuiz = () => {};
 
   const [mostrarBtnEntrar, setMostrarBtnEntrar] = useState(false);
   const [mostrarBtnRegistrar, setMostrarBtnRegistrar] = useState(true);
   const [mostrarPopup, setMostrarPopup] = useState(false);
   const [erroMessage, setErroMessage] = useState("Erro ao criar personagem");
 
-  let btnTitle = "Entrar"
-
+  let btnTitle = "Entrar";
 
   const handleEntrarClick = async () => {
     let name = document.getElementById("username").value;
@@ -39,29 +34,32 @@ function Login() {
       const res = await fetch(`http://localhost:3000/auth/login`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json" // Corrigido: "Content-Type", não "content-Type"
+          "Content-Type": "application/json", // Corrigido: "Content-Type", não "content-Type"
         },
         body: JSON.stringify({
           name: name, // Substitua com o valor real, se necessário
-          password: password
-        })
+          password: password,
+        }),
       });
 
       const data = await res.json();
+
+      const token = data.token;
+      localStorage.setItem("token", token);
+      
+
       if (data.token) {
-        alert("VOCÊ LOGOU")
+        setFadeToBlack(true); // ativa overlay preta
+        setTimeout(() => navigate("/Profile", {state: data}), 3500); // depois do fade, toca vídeo
+
       } else {
-        alert("ERRRROOOOU")
+        setErroMessage("Usuário não encontrado")
+        setMostrarPopup(true);
       }
-
-      const token = data.token
-      localStorage.setItem("token", token)
-      console.log(token)
-
     } catch (err) {
       console.error("Erro:", err);
     }
-  }
+  };
 
   const handleRegistrarClick = async () => {
     let name = document.getElementById("username").value;
@@ -72,59 +70,57 @@ function Login() {
       const res = await fetch(`http://localhost:3000/auth/register`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json" // Corrigido: "Content-Type", não "content-Type"
+          "Content-Type": "application/json", // Corrigido: "Content-Type", não "content-Type"
         },
         body: JSON.stringify({
           name: name,
           email: email, // Substitua com o valor real, se necessário
-          password: password
-        })
+          password: password,
+        }),
       });
 
-      if(!res.ok) {
+      if (!res.ok) {
         const erro = await res.text();
-        const mensagens = erro.map(err => Object.values(err.constraints));
+        const mensagens = erro.map((err) => Object.values(err.constraints));
 
-        throw new Error(mensagens)
-      } 
+        throw new Error(mensagens);
+      }
 
       const data = await res.json();
 
       if (data.name) {
         setMostrarBtnEntrar(false);
         setMostrarBtnRegistrar(true);
-        setMostrarEmail(false)
+        setMostrarEmail(false);
       }
-
     } catch (err) {
-      console.log("Entrou no Catch")
-      console.log(err)
+      console.log("Entrou no Catch");
+      console.log(err);
       setMostrarPopup(true);
     }
+  };
 
+  if (mostrarPopup) {
+    setTimeout(() => {
+      setMostrarPopup(false);
+    }, 3000);
   }
 
   if (!mostrarEmail) {
-    const bt = document.getElementById("btnEntrar")
+    const bt = document.getElementById("btnEntrar");
   }
 
   if (mostrarBtnEntrar) {
   }
 
   if (mostrarBtnEntrar) {
-    btnTitle = "Registrar"
+    btnTitle = "Registrar";
   }
-
-
-
 
   return (
-    <div className={`login-body ${fadeIn ? 'fade-in' : ''}`}>
-      {mostrarPopup && (
-        <PopUpDTO erro={erroMessage} />
-      )}
+    <div className={`login-body ${fadeIn ? "fade-in" : ""}`}>
+      {mostrarPopup && <PopUpDTO erro={erroMessage} />}
       <div className="login-page">
-
         {/* Aqui o Formulário */}
         <div className="form-container ">
           <div className="title-container ">
@@ -132,7 +128,6 @@ function Login() {
           </div>
 
           <form>
-
             {/* Input de User*/}
             <div className="form-group">
               <label htmlFor="username">Nome de usuário</label>
@@ -143,7 +138,11 @@ function Login() {
             {mostrarEmail && (
               <div className="form-group">
                 <label htmlFor="email">Email</label>
-                <input type="email" id="email" placeholder="Ex: frodo@shire.me" />
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Ex: frodo@shire.me"
+                />
               </div>
             )}
 
@@ -153,29 +152,59 @@ function Login() {
               <input type="password" id="password" placeholder="••••••••" />
             </div>
 
-            <BtnMenu type='button' handleStartQuiz={handleStartQuiz} handleEntrarClick={handleEntrarClick} handleRegistrarClick={handleRegistrarClick} texto={btnTitle}></BtnMenu>
+            <BtnMenu
+              type="button"
+              handleStartQuiz={handleStartQuiz}
+              handleEntrarClick={handleEntrarClick}
+              handleRegistrarClick={handleRegistrarClick}
+              texto={btnTitle}
+            ></BtnMenu>
           </form>
 
           {mostrarBtnRegistrar && (
-            <a href="#" type="button" className="link" id="btnRegistrar" onClick={() => { setMostrarBtnEntrar(true); setMostrarBtnRegistrar(false); setMostrarEmail(true) }}>Criar nova conta</a>
+            <a
+              href="#"
+              type="button"
+              className="link"
+              id="btnRegistrar"
+              onClick={() => {
+                setMostrarBtnEntrar(true);
+                setMostrarBtnRegistrar(false);
+                setMostrarEmail(true);
+              }}
+            >
+              Criar nova conta
+            </a>
           )}
 
           {mostrarBtnEntrar && (
-            <a href="#" className="link" id="btnEntrar" onClick={() => { setMostrarBtnEntrar(false); setMostrarBtnRegistrar(true); setMostrarEmail(false); btnTitle = "Registrar" }}>Entrar</a>
+            <a
+              href="#"
+              className="link"
+              id="btnEntrar"
+              onClick={() => {
+                setMostrarBtnEntrar(false);
+                setMostrarBtnRegistrar(true);
+                setMostrarEmail(false);
+                btnTitle = "Registrar";
+              }}
+            >
+              Entrar
+            </a>
           )}
-
         </div>
 
-        <div className={`fade-overlay-black ${fadeToBlack ? "active" : ""}`}></div>
+        <div
+          className={`fade-overlay-black ${fadeToBlack ? "active" : ""}`}
+        ></div>
 
         {/* vídeo de plano de fundo */}
-        <video className="bg-video" autoPlay muted loop playsInline >
+        <video className="bg-video" autoPlay muted loop playsInline>
           <source src={bgVideo} type="video/mp4" />
         </video>
       </div>
     </div>
-
-  )
+  );
 }
 
 export default Login;

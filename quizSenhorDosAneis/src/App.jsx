@@ -17,6 +17,7 @@ import PopUpDTO from './components/PopUpDTO'
 import MusicaArgonath from "./assets/audio/the-argonath-song.mp3";
 import MusicaTheShire from "./assets/audio/the-shire-song.mp3";
 import PlayerMusica from "./components/playerMusica/PlayerMusica";
+import OptionProfile from './components/layout/OptionProfile';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Start setMusicaAtual={setMusicaAtual}/>} />
+        <Route path="/option" element={<OptionProfile></OptionProfile>} />
         <Route path="/login" element={<Login setMusicaAtual={setMusicaAtual}/>} />
         <Route path="/profile" element={<Profile  setMusicaAtual={setMusicaAtual}/>} />
         <Route path="/quiz" element={<Quiz setMusicaAtual={setMusicaAtual}/>} />

@@ -1,0 +1,60 @@
+.option-profile-bg{
+    background-image: url('../../assets/images/box/box-lateral-girado.png');
+    width: 900px;
+    height:600px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-left: 25%;
+    padding: 6%;
+    color: aliceblue;
+    padding-top: 7%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.option-profile-bg label{
+    font-family: Ringbearer;
+    margin-bottom: -5%;
+    margin-top: 7%;
+    font-weight: 100;
+    width: 50%;
+    text-shadow: 1px 3px 2px rgba(0,0,0,1);
+}
+
+.option-profile-bg input{
+    width: 300px;
+}
+
+.option-profile-bg h2{
+    font-family: Ringbearer;
+    font-weight: 100;
+    color: goldenrod;
+    font-size: 50px;
+    text-shadow: 1px 3px 2px rgba(0,0,0,1);
+}
+
+.option-profile-bg form{
+   padding:0;
+    position: relative;
+}
+
+.btn-menu-update-profile{
+    transform: scale(0.7);
+   
+}
+
+
+.modal-overlay {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+
