@@ -23,7 +23,7 @@ const characterIcon = new L.Icon({
   iconAnchor: [24, 48],
 });
 
-export default function MapaTerraMedia({ativo, onMoving}) {
+export default function MapaTerraMedia({ativo, onMoving, onFinish }) {
   const bounds = [
     [0, 0],
     [4344, 5000],
@@ -57,10 +57,10 @@ export default function MapaTerraMedia({ativo, onMoving}) {
 
       <IntroZoom></IntroZoom>
       {/* Bonequinho animado */}
-      <MovingCharacter ativo={ativo} onMoving={onMoving}  />
+      <MovingCharacter ativo={ativo} onMoving={onMoving} onFinish={onFinish}  />
 
       {/* Marcadores temáticos */}
-      <Marker position={[3185, 1485]} icon={shireIcon}>
+      <Marker position={[3210, 1520]} icon={shireIcon}>
         <Popup>Hobbington: “Lar dos Hobbits...”</Popup>
       </Marker>
 
@@ -93,7 +93,7 @@ export function IntroZoom() {
 }
 
 
-export function MovingCharacter({ativo,  startZoom = 0.2, endZoom = -1 ,onMoving  }) {
+export function MovingCharacter({ativo,  startZoom = 0.2, endZoom = -1 ,onMoving, onFinish  }) {
   const map = useMap();
   const [routeIndex, setRouteIndex] = useState(0);
   const markerRef = useRef(null);
@@ -139,7 +139,7 @@ useEffect(() => {
     const path = paths[routeIndex];
     if (!path || path.length < 2) return;
 
-    const durations = Array(path.length - 1).fill(1000);
+    const durations = Array(path.length - 1).fill(50);
 
     if (markerRef.current) map.removeLayer(markerRef.current);
 
@@ -157,12 +157,16 @@ useEffect(() => {
       map.setZoom(startZoom, { animate: true, duration: 0.5 });
     });
 
-    // Notifica pai que terminou
     marker.on("end", () => {
-      onMoving?.(false);
-      map.setZoom(endZoom, { animate: true, duration: 0.5 });
-    });
+  onMoving?.(false);
+  map.setZoom(endZoom, { animate: true, duration: 0.5 });
 
+  if (routeIndex === paths.length - 1) {
+    console.log("Última rota atingida:", true);
+    onFinish?.(true);
+  }
+  }); 
+  
     marker.start();
 
     return () => {

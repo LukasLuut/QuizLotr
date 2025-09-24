@@ -79,11 +79,11 @@ function Quiz({ setMusicaAtual }) {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + token, // Corrigido: "Content-Type", não "content-Type"
+          Authorization: "Bearer " + token, 
         },
         body: JSON.stringify({
           id: data.user.id,
-          score: scoreByTime, // Substitua com o valor real, se necessário
+          score: scoreByTime, 
         }),
       });
 

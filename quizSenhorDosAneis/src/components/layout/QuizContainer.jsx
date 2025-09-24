@@ -4,6 +4,7 @@ import exampleImg from "../../assets/images/rivendell.webp";
 import boxQuestion from "../../assets/images/box-question.png";
 import BtnQuestion from "../buttons/btnQuestion";
 import Map from "../Map";
+import Final from "./Final";
 
 function QuizContainer({ handleUpdateUser, handleUpdateScore }) {
   const w = "400px";
@@ -62,25 +63,48 @@ function QuizContainer({ handleUpdateUser, handleUpdateScore }) {
   setIsMoving(status);
   console.log("Bonequinho está andando?", status);
 };
-  //ativa o botão a cada 4 perguntas
- useEffect(() => {
-  if (question > 1 && (question - 1) % 4 === 0) {
-    setAtivo(true);
-    setPerguntaAtivo(true);    
+
+// ativa de 2 em 2 perguntas
+useEffect(() => {
+  if (question > 0 && question % 1 === 0) {
+    setAtivo(true);        
+    setPerguntaAtivo(true);
   }
-  if(!isMoving)setPerguntaAtivo(false);
-}, [question, ativo, isMoving]);
- 
- 
+}, [question]);
+
+// desativa quando o bonequinho para
+useEffect(() => {
+  if (!isMoving)setPerguntaAtivo(false);
+  setTimeout(() => {
+      
+    setAtivo(false);
+    }, 2000); 
+   
+}, [isMoving]);
+
+ const [isFinished, setIsFinished] = useState(false);
+
+const handleFinish = (status) => {
+  setIsFinished(status);
+  console.log("Mapa terminou todas as rotas?", status);
+};
+
+useEffect(() => {
+  if (isFinished) {
+    setAtivo(false);        
+    setPerguntaAtivo(true);
+  }
+}, [isFinished]);
   
   return (
     <div>
+       {isFinished && <Final />}
       <div className="quiz-container">
         <h1 className="title-responda">RespondA</h1>
         <img className="box-question" src={boxQuestion} alt="" />
         {/* Imagem do mapa */}
         <div className="quiz-image">
-          <Map ativo={ativo} onMoving={handleMoving}/>
+          <Map ativo={ativo} onMoving={handleMoving} onFinish={handleFinish} />
         </div>
 
         {/* Pergunta */}
