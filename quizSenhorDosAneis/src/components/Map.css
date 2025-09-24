@@ -1,0 +1,27 @@
+.btn-next-map{
+    position: absolute;
+    border: none;
+    bottom: -3px;
+    left: 245px;
+    z-index: 1000;
+    background-image: url('../assets/images/button/btn-marrom.png');
+    width: 250px;
+    height: 80px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: goldenrod;
+    font-family: Ringbearer;
+    filter: drop-shadow(10px 15px 21px rgba(0,0,0,1));
+    transition: transform 0.2s, box-shadow 0.3s;
+    transition: all 0.3s ease;
+    background-color: transparent; 
+    font-size: 15px;
+    
+}
+
+.btn-next-map:hover{
+    transform: translateY(-2px) scale(1.02);
+    filter: drop-shadow(4px 20px 15px rgba(0,0,0,2));
+    background-image: url('../assets/images/button/btn-dourado.png');
+}

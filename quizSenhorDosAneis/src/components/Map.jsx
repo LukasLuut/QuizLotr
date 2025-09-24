@@ -2,7 +2,9 @@ import {  MapContainer, ImageOverlay, Marker, Popup, useMap, useMapEvents } from
 import "leaflet/dist/leaflet.css";
 import mapImage from "../assets/images/map.webp";
 import L from "leaflet";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import './Map.css'
+
 
 
 // 🔹 Importe o plugin MovingMarker manualmente
@@ -12,6 +14,7 @@ import "../public/plugins/leaflet-moving-maker/MovingMarker"; // coloque o arqui
 import mordorIconUrl from "../assets/icons/mordor.png";
 import shireIconUrl from "../assets/icons/Map Icons/House.png";
 import rivendellIconUrl from "../assets/icons/rivendell.png";
+import BtnQuestion from "./buttons/btnQuestion";
 
 // Ícone provisório do bonequinho
 const characterIcon = new L.Icon({
@@ -28,6 +31,9 @@ export default function MapaTerraMedia(props) {
 
   // Coordenadas do caminho do bonequinho (pixels na imagem)
  const paths = {
+  init:[
+    [3185, 1485]
+  ],
   bri: [
     [3185, 1485],
     [3133, 1497],
@@ -37,7 +43,7 @@ export default function MapaTerraMedia(props) {
     [3158, 1752],
     [3182, 1797],
   ],
-  rivendel: [
+  rivendell: [
     [3182, 1797],
     [3218, 1832],
     [3196, 1906],
@@ -105,21 +111,11 @@ export default function MapaTerraMedia(props) {
 };
 
   const caminho = paths[props.path];
-  console.log(caminho)
+  
 
-  const path2 = [
-    [3285, 1755], // Shire
-    [3282, 3790], // Bri
-    [2000, 3500], // Mordor
-  ];
 
-  // Ícones dos marcadores
-  const mordorIcon = new L.Icon({
-    iconUrl: mordorIconUrl,
-    iconSize: [48, 48],
-    iconAnchor: [24, 48],
-    popupAnchor: [0, -40],
-  });
+
+ 
 
   const shireIcon = new L.Icon({
     iconUrl: shireIconUrl,
@@ -128,12 +124,7 @@ export default function MapaTerraMedia(props) {
     popupAnchor: [0, -40],
   });
 
-  const rivendellIcon = new L.Icon({
-    iconUrl: rivendellIconUrl,
-    iconSize: [48, 48],
-    iconAnchor: [24, 48],
-    popupAnchor: [0, -40],
-  });
+ 
 
   return (
     <MapContainer
@@ -152,20 +143,14 @@ export default function MapaTerraMedia(props) {
 
       <IntroZoom></IntroZoom>
       {/* Bonequinho animado */}
-      {/* <MovingCharacter path={paths.bri} /> */}
+      <MovingCharacter />
 
       {/* Marcadores temáticos */}
       <Marker position={[3185, 1485]} icon={shireIcon}>
         <Popup>Hobbington: “Lar dos Hobbits...”</Popup>
       </Marker>
 
-      <Marker position={[3182, 1790]} icon={rivendellIcon}>
-        <Popup>Bri: “Lar dos vagabundos e prostitutas...”</Popup>
-      </Marker>
-
-      <Marker position={[2000, 3500]} icon={mordorIcon}>
-        <Popup>Mordor: “Terra de Sauron...”</Popup>
-      </Marker>
+     
 
             
     </MapContainer>
@@ -183,7 +168,7 @@ export function IntroZoom() {
 
   // animação de zoom suave até o ponto
   setTimeout(() => {
-    map.flyTo([3185, 1595], -1, {
+    map.flyTo([3185, 1485], -1, {
       duration: 7, // maior duração = mais suave
       easeLinearity: 0.25 // controla suavidade
     });
@@ -193,26 +178,61 @@ export function IntroZoom() {
   return null;
 }
 
-export function MovingCharacter({ path, startZoom = 0.2, endZoom = -1, normalZoom = -1 }) {
-  const map = useMap();
 
+export function MovingCharacter({  startZoom = 0.2, endZoom = -1 }) {
+  const map = useMap();
+  const [routeIndex, setRouteIndex] = useState(0);
+  const markerRef = useRef(null);
+
+  const paths = [
+  [[3185, 1485]], // 0 - init
+
+  [[3185, 1485], [3133, 1497], [3110, 1544], [3126, 1614],
+   [3169, 1674], [3158, 1752], [3182, 1797]], // 1 - bri
+
+  [[3182, 1797], [3218, 1832], [3196, 1906], [3217, 1977],
+   [3210, 2058], [3160, 2109], [3179, 2184], [3191, 2255],
+   [3234, 2315], [3230, 2388], [3225, 2445], [3215, 2517]], // 2 - rivendell
+
+  [[3215, 2517], [3167, 2512], [3120, 2502], [3078, 2488],
+   [3033, 2468], [2987, 2453], [2915, 2429], [2788, 2413]], // 3 - moria
+
+  [[2788, 2413], [2783, 2477], [2770, 2544], [2728, 2595],
+   [2689, 2642], [2656, 2715]], // 4 - lorien
+
+  [[2656, 2715], [2600, 2781], [2531, 2804], [2462, 2904],
+   [2447, 2957], [2392, 2935], [2350, 2957], [2364, 3028],
+   [2324, 3033], [2279, 2995], [2247, 3060], [2211, 3058],
+   [2132, 3022], [2026, 3044], [1981, 3076]], // 5 - argonath
+
+  [[1981, 3076], [2028, 3121], [2071, 3202], [2033, 3285],
+   [1975, 3367]], // 6 - mordorEntrance
+
+  [[1975, 3367], [1917, 3442], [1872, 3487], [1823, 3512],
+   [1747, 3497], [1718, 3543], [1748, 3622]], // 7 - mordor
+];
+
+
+  // Avança para a próxima rota
+  const nextRoute = () => {
+    setRouteIndex((prev) => Math.min(prev + 1, paths.length - 1));
+  };
 
   useEffect(() => {
-    if (!map || path.length < 2) return;
+    if (!map) return;
+    const path = paths[routeIndex];
+    if (!path || path.length < 2) return;
 
     const durations = Array(path.length - 1).fill(1000);
+
+    // Remove marcador antigo
+    if (markerRef.current) map.removeLayer(markerRef.current);
+
     const marker = L.Marker.movingMarker(path, durations, { icon: characterIcon }).addTo(map);
+    markerRef.current = marker;
 
-    // Zoom in no início
-    marker.on("start", () => {
-      map.setZoom(startZoom, { animate: true, duration: 1 });
-    });
-
-    // Zoom out no final
-    marker.on("end", () => {
-      map.setZoom(endZoom, { animate: true, duration: 0.5 });
-    });
-
+    marker.on("start", () => map.setZoom(startZoom, { animate: true, duration: 0.5 }));
+    marker.on("end", () => map.setZoom(endZoom, { animate: true, duration: 0.5 }));
     // Atualiza a câmera a cada 50ms
     const interval = setInterval(() => {
       const latlng = marker.getLatLng();
@@ -224,10 +244,14 @@ export function MovingCharacter({ path, startZoom = 0.2, endZoom = -1, normalZoo
     marker.start();
 
     return () => {
-      clearInterval(interval);
-      map.removeLayer(marker);
+      if (map.hasLayer(marker)) map.removeLayer(marker) 
+        clearInterval(interval);
     };
-  }, [map, path, startZoom, endZoom]);
+  }, [map, routeIndex]);
 
-  return null;
+  return (
+    <button className="btn-next-map" onClick={nextRoute} >
+      Próxima Rota
+    </button>
+  );
 }

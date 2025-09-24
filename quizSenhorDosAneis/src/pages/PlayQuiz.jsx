@@ -18,44 +18,7 @@ function Quiz({ setMusicaAtual }) {
   const [score, setScore] = useState(0);
   const [current, setCurrent] = useState(1);
   const total = 10;
-  const [questions, setQuestions] = useState([]);
-
-  let questionNumber = 3;
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     fetch(`http://localhost:3000/questions/${questionNumber}`, {
-  //       method: "GET"
-  //     })
-  //       .then(res => res.json())
-  //       .then(data => setQuestions(data))
-  //       .catch(err => console.error("Erro:", err));
-  //   }
-  //   fetchData()
-  // }, []);
-
-  // // Verifique se 'questions' tem dados antes de tentar acessar a resposta
-  // let pergunta = questions.question;
-  // let opcao1, opcao2, opcao3, opcao4;
-
-
-  // if (questions.answers && questions.answers.length > 0) {
-  //   opcao1 = questions.answers[0].answer;
-  //   opcao2 = questions.answers[1]?.answer; // Usando o optional chaining (?.) para evitar erro se answers[1] não existir
-  //   opcao3 = questions.answers[2]?.answer;
-  //   opcao4 = questions.answers[3]?.answer;
-  // }
-  
-  
-  // let teste = paths.bri
-
-  const [caminho, setCaminho] = React.useState("mordor");
-
  
-  useEffect(() => {
-      if(1 > 0) setCaminho("bri")
-  }, []);
-
 
   useEffect(() => {
         setFadeIn(true); // ativa fade in ao entrar
@@ -76,14 +39,7 @@ function Quiz({ setMusicaAtual }) {
           total={total}
         />
         </div>
-        <QuizContainer
-          path={caminho}
-          pergunta='{pergunta}'
-          opcao1='{opcao1}  '
-          opcao2='{opcao2}'
-          opcao3='{opcao3}'
-          opcao4='{opcao4}'
-        ></QuizContainer>
+        <QuizContainer></QuizContainer>
 
         <div className='box-lateral-r '>
         <img className='box-lateral-img ' src={BoxWoodenR} alt="" />

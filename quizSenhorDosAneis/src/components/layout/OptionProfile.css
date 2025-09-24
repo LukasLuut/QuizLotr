@@ -43,6 +43,7 @@
 
 .btn-menu-update-profile{
     transform: scale(0.7);
+    display: flex;
    
 }
 

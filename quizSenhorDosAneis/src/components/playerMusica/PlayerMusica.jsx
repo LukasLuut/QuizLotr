@@ -27,7 +27,7 @@ const PlayerMusica = ({ musica }) => {
   useEffect(() => {
     const antiga = audioAtualRef.current;
 
-    // 👉 Caso especial: se "musica" for null, parar
+    //se for null, para
     if (!musica) {
       if (antiga) {
         fadeVolume(antiga, 0).then(() => {
@@ -39,7 +39,7 @@ const PlayerMusica = ({ musica }) => {
       return;
     }
 
-    // cria o novo áudio
+    //cria novo áudio
     const nova = new Audio(musica);
     nova.volume = 0;
     nova.loop = true;
@@ -52,14 +52,14 @@ const PlayerMusica = ({ musica }) => {
 
     audioAtualRef.current = nova;
 
-    // crossfade: se tinha antiga, fade out dela em paralelo
+    //se tinha antiga, fadeout dela em paralelo
     if (antiga) {
       fadeVolume(antiga, 0).then(() => {
         antiga.pause();
       });
     }
 
-    // fade in da nova
+    //fadein da nova
     fadeVolume(nova, 1);
   }, [musica]);
 

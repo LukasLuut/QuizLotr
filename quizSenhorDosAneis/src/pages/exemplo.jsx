@@ -1,60 +1,56 @@
-import "./PlayQuiz.css";
-import exampleImg from "../assets/images/rivendell.webp";
-import Map from '../components/Map'
-import BoxMap from '../assets/images/map-box.png'
-import MapBox from "../components/MapBox";
-import bgShire from "../assets/videos/Hobbington.mp4";
-import QuizContainer from "../components/layout/QuizContainer";
-import { useEffect, useState } from "react";
-
-function Quiz() {
-
-  const [questions, setQuestions] = useState([]);
-
-  let questionNumber = 1;
-
+export function MovingCharacter({ path, startZoom = 0.2, endZoom = -1 }) {
+  const map = useMap();
+  const markerRef = useRef(null);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      fetch(`http://localhost:3000/questions/${questionNumber}`, {
-        method: "GET"
-      })
-        .then(res => res.json())
-        .then(data => setQuestions(data))
-        .catch(err => console.error("Erro:", err));
+    if (!map || !path || path.length < 2) return;
+
+    // Se o marcador já existe, só atualiza a rota
+    if (markerRef.current) {
+      markerRef.current.moveTo(path, Array(path.length - 1).fill(1000));
+      return;
     }
-    fetchData()
-  }, []);
 
-  let pergunta = questions.question
-  console.log(questions.answers[0].answer)
+    // Cria o marcador na primeira vez
+    const durations = Array(path.length - 1).fill(1000);
+    const marker = L.Marker.movingMarker(path, durations, { icon: characterIcon }).addTo(map);
 
-  //let opcao1 = questions.answers[0].answer
-  // let opcao2 = questions.answers[1].answer
-  // let opcao3 = questions.answers[2].answer
-  // let opcao4 = questions.answers[3].answer
-  //console.log(questions)
-  //console.log(questions.answers[0])
+    markerRef.current = marker;
 
-  return (
+    marker.on("start", () => {
+      map.setZoom(startZoom, { animate: true, duration: 0.5 });
+    });
 
-    <div className="quiz-page">
-      <QuizContainer pergunta={pergunta}
-        opcao1='{opcao1}'
-        opcao2='{opcao2}'
-        opcao3='{opcao3}'
-        opcao4='{opcao4}'
-      ></QuizContainer>
+    marker.on("end", () => {
+      map.setZoom(endZoom, { animate: true, duration: 0.5 });
+    });
 
-      {/* <MapBox ></MapBox> */}
+    // Atualiza a câmera
+    intervalRef.current = setInterval(() => {
+      const latlng = marker.getLatLng();
+      if (latlng) {
+        map.setView(latlng, map.getZoom(), { animate: false });
+      }
+    }, 20);
 
+    marker.start();
 
-      <video className="bg-video2" autoPlay muted loop playsInline>
-        <source src={bgShire} type="video/mp4" />
-      </video>
-    </div>
+    return () => {
+      clearInterval(intervalRef.current);
+      if (map.hasLayer(marker)) {
+        map.removeLayer(marker);
+      }
+    };
+  }, [map]);
 
-  );
+  // Quando `path` muda, manda o marcador andar
+  useEffect(() => {
+    if (markerRef.current && path && path.length > 1) {
+      markerRef.current.moveTo(path, Array(path.length - 1).fill(1000));
+      markerRef.current.start();
+    }
+  }, [path]);
+
+  return null;
 }
-
-export default Quiz;
