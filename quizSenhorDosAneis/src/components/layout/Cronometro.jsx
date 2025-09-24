@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
-import './Cronometro.css'
+import "./Cronometro.css";
 
-export default function Cronometro() {
+export default function Cronometro({ handleGetHour, current }) {
   const [tempo, setTempo] = useState(0); // tempo em segundos
   const [ativo, setAtivo] = useState(true);
+
+  useEffect(() => {
+    handleGetHour(tempo);
+  },);
 
   useEffect(() => {
     let intervalo;
@@ -33,7 +37,7 @@ export default function Cronometro() {
   };
 
   return (
-    <div className="conometro-box" >
+    <div className="conometro-box">
       <h1 className="contador">{formatarTempo(tempo)}</h1>
       {/* <button onClick={iniciar}>Iniciar</button>
       <button onClick={pausar}>Pausar</button>

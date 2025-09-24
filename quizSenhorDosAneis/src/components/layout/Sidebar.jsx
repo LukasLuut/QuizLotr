@@ -6,7 +6,7 @@ import borderProfile from '../../assets/images/perfil-border.webp'
 import Cronometro from "./Cronometro";
 
 
-export default function Sidebar({ playerName, score, current, total }) {
+export default function Sidebar({ playerName, score, current, total, handleGetHour }) {
   return (
     <aside className="sidebar">
 
@@ -42,7 +42,7 @@ export default function Sidebar({ playerName, score, current, total }) {
       <div className="message">
         <p>Você está mandando bem!</p>
       </div>
-      <Cronometro></Cronometro>
+      <Cronometro handleGetHour={handleGetHour} current={current}></Cronometro>
     </aside>
   );
 }
