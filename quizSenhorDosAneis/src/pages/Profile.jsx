@@ -40,7 +40,7 @@ function Profile({ setMusicaAtual }) {
   };
 
   const handleVideoEnd = () => {
-    navigate("/quiz"); // ao terminar o vídeo, vai para Quiz
+    navigate("/quiz", {state: dataUser}); // ao terminar o vídeo, vai para Quiz
   };
 
   const pularIntro = () => {
@@ -48,7 +48,7 @@ function Profile({ setMusicaAtual }) {
     setMusicaAtual(Musica1); // inicia música ao pular
     setTimeout(() => {
       if (videoRef.current) videoRef.current.pause();
-      navigate("/quiz");
+      navigate("/quiz", {state: dataUser});
     }, 2000); 
   };
 
