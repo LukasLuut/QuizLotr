@@ -22,7 +22,7 @@ function Quiz({ setMusicaAtual }) {
   const [playerName] = useState(data.user.name);
   const [score, setScore] = useState(0);
   const [current, setCurrent] = useState(1);
-  const total = 10;
+  const total = 7;
   const [segundos, setSegundos] = useState(1);
 
   const handleRanking = async () => {
@@ -69,7 +69,7 @@ function Quiz({ setMusicaAtual }) {
     handleRanking();
   }, 10000)
 
-  const handleUpdateUser = () => {};
+  const handleUpdateUser = () => { };
 
   const handleUpdateScore = async (score = 300) => {
     const scoreByTime = Math.round(score / segundos);
@@ -79,11 +79,11 @@ function Quiz({ setMusicaAtual }) {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + token, 
+          Authorization: "Bearer " + token,
         },
         body: JSON.stringify({
           id: data.user.id,
-          score: scoreByTime, 
+          score: scoreByTime,
         }),
       });
 

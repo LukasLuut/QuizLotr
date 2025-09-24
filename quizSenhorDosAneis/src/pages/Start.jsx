@@ -21,7 +21,6 @@ function Start({ setMusicaAtual }) {
     }, 3000); // 3000ms = mesma duração do transition
   
 
-    console.log('cuuuuu')
     // Entrar em fullscreen
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
