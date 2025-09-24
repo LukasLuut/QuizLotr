@@ -53,6 +53,7 @@
   grid-template-columns: 2fr 2fr;
   gap: 1px;
   z-index: 2;
+  
 }
 
 
@@ -71,4 +72,9 @@
     font-family: Ringbearer;
     font-weight: 200;
     font-size: 40px;
+}
+
+.pergunta-off{
+  display: none;
+  opacity: 0;
 }

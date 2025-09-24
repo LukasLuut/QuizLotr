@@ -1,27 +1,39 @@
-.btn-next-map{
-    position: absolute;
-    border: none;
-    bottom: -3px;
-    left: 245px;
-    z-index: 1000;
-    background-image: url('../assets/images/button/btn-marrom.png');
-    width: 250px;
-    height: 80px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    color: goldenrod;
-    font-family: Ringbearer;
-    filter: drop-shadow(10px 15px 21px rgba(0,0,0,1));
-    transition: transform 0.2s, box-shadow 0.3s;
-    transition: all 0.3s ease;
-    background-color: transparent; 
-    font-size: 15px;
-    
+.btn-next-map {
+  position: fixed;
+  bottom: 150px;
+  left: 240px;
+  z-index: 1000;
+  border: none;
+  width:480px;
+  height: 150px;
+
+  background-image: url('../assets/images/button/btn-marrom.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+
+  color: goldenrod;
+  font-family: Ringbearer;
+  font-size: 25px;
+
+  filter: drop-shadow(10px 15px 21px rgba(0,0,0,1));
+
+  /* começa invisível */
+  opacity: 0;
+  pointer-events: none;
+
+  /* transições */
+  transition: opacity 0.5s ease, transform 0.2s ease, filter 0.3s ease;
 }
 
-.btn-next-map:hover{
-    transform: translateY(-2px) scale(1.02);
-    filter: drop-shadow(4px 20px 15px rgba(0,0,0,2));
-    background-image: url('../assets/images/button/btn-dourado.png');
+.btn-next-map:hover {
+  transform: translateY(-2px) scale(1.02);
+  filter: drop-shadow(4px 20px 15px rgba(0,0,0,2));
+  background-image: url('../assets/images/button/btn-dourado.png');
+}
+
+.btn-next-map.mostrar {
+  opacity: 1;
+  pointer-events: auto;
 }

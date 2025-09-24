@@ -16,6 +16,7 @@ function QuizContainer() {
   const [questions, setQuestions] = useState([]);
   
   
+  
     useEffect(() => {
       const fetchData = async () => {
         fetch(`http://localhost:3000/questions/${question}`, {
@@ -60,25 +61,24 @@ function QuizContainer() {
     }, 1000);
   }
     
-
-  const [caminho, setCaminho] = useState("init");
-
-  
-
-  // 🔹 Troca a rota a cada 4 perguntas
+  const [ativo,setAtivo]= useState(false)
+  const [perguntaAtivo,setPerguntaAtivo]=useState(false)
+  //pega o o status true ou false  
+  const [isMoving, setIsMoving] = useState(false);
+  const handleMoving = (status) => {
+  setIsMoving(status);
+  console.log("Bonequinho está andando?", status);
+};
+  //ativa o botão a cada 4 perguntas
  useEffect(() => {
   if (question > 1 && (question - 1) % 4 === 0) {
-    
-    
-
-    if (novaRota && novaRota !== caminho) {
-      setCaminho(novaRota);
-      console.log("🚶‍♂️ Novo caminho no mapa:", novaRota);
-    }
+    setAtivo(true);
+    setPerguntaAtivo(true);    
   }
-}, [question, caminho]);
-    
-  
+  if(!isMoving)setPerguntaAtivo(false);
+}, [question, ativo, isMoving]);
+ 
+ 
   
   return (
     <div>
@@ -88,16 +88,16 @@ function QuizContainer() {
         <img className='box-question' src={boxQuestion} alt="" />
         {/* Imagem do mapa */}
         <div className="quiz-image">
-          <Map />
+          <Map ativo={ativo} onMoving={handleMoving}/>
         </div>
 
         {/* Pergunta */}
-        <h2 className="quiz-question">
+        <h2 className={`quiz-question ${perguntaAtivo ? "pergunta-off" : ""}`}>
           {pergunta}
         </h2>
 
         {/* Opções */}
-        <div className="quiz-options">
+        <div className={`quiz-options ${perguntaAtivo ? "pergunta-off" : ""}`}>
           <BtnQuestion w={w} h={h} texto={opcao1} onClick={(isCorrect) => handleAnswer(isCorrect)} resposta={opcao1R} />
           <BtnQuestion w={w} h={h} texto={opcao2} onClick={(isCorrect) => handleAnswer(isCorrect)} resposta={opcao2R}/>
           <BtnQuestion w={w} h={h} texto={opcao3} onClick={(isCorrect) => handleAnswer(isCorrect)} resposta={opcao3R}/>
