@@ -45,6 +45,7 @@ function Quiz({ setMusicaAtual }) {
   const toggleOverlay = () => setOverlayVisible((prev) => !prev);
 
   const [fundoFrente, setFundoFrente] = useState(false);
+  const [titleScene, setTitleScene] = useState(false)
 
   // Controle do bonequinho / isMoving vindo do QuizContainer
   const [isMoving, setIsMoving] = useState(false);
@@ -54,13 +55,19 @@ function Quiz({ setMusicaAtual }) {
   };
 
   const handleFundo = () => {
-    console.log("ESTOU NO HANDLE DE FUNDO")
     setFundoFrente(true);
 
     setTimeout(() => {
       setFundoFrente(false)
     }, 3000)
-    
+  }
+
+  const handleTitleScene = () => {
+    setTitleScene(true)
+
+    setTimeout(() => {
+      setTitleScene(false)
+    }, 3000)
   }
 
   // --------------------------- Ranking ---------------------------
@@ -138,6 +145,7 @@ function Quiz({ setMusicaAtual }) {
         setFadeIn(true); // Fade-in do novo vídeo
         setTimeout(() => {
           handleFundo();
+          handleTitleScene();
         }, 200)
       }, 500);
       return () => clearTimeout(timeout);
@@ -149,10 +157,15 @@ return (
     <div
       className={`bg-black-quiz`}
     >
+      { titleScene && (
+        <h1 className={`${fundoFrente ? "visible-ui" : "hidden-ui"}`} style={{color: 'white'}}>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</h1>
+      )}
       {/* BOTÃO FIXO: fica acima de tudo e controla a transparência */}
       <button
-        className="toggle-overlay-btn"
+        className={`${fundoFrente ? "hidden-ui disable-btn" : "visible-ui"} toggle-overlay-btn`}
+        id="btn-hidden"
         onClick={handleFundo}
+        disabled={fundoFrente}
         // aria-pressed={!overlayVisible}
         
       >
