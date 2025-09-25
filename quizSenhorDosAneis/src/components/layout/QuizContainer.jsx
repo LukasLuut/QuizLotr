@@ -68,7 +68,7 @@ function QuizContainer({ handleUpdateUser, handleUpdateScore, isMovingChange }) 
 
 // ativa de 2 em 2 perguntas
 useEffect(() => {
-  if (question > 0 && question % 2 === 0) {
+  if (question > 0 && question % 3 === 0) {
     setAtivo(true);        
     setPerguntaAtivo(true);
   }
@@ -104,7 +104,6 @@ useEffect(() => {
 
   return (
     <div>
-       {isFinished && <Final />}
       <div className="quiz-container">
         <h1 className="title-responda">RespondA</h1>
         <img className="box-question" src={boxQuestion} alt="" />
@@ -150,6 +149,7 @@ useEffect(() => {
           />
         </div>
       </div>
+      {isFinished && <Final />}
     </div>
   );
 }

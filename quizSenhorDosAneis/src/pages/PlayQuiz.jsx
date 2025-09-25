@@ -24,7 +24,7 @@ function Quiz({ setMusicaAtual }) {
   const [playerName] = useState(data.user.name);
   const [score, setScore] = useState(0);
   const [current, setCurrent] = useState(1);
-  const total = 10;
+  const total = 7;
   const [segundos, setSegundos] = useState(1);
 
   const videoBackgrounds = [
@@ -86,10 +86,15 @@ function Quiz({ setMusicaAtual }) {
     return () => clearInterval(interval);
   }, []);
 
-  // --------------------------- Atualização de score ---------------------------
-  const handleUpdateUser = () => {};
-  const handleUpdateScore = async (scoreUpdate = 300) => {
-    const scoreByTime = Math.round(scoreUpdate / segundos);
+  setInterval(() => {
+    handleRanking();
+  }, 10000)
+
+  const handleUpdateUser = () => { };
+
+  const handleUpdateScore = async (score = 300) => {
+    const scoreByTime = Math.round(score / segundos);
+
     try {
       const res = await fetch(`http://localhost:3000/users/me/score`, {
         method: "PUT",

@@ -20,7 +20,7 @@ function Final() {
       }
     } else {
       // segunda vez: redireciona para /profile
-      navigate("/profile");
+      navigate("/login");
     }
   };
 
