@@ -1,0 +1,39 @@
+.narrator-box {
+  width: 100%;
+  min-height: 120px;
+  background: url('../../assets//images/box-question.png') no-repeat center/cover;
+  border: 2px solid #a67c52;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+  font-family: 'Ringbearer', serif;
+  color: #e6d8b0;
+  overflow: hidden;
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+  text-wrap: wrap;
+}
+
+.narrator-box.fade-in {
+  opacity: 1;
+}
+
+.narrator-text {
+  font-size: 18px;
+  line-height: 1.5;
+  text-shadow: 1px 1px 2px #000;
+  white-space: pre-wrap; /* mantém quebras de linha */
+  text-wrap: wrap;
+}
+
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-out {
+  opacity: 0;
+  transform: translateY(10px);
+}
+

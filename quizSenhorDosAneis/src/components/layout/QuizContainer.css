@@ -1,13 +1,13 @@
 .quiz-container {
   width: 50vw;
-  height: 85vh;
+  height: 91vh;
   text-align: center;
   font-family: 'Uncial Antiqua', cursive;
   position: relative;
   z-index: 2;
   padding: 6%;
   padding-top:11%;
-    filter: drop-shadow(-10px 20px 15px rgb(28, 19, 0));
+    filter: drop-shadow(-10px 20px 15px rgb(0, 0, 0));
 
   
 }

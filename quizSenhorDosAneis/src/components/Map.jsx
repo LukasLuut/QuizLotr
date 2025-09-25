@@ -139,7 +139,7 @@ useEffect(() => {
     const path = paths[routeIndex];
     if (!path || path.length < 2) return;
 
-    const durations = Array(path.length - 1).fill(50);
+    const durations = Array(path.length - 1).fill(500);
 
     if (markerRef.current) map.removeLayer(markerRef.current);
 
@@ -158,7 +158,7 @@ useEffect(() => {
     });
 
     marker.on("end", () => {
-  onMoving?.(false);
+      onMoving?.(false);
   map.setZoom(endZoom, { animate: true, duration: 0.5 });
 
   if (routeIndex === paths.length - 1) {

@@ -37,7 +37,7 @@
     width: 25%;
     margin-top: 13%;
     margin-left: 11%;
-    filter: drop-shadow(5px 2px 5px rgb(28, 19, 0));
+    filter: drop-shadow(5px 2px 5px rgb(0, 0, 0));
 }
 
 .player-info img {
@@ -59,7 +59,7 @@
     font-weight: 100;
     padding-bottom: 15px;
     font-size: 18px;
-    filter: drop-shadow(0px 2px 5px rgb(28, 19, 0));
+    filter: drop-shadow(0px 2px 5px rgb(0, 0, 0));
 
 }
 
@@ -80,5 +80,5 @@
     height: 200px;
     position: fixed;
     z-index: 1;
-    filter: drop-shadow(0px -2px 10px rgba(28, 19, 0, 0.541));
+    filter: drop-shadow(0px -2px 10px rgba(0, 0, 0, 0.541));
 }

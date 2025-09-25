@@ -1,39 +1,60 @@
-import "./PlayQuiz.css";
-import Map from "../components/Map";
-import BoxMap from "../assets/images/map-box.png";
-import MapBox from "../components/MapBox";
-import bgShire from "../assets/videos/Hobbington.mp4";
-import QuizContainer from "../components/layout/QuizContainer";
-import React, { useEffect, useState } from "react";
-import MovingCharacter from "../components/Map";
-import Sidebar from "../components/layout/Sidebar";
-import BoxWoodenR from "../assets/images/box/box-aviso-gg.png";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
+import QuizContainer from "../components/layout/QuizContainer";
+import Sidebar from "../components/layout/Sidebar";
+import BoxWoodenR from "../assets/images/box/box-aviso-gg.png";
+
+import bgShire from "../assets/videos/Hobbington.mp4";
+import bgBri from "../assets/videos/bri.mp4";
+import bgRivendel from "../assets/videos/lorien.mp4";
+import bgLorien from "../assets/videos/lorien.mp4";
+import bgMordor from "../assets/videos/mordor.mp4";
+import bgMoria from "../assets/videos/moria.mp4";
+import bgArgonath from "../assets/videos/argonath.mp4";
+
+import "./PlayQuiz.css";
+
 function Quiz({ setMusicaAtual }) {
-  const [fadeIn, setFadeIn] = useState(false); // para o efeito de fadeIN quando a página abre
-  /*Essas variáveis servem para o quadro lateral Sidebar*/
-
   const location = useLocation();
-  const data = location.state; // name id score
-
+  const data = location.state; // user info
   const token = localStorage.getItem("token");
 
+  // --------------------------- Estados principais ---------------------------
   const [playerName] = useState(data.user.name);
   const [score, setScore] = useState(0);
   const [current, setCurrent] = useState(1);
   const total = 10;
   const [segundos, setSegundos] = useState(1);
 
+  const videoBackgrounds = [
+    bgShire,
+    bgBri,
+    bgRivendel,
+    bgMoria,
+    bgLorien,
+    bgArgonath,
+    bgMordor,
+  ];
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [fadeIn, setFadeIn] = useState(false);
+
+  // Controle do botão de transparência da UI
+  const [overlayVisible, setOverlayVisible] = useState(true);
+  const [overlayHovered, setOverlayHovered] = useState(false);
+  const toggleOverlay = () => setOverlayVisible((prev) => !prev);
+
+  // Controle do bonequinho / isMoving vindo do QuizContainer
+  const [isMoving, setIsMoving] = useState(false);
+  const handleMoving = (status) => {
+    setIsMoving(status);
+    console.log("Bonequinho está andando?", status);
+  };
+
+  // --------------------------- Ranking ---------------------------
   const handleRanking = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/users/ranking`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
+      const res = await fetch(`http://localhost:3000/users/ranking`);
       const rankingList = await res.json();
 
       const container = document.getElementById("listboard");
@@ -51,10 +72,8 @@ function Quiz({ setMusicaAtual }) {
 
         div.appendChild(nameUser);
         div.appendChild(scoreUser);
-
         container.appendChild(div);
       });
-
     } catch (err) {
       console.error("Erro:", err);
     }
@@ -62,51 +81,68 @@ function Quiz({ setMusicaAtual }) {
 
   useEffect(() => {
     handleRanking();
-    setFadeIn(true); // ativa fade in ao entrar
+    setFadeIn(true);
+    const interval = setInterval(handleRanking, 10000);
+    return () => clearInterval(interval);
   }, []);
 
-  setInterval(() => {
-    handleRanking();
-  }, 10000)
-
+  // --------------------------- Atualização de score ---------------------------
   const handleUpdateUser = () => {};
-
-  const handleUpdateScore = async (score = 300) => {
-    const scoreByTime = Math.round(score / segundos);
-
+  const handleUpdateScore = async (scoreUpdate = 300) => {
+    const scoreByTime = Math.round(scoreUpdate / segundos);
     try {
       const res = await fetch(`http://localhost:3000/users/me/score`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + token, 
+          Authorization: "Bearer " + token,
         },
         body: JSON.stringify({
           id: data.user.id,
-          score: scoreByTime, 
+          score: scoreByTime,
         }),
       });
-
-      // console.log("ESSE É A RESPOSTA DA REQUISIÇÃO:  ", res.users)
-      if (!res.ok) {
-        throw new Error("Erro ao atualizar pontuação");
-      }
-
+      if (!res.ok) throw new Error("Erro ao atualizar pontuação");
       const resData = await res.json();
-      await setScore(resData.score);
-      setCurrent(current + 1);
+      setScore(resData.score);
+      setCurrent((prev) => prev + 1);
     } catch (err) {
       console.error("Erro:", err);
-      console.log("ESSE É O CATCH CONSOLE");
     }
   };
 
-  const handleGetHour = (timer) => {
-    setSegundos(timer);
-  };
+  const handleGetHour = (timer) => setSegundos(timer);
 
-  return (
-    <div className="bg-black-quiz">
+  // --------------------------- Troca de vídeos ---------------------------
+  useEffect(() => {
+    if (!isMoving) {
+      const timeout = setTimeout(() => {
+        setCurrentVideoIndex((prev) => (prev + 1) % videoBackgrounds.length);
+        setFadeIn(true); // Fade-in do novo vídeo
+      }, 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [isMoving]);
+
+  // --------------------------- JSX ---------------------------
+return (
+    <div
+      className={`bg-black-quiz ${
+        !overlayVisible ? "transparent-mode" : ""
+      } ${overlayHovered ? "transparent-mode-hover" : ""}`}
+    >
+      {/* BOTÃO FIXO: fica acima de tudo e controla a transparência */}
+      <button
+        className="toggle-overlay-btn"
+        onClick={toggleOverlay}
+        onMouseEnter={() => setOverlayHovered(true)}
+        onMouseLeave={() => setOverlayHovered(false)}
+        aria-pressed={!overlayVisible}
+        title={overlayVisible ? "Mostrar vídeo ao fundo" : "Restaurar UI"}
+      >
+        {overlayVisible ? "👁 Mostrar fundo" : "🔒 UI visível"}
+      </button>
+
       <div className={`quiz-page ${fadeIn ? "fade-in" : ""} `}>
         <div className="box-lateral">
           {/* Quadro lateral */}
@@ -118,14 +154,15 @@ function Quiz({ setMusicaAtual }) {
             handleGetHour={handleGetHour}
           />
         </div>
+
         <QuizContainer
           handleUpdateUser={handleUpdateUser}
           handleUpdateScore={handleUpdateScore}
-        ></QuizContainer>
+          isMovingChange={handleMoving}
+        />
 
         <div className="box-lateral-r ">
           <img className="box-lateral-img " src={BoxWoodenR} alt="" />
-
           <div className="box-leaderboard">
             <h1>Hall dos heroiS</h1>
             <div className="leaderboard">
@@ -135,13 +172,29 @@ function Quiz({ setMusicaAtual }) {
             <div className="listboard" id="listboard"></div>
           </div>
         </div>
-
-        <video className="bg-video2" autoPlay muted loop playsInline>
-          <source src={bgShire} type="video/mp4" />
-        </video>
+         {/* Vídeos sobrepostos */}
+        <div className="video-wrapper">
+          {videoBackgrounds.map((video, index) => (
+            <video
+              key={index}
+              className={`bg-video2 ${
+                index === currentVideoIndex ? "visible-video" : "hidden-video"
+              }`}
+              autoPlay
+              muted
+              loop
+              playsInline
+            >
+              <source src={video} type="video/mp4" />
+            </video>
+          ))}
+        </div>
+       
       </div>
+     
     </div>
   );
 }
+
 
 export default Quiz;

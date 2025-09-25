@@ -5,8 +5,9 @@ import boxQuestion from "../../assets/images/box-question.png";
 import BtnQuestion from "../buttons/btnQuestion";
 import Map from "../Map";
 import Final from "./Final";
+import Narrator from "../narrador/Narrador";
 
-function QuizContainer({ handleUpdateUser, handleUpdateScore }) {
+function QuizContainer({ handleUpdateUser, handleUpdateScore, isMovingChange }) {
   const w = "400px";
   const h = "90px";
   const [question, setQuestion] = useState(1);
@@ -56,17 +57,18 @@ function QuizContainer({ handleUpdateUser, handleUpdateScore }) {
   }
     
   const [ativo,setAtivo]= useState(false)
-  const [perguntaAtivo,setPerguntaAtivo]=useState(false)
+  const [perguntaAtivo,setPerguntaAtivo]=useState(true)
   //pega o o status true ou false  
   const [isMoving, setIsMoving] = useState(false);
   const handleMoving = (status) => {
   setIsMoving(status);
-  console.log("Bonequinho está andando?", status);
+  isMovingChange(status);
+  console.log("Bonequinho está andando? no CONTAINER", status);
 };
 
 // ativa de 2 em 2 perguntas
 useEffect(() => {
-  if (question > 0 && question % 1 === 0) {
+  if (question > 0 && question % 2 === 0) {
     setAtivo(true);        
     setPerguntaAtivo(true);
   }
@@ -96,6 +98,10 @@ useEffect(() => {
   }
 }, [isFinished]);
   
+
+// No JSX
+
+
   return (
     <div>
        {isFinished && <Final />}
@@ -106,7 +112,7 @@ useEffect(() => {
         <div className="quiz-image">
           <Map ativo={ativo} onMoving={handleMoving} onFinish={handleFinish} />
         </div>
-
+          {/* <Narrator index={1} active={true} typingSpeed={90}></Narrator> */}
         {/* Pergunta */}
         <h2 className={`quiz-question ${perguntaAtivo ? "pergunta-off" : ""}`}>
           {pergunta}
