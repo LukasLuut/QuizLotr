@@ -112,6 +112,7 @@ filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
 }
 
 .fade-in {
+  z-index: 100;
   opacity: 1;
   transition: all 1s ease;
 }
@@ -129,10 +130,40 @@ filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
   transition: all 1s ease;
 }
 
-.video-wrapper {
+@keyframes fade-in-ui {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out-ui {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.video-front {
   position: absolute;
   inset: 0;
   overflow: hidden;
+}
+
+.hidden-ui {
+  opacity: 0;
+  animation: fade-out-ui 1s ease;
+} 
+
+.visible-ui {
+  opacity: 1;
+  animation: fade-in-ui 1s ease;
 }
 
 

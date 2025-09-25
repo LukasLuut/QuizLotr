@@ -44,12 +44,24 @@ function Quiz({ setMusicaAtual }) {
   const [overlayHovered, setOverlayHovered] = useState(false);
   const toggleOverlay = () => setOverlayVisible((prev) => !prev);
 
+  const [fundoFrente, setFundoFrente] = useState(false);
+
   // Controle do bonequinho / isMoving vindo do QuizContainer
   const [isMoving, setIsMoving] = useState(false);
   const handleMoving = (status) => {
     setIsMoving(status);
     console.log("Bonequinho está andando?", status);
   };
+
+  const handleFundo = () => {
+    console.log("ESTOU NO HANDLE DE FUNDO")
+    setFundoFrente(true);
+
+    setTimeout(() => {
+      setFundoFrente(false)
+    }, 3000)
+    
+  }
 
   // --------------------------- Ranking ---------------------------
   const handleRanking = async () => {
@@ -124,7 +136,10 @@ function Quiz({ setMusicaAtual }) {
       const timeout = setTimeout(() => {
         setCurrentVideoIndex((prev) => (prev + 1) % videoBackgrounds.length);
         setFadeIn(true); // Fade-in do novo vídeo
-      }, 1000);
+        setTimeout(() => {
+          handleFundo();
+        }, 200)
+      }, 500);
       return () => clearTimeout(timeout);
     }
   }, [isMoving]);
@@ -132,24 +147,20 @@ function Quiz({ setMusicaAtual }) {
   // --------------------------- JSX ---------------------------
 return (
     <div
-      className={`bg-black-quiz ${
-        !overlayVisible ? "transparent-mode" : ""
-      } ${overlayHovered ? "transparent-mode-hover" : ""}`}
+      className={`bg-black-quiz`}
     >
       {/* BOTÃO FIXO: fica acima de tudo e controla a transparência */}
       <button
         className="toggle-overlay-btn"
-        onClick={toggleOverlay}
-        onMouseEnter={() => setOverlayHovered(true)}
-        onMouseLeave={() => setOverlayHovered(false)}
-        aria-pressed={!overlayVisible}
-        title={overlayVisible ? "Mostrar vídeo ao fundo" : "Restaurar UI"}
+        onClick={handleFundo}
+        // aria-pressed={!overlayVisible}
+        
       >
         {overlayVisible ? "👁 Mostrar fundo" : "🔒 UI visível"}
       </button>
 
       <div className={`quiz-page ${fadeIn ? "fade-in" : ""} `}>
-        <div className="box-lateral">
+        <div className={`${fundoFrente ? "hidden-ui" : "visible-ui"} box-lateral`}>
           {/* Quadro lateral */}
           <Sidebar
             playerName={playerName}
@@ -160,13 +171,15 @@ return (
           />
         </div>
 
+        <div className={`${fundoFrente ? "hidden-ui" : "visible-ui"}`}>
         <QuizContainer
           handleUpdateUser={handleUpdateUser}
           handleUpdateScore={handleUpdateScore}
           isMovingChange={handleMoving}
         />
+        </div>
 
-        <div className="box-lateral-r ">
+        <div className={`${fundoFrente ? "hidden-ui" : "visible-ui"} box-lateral-r`}>
           <img className="box-lateral-img " src={BoxWoodenR} alt="" />
           <div className="box-leaderboard">
             <h1>Hall dos heroiS</h1>
@@ -178,7 +191,7 @@ return (
           </div>
         </div>
          {/* Vídeos sobrepostos */}
-        <div className="video-wrapper">
+        <div className={` ${fundoFrente ? "video-front" : "video-wrapper"} `}>
           {videoBackgrounds.map((video, index) => (
             <video
               key={index}
