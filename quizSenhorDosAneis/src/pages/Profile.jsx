@@ -74,7 +74,7 @@ function Profile({ setMusicaAtual }) {
 
   return (
     <div className='bg-black-profile'>
-      <div className={`body-container-profile ${fadeIn ? 'fade-in' : ''} `}>
+      <div className={`body-container-profile ${fadeIn ? 'fade-in-profile' : ''} `}>
         <div className='profile-container'>
           <div className='flag-profile'>
             <img className='flagg' src={flag} alt=""/>
@@ -102,7 +102,7 @@ function Profile({ setMusicaAtual }) {
           <video 
             ref={videoRef}
             onPlay={() => setMostrarBotao(true)} 
-            className={`transition-video ${fadeOut ? "fade-out" : ""}`} 
+            className={`transition-video ${fadeOut ? "fade-out-profile" : ""}`} 
             autoPlay 
             onEnded={handleVideoEnd}
           >
@@ -111,12 +111,12 @@ function Profile({ setMusicaAtual }) {
         )}
 
         {mostrarBotao && (
-          <div className={`pular-intro ${fadeOut ? "fade-out" : ""}`}>
+          <div className={`pular-intro ${fadeOut ? "fade-out-profile" : ""}`}>
             <Button onClick={pularIntro} texto='Pular intro'></Button>
           </div>
         )}
 
-        <video className="bg-video" autoPlay muted loop playsInline>
+        <video className="bg-video-profile" autoPlay muted loop playsInline>
                   <source src={bgVideo} type="video/mp4" />
                 </video>
       </div>

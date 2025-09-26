@@ -95,7 +95,7 @@ svg{
 .loader__inscription {
   width: 100%;  
   animation: ring 60s linear infinite;
-  cursor: pointer;
+  
   position: absolute;
   bottom: 0px;
   transition: transform 0.3s ease;

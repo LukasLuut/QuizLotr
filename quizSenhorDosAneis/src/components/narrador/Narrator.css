@@ -1,11 +1,12 @@
 .narrator-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   min-height: 120px;
-  background: url('../../assets//images/box-question.png') no-repeat center/cover;
-  border: 2px solid #a67c52;
+  background: transparent;
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.7);
   font-family: 'Ringbearer', serif;
   color: #e6d8b0;
   overflow: hidden;
@@ -13,6 +14,9 @@
   opacity: 0;
   transition: opacity 0.6s ease-in-out;
   text-wrap: wrap;
+  text-align: center;
+  text-justify: center;
+  height: 100%;
 }
 
 .narrator-box.fade-in {
@@ -20,11 +24,14 @@
 }
 
 .narrator-text {
-  font-size: 18px;
+  font-size: 160px;
   line-height: 1.5;
-  text-shadow: 1px 1px 2px #000;
+  text-shadow: 10px 8px 2px #000;
   white-space: pre-wrap; /* mantém quebras de linha */
   text-wrap: wrap;
+  text-align: center;
+  text-justify: center;
+  height: 100%;
 }
 
 .fade-in {
@@ -36,4 +43,26 @@
   opacity: 0;
   transform: translateY(10px);
 }
+
+
+.fade-letter {
+  opacity: 0;
+  display: inline-block;
+  animation: fadeIn 0.4s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px); /* levinho "subindo" */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
 

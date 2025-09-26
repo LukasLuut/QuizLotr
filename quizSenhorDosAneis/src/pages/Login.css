@@ -109,7 +109,7 @@ input::placeholder{
   color: var(--color-text-link-hover);
 }
 
-.bg-video {
+.bg-video-login {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -140,7 +140,7 @@ form{
   transition: opacity 2s ease;
 }
 
-.fade-in {
+.fade-in-login {
   opacity: 1;
   transition: opacity 2s ease;
 }

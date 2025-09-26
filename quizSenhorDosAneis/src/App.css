@@ -1,35 +1,9 @@
-/* .text {
-  position: relative;
-  display: inline-block;
-}
-
-.text span {
-  position: absolute;
-  
-  top: 0;
-  left: 0;
-  transition: opacity 0.4s ease;
-  
-}
-
-.text .alt {
-  opacity: 0;
-}
-
-.text:hover .alt {
-  opacity: 1;
-}
-
-.text:hover .main {
-  opacity: 0;
-} */
-
 .fade-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background: white;
   pointer-events: none; /* deixa clicar nos elementos atrás se necessário */
   opacity: 0;
@@ -39,4 +13,71 @@
 
 .fade-overlay.active {
   opacity: 1;
+}
+
+
+
+html {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-normal-final.png') 8 8, pointer !important;
+}
+html:active {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-click-final.png') 8 8, pointer !important;
+}
+/* Elementos principais (normal) */
+body, div, section, article, header, footer, main, aside,
+span, p, h1, h2, h3, h4, h5, h6,
+button, a, input, textarea, select, label, img, video {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-normal-final.png') 8 8, pointer !important;
+}
+
+/* Elementos principais (quando clicados) */
+body:active, div:active, section:active, article:active,
+header:active, footer:active, main:active, aside:active,
+span:active, p:active, h1:active, h2:active, h3:active, h4:active, h5:active, h6:active,
+button:active, a:active, input:active, textarea:active, select:active, label:active, img:active, video:active {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-click-final.png') 8 8, pointer !important;
+}
+
+/* Links e botões (normal/click já incluso acima, mas deixo explícito se quiser prioridade extra) */
+a, button {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-normal-final.png') 8 8, pointer !important;
+}
+a:active, button:active {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-click-final.png') 8 8, pointer !important;
+}
+
+/* === Leaflet Cursor Overrides === */
+
+/* Área geral do mapa */
+.leaflet-container {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-normal-final.png') 8 8, default !important;
+}
+
+/* Quando interagindo (ex: hover sobre algo clicável no mapa) */
+.leaflet-interactive,
+.leaflet-marker-icon,
+.leaflet-popup,
+.leaflet-control {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-normal-final.png') 8 8, pointer !important;
+}
+
+/* Clique (mouse down) no mapa e elementos interativos */
+.leaflet-container:active,
+.leaflet-interactive:active,
+.leaflet-marker-icon:active,
+.leaflet-popup:active,
+.leaflet-control:active {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-click-final.png') 8 8, pointer !important;
+}
+
+/* Drag do mapa (substitui o "mãozinha aberta" e "mãozinha fechada") */
+.leaflet-grab {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-normal-final.png') 8 8, grab !important;
+}
+
+.leaflet-grabbing {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-click-final.png') 8 8, grabbing !important;
+}
+.player-musica {   /* aqui entrou o seu player */
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-normal-final.png') 8 8, pointer !important;
 }

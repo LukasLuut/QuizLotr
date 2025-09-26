@@ -118,7 +118,7 @@ function Login() {
   }
 
   return (
-    <div className={`login-body ${fadeIn ? "fade-in" : ""}`}>
+    <div className={`login-body ${fadeIn ? "fade-in-login" : ""}`}>
       {mostrarPopup && <PopUpDTO erro={erroMessage} />}
       <div className="login-page">
         {/* Aqui o Formulário */}
@@ -131,25 +131,21 @@ function Login() {
             {/* Input de User*/}
             <div className="form-group">
               <label htmlFor="username">Nome de usuário</label>
-              <input type="text" id="username" placeholder="Ex: Frodo" />
+              <input autocomplete="off" type="text" id="username" placeholder="Ex: Frodo" />
             </div>
 
             {/* Input de Email*/}
             {mostrarEmail && (
               <div className="form-group">
                 <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  placeholder="Ex: frodo@shire.me"
-                />
+                <input autocomplete="off" type="email" id="email" placeholder="Ex: frodo@shire.me" />
               </div>
             )}
 
             {/* Input de senha*/}
             <div className="form-group">
               <label htmlFor="password">Senha</label>
-              <input type="password" id="password" placeholder="••••••••" />
+              <input autocomplete="off" type="password" id="password" placeholder="••••••••" />
             </div>
 
             <BtnMenu
@@ -199,7 +195,7 @@ function Login() {
         ></div>
 
         {/* vídeo de plano de fundo */}
-        <video className="bg-video" autoPlay muted loop playsInline>
+        <video className="bg-video-login" autoPlay muted loop playsInline>
           <source src={bgVideo} type="video/mp4" />
         </video>
       </div>

@@ -73,7 +73,7 @@
 }
 
 /* vídeos de fundo */
-.bg-video {
+.bg-video-profile {
   position: fixed;
   top: 0;
   left: 0;
@@ -85,7 +85,7 @@
   z-index: -1; /* sempre no fundo */
 }
 
-.fade-in {
+.fade-in-profile {
   opacity: 1;
   transition: opacity 2s ease;
 }
@@ -134,7 +134,7 @@
 }
 
 
-.fade-out {
+.fade-out-profile {
   opacity: 0;
 }
 

@@ -26,7 +26,7 @@ function App() {
 
   return (
     <>  {/* Player sempre montado */}
-      <PlayerMusica musica={musicaAtual}></PlayerMusica>
+      <PlayerMusica className="player-musica" cursor="pointer" musica={musicaAtual}></PlayerMusica>
 
     <Router>
       <Routes>

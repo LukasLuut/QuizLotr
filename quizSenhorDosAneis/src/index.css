@@ -1,0 +1,19 @@
+/* Cursor normal: cobre toda a aplicação */
+html, body, :root, video,
+div, section, article, header, footer, main, aside,
+span, p, h1, h2, h3, h4, h5, h6,
+button, a, input, textarea, select, label,
+img, video, audio, canvas,
+.leaflet-container, .leaflet-control, .leaflet-popup, .leaflet-marker-icon {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-normal-final.png') 8 8, auto !important;
+}
+
+/* Cursor no clique */
+html:active, body:active, :root:active, video:active,
+div:active, section:active, article:active, header:active, footer:active, main:active, aside:active,
+span:active, p:active, h1:active, h2:active, h3:active, h4:active, h5:active, h6:active,
+button:active, a:active, input:active, textarea:active, select:active, label:active,
+img:active, video:active, audio:active, canvas:active,
+.leaflet-container:active, .leaflet-control:active, .leaflet-popup:active, .leaflet-marker-icon:active {
+  cursor: url('./assets/cursor/sauron-hand-icon-cursor-click-final.png') 8 8, auto !important;
+}

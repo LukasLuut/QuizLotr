@@ -106,6 +106,7 @@ function OptionProfile({ isOpen, onClose, onSubmit, id }) {
             <label htmlFor="name">Nome</label>
             <br />
             <input
+              autocomplete="off"
               id="name"
               name="name"
               type="text"
@@ -120,6 +121,7 @@ function OptionProfile({ isOpen, onClose, onSubmit, id }) {
             <label htmlFor="email">Email</label>
             <br />
             <input
+              autocomplete="off"
               id="email"
               name="email"
               type="email"
@@ -134,6 +136,7 @@ function OptionProfile({ isOpen, onClose, onSubmit, id }) {
             <label htmlFor="password">Senha</label>
             <br />
             <input
+              autocomplete="off"
               id="password"
               name="password"
               type="password"

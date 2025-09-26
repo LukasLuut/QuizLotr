@@ -76,10 +76,16 @@ useEffect(() => {
 
 // desativa quando o bonequinho para
 useEffect(() => {
-  if (!isMoving)setPerguntaAtivo(false);
+  if (!isMoving)
   setTimeout(() => {
-      
-    setAtivo(false);
+    if (isFinished) {
+      setAtivo(false);        
+      setPerguntaAtivo(true);
+    }else{
+      setPerguntaAtivo(false);
+      setAtivo(false);
+    }
+    
     }, 2000); 
    
 }, [isMoving]);

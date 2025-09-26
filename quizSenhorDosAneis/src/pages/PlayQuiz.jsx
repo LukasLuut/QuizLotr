@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
+import VideoTransition from "../components/videoTransition/VideoTransition"; // importa o novo componente
 
 import QuizContainer from "../components/layout/QuizContainer";
 import Sidebar from "../components/layout/Sidebar";
@@ -14,6 +15,7 @@ import bgMoria from "../assets/videos/moria.mp4";
 import bgArgonath from "../assets/videos/argonath.mp4";
 
 import "./PlayQuiz.css";
+import Narrator from "../components/narrador/Narrador";
 
 function Quiz({ setMusicaAtual }) {
   const location = useLocation();
@@ -26,6 +28,7 @@ function Quiz({ setMusicaAtual }) {
   const [current, setCurrent] = useState(1);
   const total = 7;
   const [segundos, setSegundos] = useState(1);
+  const videoRef = useRef();//deve controlar a mudança de background
 
   const videoBackgrounds = [
     bgShire,
@@ -41,6 +44,7 @@ function Quiz({ setMusicaAtual }) {
 
   // Controle do botão de transparência da UI
   const [overlayVisible, setOverlayVisible] = useState(true);
+  const [titleFadeOut, setTitleFadeOut]=useState(true)
   const [overlayHovered, setOverlayHovered] = useState(false);
   const toggleOverlay = () => setOverlayVisible((prev) => !prev);
 
@@ -54,14 +58,25 @@ function Quiz({ setMusicaAtual }) {
     console.log("Bonequinho está andando?", status);
   };
 
+//--------------------------Transição de áreas do mapa-------------------------------
   const handleFundo = () => {
     setFundoFrente(true);
+    setTitleScene(true)
+    setTitleFadeOut(true)
 
+    //esse timer envia false para o narrador 
+    //antes para gerar animação de fade-out
+    setTimeout(() => {
+        setTitleFadeOut(false);
+       },2100)
     setTimeout(() => {
       setFundoFrente(false)
-    }, 3000)
+      setTitleScene(false)
+    }, 2800)
   }
 
+  
+  //titulo da área aparece e desaparece depois de 3s
   const handleTitleScene = () => {
     setTitleScene(true)
 
@@ -97,10 +112,21 @@ function Quiz({ setMusicaAtual }) {
       console.error("Erro:", err);
     }
   };
-
+// --------------------------- Toca ao abrir a página ---------------------------
   useEffect(() => {
+    
+    
     handleRanking();
-    setFadeIn(true);
+    //desliga a opacidade para aparecer o título primeiro
+    setFadeIn(false);
+    //roda o título
+    handleFundo();
+    //depois de 3s liga a opacidade para aparecer UI
+    setTimeout(()=>{
+      setFadeIn(true);
+    },2900)
+    
+    videoRef.current.setBg(0)
     const interval = setInterval(handleRanking, 10000);
     return () => clearInterval(interval);
   }, []);
@@ -109,6 +135,8 @@ function Quiz({ setMusicaAtual }) {
     handleRanking();
   }, 10000)
 
+  
+// ----------------------------------------------------------------------------------------
   const handleUpdateUser = () => { };
 
   const handleUpdateScore = async (score = 300) => {
@@ -141,90 +169,93 @@ function Quiz({ setMusicaAtual }) {
   useEffect(() => {
     if (!isMoving) {
       const timeout = setTimeout(() => {
+        videoRef.current.nextBg()
         setCurrentVideoIndex((prev) => (prev + 1) % videoBackgrounds.length);
         setFadeIn(true); // Fade-in do novo vídeo
         setTimeout(() => {
-          handleFundo();
+          
           handleTitleScene();
         }, 200)
+        handleFundo();
       }, 500);
       return () => clearTimeout(timeout);
     }
   }, [isMoving]);
 
+  
+  
+
+
   // --------------------------- JSX ---------------------------
 return (
-    <div
-      className={`bg-black-quiz`}
+  <div className="bg-black-quiz">
+    {/* Narrador / título */}
+    {titleScene && (
+      <div className={`title-scene ${titleScene ? "visible-ui" : "hidden-ui"}`}>
+        <Narrator
+          index={currentVideoIndex}
+          active={titleFadeOut}
+          typingSpeed={125}
+        />
+      </div>
+    )}
+
+    {/* Botão de controle */}
+    <button
+      className={`${
+        fundoFrente ? "hidden-ui disable-btn" : "visible-ui"
+      } toggle-overlay-btn`}
+      id="btn-hidden"
+      onClick={handleFundo}
+      disabled={fundoFrente}
     >
-      { titleScene && (
-        <h1 className={`${fundoFrente ? "visible-ui" : "hidden-ui"}`} style={{color: 'white'}}>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</h1>
-      )}
-      {/* BOTÃO FIXO: fica acima de tudo e controla a transparência */}
-      <button
-        className={`${fundoFrente ? "hidden-ui disable-btn" : "visible-ui"} toggle-overlay-btn`}
-        id="btn-hidden"
-        onClick={handleFundo}
-        disabled={fundoFrente}
-        // aria-pressed={!overlayVisible}
-        
-      >
-        {overlayVisible ? "👁 Mostrar fundo" : "🔒 UI visível"}
-      </button>
+      {overlayVisible ? "👁 Mostrar fundo" : "🔒 UI visível"}
+    </button>
 
-      <div className={`quiz-page ${fadeIn ? "fade-in" : ""} `}>
-        <div className={`${fundoFrente ? "hidden-ui" : "visible-ui"} box-lateral`}>
-          {/* Quadro lateral */}
-          <Sidebar
-            playerName={playerName}
-            score={score}
-            current={current}
-            total={total}
-            handleGetHour={handleGetHour}
-          />
-        </div>
+    <div className={`quiz-page ${fadeIn ? "fade-in" : ""}`}>
+      {/* Sidebar esquerda */}
+      <div className={`${fundoFrente ? "hidden-ui" : "visible-ui"} box-lateral`}>
+        <Sidebar
+          playerName={playerName}
+          score={score}
+          current={current}
+          total={total}
+          handleGetHour={handleGetHour}
+        />
+      </div>
 
-        <div className={`${fundoFrente ? "hidden-ui" : "visible-ui"}`}>
+      {/* Container principal */}
+      <div className={`${fundoFrente ? "hidden-ui" : "visible-ui"}`}>
         <QuizContainer
           handleUpdateUser={handleUpdateUser}
           handleUpdateScore={handleUpdateScore}
           isMovingChange={handleMoving}
         />
-        </div>
-
-        <div className={`${fundoFrente ? "hidden-ui" : "visible-ui"} box-lateral-r`}>
-          <img className="box-lateral-img " src={BoxWoodenR} alt="" />
-          <div className="box-leaderboard">
-            <h1>Hall dos heroiS</h1>
-            <div className="leaderboard">
-              <h1>Nome:</h1>
-              <h1>Pontuação:</h1>
-            </div>
-            <div className="listboard" id="listboard"></div>
-          </div>
-        </div>
-         {/* Vídeos sobrepostos */}
-        <div className={` ${fundoFrente ? "video-front" : "video-wrapper"} `}>
-          {videoBackgrounds.map((video, index) => (
-            <video
-              key={index}
-              className={`bg-video2 ${
-                index === currentVideoIndex ? "visible-video" : "hidden-video"
-              }`}
-              autoPlay
-              muted
-              loop
-              playsInline
-            >
-              <source src={video} type="video/mp4" />
-            </video>
-          ))}
-        </div>
-       
       </div>
-     
+
+      {/* Sidebar direita */}
+      <div
+        className={`${
+          fundoFrente ? "hidden-ui" : "visible-ui"
+        } box-lateral-r`}
+      >
+        <img className="box-lateral-img " src={BoxWoodenR} alt="" />
+        <div className="box-leaderboard">
+          <h1>Hall dos heroiS</h1>
+          <div className="leaderboard">
+            <h1>Nome:</h1>
+            <h1>Pontuação:</h1>
+          </div>
+          <div className="listboard" id="listboard"></div>
+        </div>
+      </div>
+
+      
     </div>
-  );
+    {/* Transição de vídeos (novo componente) */}
+       <VideoTransition ref={videoRef} fadeDuration={500} />
+  </div>
+);
 }
 
 

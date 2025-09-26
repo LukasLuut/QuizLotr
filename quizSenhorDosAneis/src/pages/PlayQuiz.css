@@ -35,7 +35,8 @@
   width: 20%; 
   height: 90vh;
   margin:0 2%;
-    filter: drop-shadow(0px 0px 15px rgb(0, 0, 0));
+  filter: drop-shadow(0px 0px 15px rgb(0, 0, 0));
+  opacity: 0;
 }
 
 .box-lateral-r{
@@ -149,6 +150,20 @@ filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
     opacity: 0;
   }
 }
+.title-scene{
+  font-family: Ringbearer;
+  color: rgb(218, 218, 218);
+  filter: drop-shadow(5px 3px 2px rgb(0, 0, 0));
+  position: fixed;
+  top:40%;
+  z-index: 3;
+  font-size: 86px;
+  font-weight: 100;
+  width: 100%;
+  text-align: center;
+  text-justify: center;
+   letter-spacing: 40px;
+}
 
 .video-front {
   position: absolute;
@@ -159,7 +174,7 @@ filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
 .hidden-ui {
   opacity: 0;
   animation: fade-out-ui 1s ease;
-  cursor: default;
+  
 } 
 
 
@@ -167,7 +182,7 @@ filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
 .visible-ui {
   opacity: 1;
   animation: fade-in-ui 1s ease;
-  cursor: pointer;
+  
 }
 
 
@@ -184,7 +199,7 @@ filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
   border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.15);
   transition: transform .15s ease, background .15s;
-  pointer-events: auto;
+ 
 }
 .toggle-overlay-btn:hover {
   transform: scale(1.05);
@@ -220,4 +235,42 @@ filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
 .hidden-video {
   opacity: 0;
   z-index: -2;
+}
+
+
+/* animação para revelar a palavra */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 15ch } /* 15 caracteres */
+}
+
+/* animação do cursor piscando */
+@keyframes blink {
+  50% { border-color: transparent }
+}
+
+.typing {
+  width: 0;
+  white-space: nowrap;        /* impede quebra de linha */
+  overflow: hidden;           /* esconde o que não couber */
+  border-right: 2px solid;    /* simula o cursor */
+  animation: typing 3s steps(15) forwards, blink 0.6s step-end infinite;
+}
+
+.bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: auto;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  object-fit: contain;
+}
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 2s ease;
 }
