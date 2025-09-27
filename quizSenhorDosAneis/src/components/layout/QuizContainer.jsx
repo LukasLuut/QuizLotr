@@ -7,7 +7,7 @@ import Map from "../Map";
 import Final from "./Final";
 import Narrator from "../narrador/Narrador";
 
-function QuizContainer({ handleUpdateUser, handleUpdateScore, isMovingChange }) {
+function QuizContainer({ handleUpdateUser, handleUpdateScore, isMovingChange, handleSetRound }) {
   const w = "400px";
   const h = "90px";
   const [question, setQuestion] = useState(1);
@@ -99,6 +99,8 @@ const handleFinish = (status) => {
 
 useEffect(() => {
   if (isFinished) {
+    handleSetRound();
+    handleUpdateScore(-999, true);
     setAtivo(false);        
     setPerguntaAtivo(true);
   }
