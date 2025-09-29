@@ -9,25 +9,26 @@ questões, acumula pontos e compete no ranking.
 
 ## ✨ Funcionalidades
 
--   🎮 **Quiz interativo** com animações e feedback imediato\
+-   🎮 **Quiz interativo** com animações e feedback imediato
 -   🗺️ **Mapa estilo Terra-média** usando **Leaflet**, onde o personagem
     se move conforme o progresso\
--   🎥 **Vídeos de fundo** com transições suaves (fade in/out)\
+-   🎥 **Vídeos de fundo** com transições suaves (fade in/out)
 -   🖼️ **UI temática** com fontes de fantasia, ornamentos e efeitos
     visuais\
--   🏆 **Leaderboard** para exibir jogadores e pontuações\
--   👤 **Perfil de usuário** com atualização e exclusão de conta\
+-   🏆 **Leaderboard** para exibir jogadores e pontuações
+-   👤 **Perfil de usuário** com atualização e exclusão de conta
 -   🔑 **Autenticação segura** com JWT e senhas criptografadas
+-   🎵 **Sound Design** pensado para imersão e melhor experiência 
 
 ------------------------------------------------------------------------
 
 ## 🛠️ Tecnologias Utilizadas
 
 -   **Frontend**: React, CSS3, Leaflet\
--   **Backend**: Node.js, Express, MySQL (Workbench)\
+-   **Backend**: Node.js, TypeOrm, MySQL (Workbench)\
 -   **Segurança**: DTO, Tokens JWT, Criptografia com Bcrypt\
--   **Design**: Pixel art, fontes temáticas (Ringbearer, Tengwar
-    Annatar), efeitos visuais com vídeos e sprites
+-   **Design**: Fontes temáticas (Ringbearer, Tengwar
+    Annatar), efeitos visuais com vídeos, sprites e efeitos sonoros
 
 ------------------------------------------------------------------------
 
@@ -40,7 +41,6 @@ questões, acumula pontos e compete no ranking.
      │   ├─ layout/       # containers e telas principais
      │   └─ ui/           # elementos visuais extras
      ├─ pages/            # páginas principais (Quiz, Login, Profile)
-     ├─ styles/           # CSS global e temas
      └─ App.jsx           # ponto de entrada React
 
 ------------------------------------------------------------------------
@@ -50,8 +50,8 @@ questões, acumula pontos e compete no ranking.
 1.  Clone este repositório:
 
     ``` bash
-    git clone https://github.com/seu-usuario/quiz-senhor-dos-aneis.git
-    cd quiz-senhor-dos-aneis
+    git clone https://github.com/LukasLuut/QuizLotr.git
+    cd quizSenhorDosAneis/
     ```
 
 2.  Instale as dependências:
@@ -73,7 +73,8 @@ questões, acumula pontos e compete no ranking.
     npm install
     npm run dev
     ```
-
+    --Necessário configurar **.env**.
+   -- Necessário instalar Workbench.
 ------------------------------------------------------------------------
 
 ## 📸 Demonstração
