@@ -18,19 +18,31 @@ questões, acumula pontos e compete no ranking.
 -   🏆 **Leaderboard** para exibir jogadores e pontuações
 -   👤 **Perfil de usuário** com atualização e exclusão de conta
 -   🔑 **Autenticação segura** com JWT e senhas criptografadas
--   🎵 **Sound Design** pensado para imersão e melhor experiência 
+-   🎵 **Sound Design** pensado para imersão e melhor experiência
+
+   ## ✨ Badges da Guilda
+
+![Forjado em React](https://img.shields.io/badge/Forjado%20em-React-61DAFB?style=for-the-badge\&logo=react\&logoColor=black)
+![Mapa por Leaflet](https://img.shields.io/badge/Mapa-Leaflet-199900?style=for-the-badge\&logo=leaflet\&logoColor=white)
+![Protegido por Bcrypt](https://img.shields.io/badge/Protegido%20por-Bcrypt-yellow?style=for-the-badge)
+![Guardado no GitHub](https://img.shields.io/badge/Guardado-no%20GitHub-lightgrey?style=for-the-badge\&logo=github)
+
+---
+
+## ⚒️ Forja de Ferramentas
+
+* **Frontend:** React, React Router
+* **Mapa:** Leaflet.js
+* **Estilização:** CSS (animações, media queries, fontes *Ringbearer* e *Uncial Antiqua*)
+* **Backend:** MySQL (Workbench), autenticação e tokens de acesso
+* **Segurança:** Criptografia de senhas com Bcrypt
+* **Arquitetura:** DTOs, tratamento de exceções e UI/UX imersiva
+* **Design**: Efeitos visuais com vídeos, imagens e efeitos sonoros
+
+
 
 ------------------------------------------------------------------------
 
-## 🛠️ Tecnologias Utilizadas
-
--   **Frontend**: React, CSS3, Leaflet\
--   **Backend**: Node.js, TypeOrm, MySQL (Workbench)\
--   **Segurança**: DTO, Tokens JWT, Criptografia com Bcrypt\
--   **Design**: Fontes temáticas (Ringbearer, Tengwar
-    Annatar), efeitos visuais com vídeos, sprites e efeitos sonoros
-
-------------------------------------------------------------------------
 
 ## 📂 Estrutura do Projeto
 
@@ -69,6 +81,7 @@ questões, acumula pontos e compete no ranking.
 4.  Suba o backend:
 
     ``` bash
+    cd ..
     cd backend
     npm install
     npm run dev
