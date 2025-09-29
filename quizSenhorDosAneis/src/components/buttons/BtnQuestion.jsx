@@ -6,7 +6,7 @@ import btnQuestionVerde from '../../assets/images/button/btn-verde.png'
 import btnQuestionVermelho from '../../assets/images/button/btn-vermelho.png'
 import hoverSound from '../../assets/audio/click-song.mp3'
 
-function BtnQuestion({ w, h, texto, resposta, onClick }) {
+function BtnQuestion({className, w, h, texto, resposta, onClick }) {
   const audioRef = useRef(new Audio(hoverSound));
   const [status, setStatus] = useState("default"); 
   // valores possíveis: "default", "correct", "wrong"
@@ -36,7 +36,7 @@ function BtnQuestion({ w, h, texto, resposta, onClick }) {
     // espera 0.5s antes de mostrar verde/vermelho
     setTimeout(() => {
       setStatus(resposta ? "correct" : "wrong");
-    }, 500);
+    }, 100);
   };
 
   // define imagens: base marrom sempre, hover muda conforme status
@@ -55,7 +55,7 @@ function BtnQuestion({ w, h, texto, resposta, onClick }) {
       onMouseEnter={handleHover}
       onClick={handleClick}
       style={{ width: w, height: h }}
-      className={`btn-question ${status}`} 
+     className={`btn-question ${status} ${className || ""}`} 
     >
       <p className='txt-btn-question'>{texto}</p>
      {/* Base sempre marrom */}

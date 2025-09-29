@@ -1,0 +1,101 @@
+/* Fundo semitransparente que cobre a tela */
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6); /* fundo escuro */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  
+}
+
+/* Caixa central de confirmação */
+.confirm-box {
+  position: relative;
+  width: 400px;
+  padding: 0px;
+  left: 12%;
+  text-align: center;
+  background: transparent;
+}
+
+/* Imagem de fundo */
+.confirm-box img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(4px 10px 10px rgba(0,0,0,0.8));
+}
+
+/* Texto da confirmação */
+.confirm-box h1 {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: Ringbearer, serif;
+  font-size: 22px;
+  color: goldenrod;
+  text-shadow: 1px 4px 4px #000;
+  width: 80%;
+}
+
+/* Container dos botões */
+.box-btn-tem-certeza {
+  position: absolute;
+  bottom: 60px;
+  left: 49.5%;
+  transform: translateX(-50%);
+  display: flex;
+  text-align: center;
+  text-justify: center;
+  
+  
+}
+
+
+/* Botão "Sim" */
+.confirm-box .btn-question.sim .base {
+  content: url("../assets/images/button/btn-sim-base.png");
+  
+}
+
+.confirm-box .btn-question.sim .hover {
+  content: url("../assets/images/button/btn-sim-base.png");
+  
+}
+
+.confirm-box .btn-question.sim.correct .correct {
+  content: url("../assets/images/button/btn-sim-base.png");
+  font-size: 1px;
+}
+
+.confirm-box .btn-question.sim.wrong .wrong {
+  content: url("../assets/images/button/btn-sim-base.png");
+}
+
+/* Botão "Não" */
+.confirm-box .btn-question.nao .base {
+  content: url("../assets/images/button/btn-nao-base.png");
+}
+
+.confirm-box .btn-question.nao .hover {
+  content: url("../assets/images/button/btn-nao-base.png");
+}
+
+.confirm-box .btn-question.nao.correct .correct {
+  content: url("../assets/images/button/btn-nao-base.png");
+}
+
+.confirm-box .btn-question.nao.wrong .wrong {
+  content: url("../assets/images/button/btn-nao-base.png");
+}
+
+
+
+

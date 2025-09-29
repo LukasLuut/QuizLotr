@@ -7,7 +7,7 @@ import BtnMenu from '../buttons/BtnMenu'
 function Menu() {
   return (
     <div className='box-menu'>
-        <img src={bgMenu} alt="" />
+        <img className='img-box-menu' src={bgMenu} alt="" />
         <h1>Menu</h1>
         <div className='box-btn'>
             <BtnMenu texto='Continuar'></BtnMenu>

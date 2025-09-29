@@ -1,12 +1,19 @@
 .box-menu{
-    width: 400px;
-    height: 600px;
-    position: relative;
+   
+    position: fixed;
+    inset: 0; /* equivale a top:0; left:0; right:0; bottom:0 */
+    display: flex;
+    
+    align-items: center;  /* alinha no eixo vertical */
+    justify-content: center; /* alinha no eixo horizontal */
+    background: rgba(0, 0, 0, 0.6); /* fundo preto translúcido opcional */
+    z-index: 2000; /* fica acima de tudo */
 }
 
 .box-menu img{
-    width: 100%;
-    height: 100%;
+    width: 400px;
+    height: 600px;
+    filter: drop-shadow(4px 15px 15px rgba(0,0,0,1));
     
 
     
@@ -14,19 +21,19 @@
 
 .box-menu h1{
     position: absolute;
-    top: 14%;
-    left: 33%;
     font-family: 'Ringbearer';
     font-weight: 100;
     font-size: 50px;
+    top:30%;
     color: rgb(187, 139, 17);
     filter: drop-shadow(4px 5px 5px rgba(0,0,0,1));
 
 }
 
 .box-btn{
-    position: absolute;
-    top: 23%;
+    display: flex;
+    position: absolute;    
     transform: scale(0.8);
-    left: -2px;
+    flex-direction: column;
+    top: 35%;
 }

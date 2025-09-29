@@ -19,30 +19,35 @@ export default function Sidebar({ playerName, score, current, total, handleGetHo
           <span className="span-title">Rainha dos 7 mares</span>
         </h2>
       </div>
-        
-      {/* Pontuação */}
-      <div className="score">
-        <p>Pontuação: {score}</p>
-      </div>
-
-      {/* Progresso */}
-      <div className="progress">
-        <p>
-          Progresso: {current}/{total}
-        </p>
-        <div className="progress-bar">
-          <div
-            className="progress-fill"
-            style={{ width: `${(current / total) * 100}%` }}
-          ></div>
+      <div className="box-state-atual">
+        {/* Pontuação */}
+        <div className="score">
+          <p>Pontuação: {score}</p>
         </div>
-      </div>
 
-      {/* Extra: Mensagens motivacionais */}
-      <div className="message">
-        <p>Você está mandando bem!</p>
+        {/* Progresso */}
+        <div className="progress">
+          <p>
+            Progresso: {current}/{total}
+          </p>
+          <div className="progress-bar">
+            <div
+              className="progress-fill"
+              style={{ width: `${(current / total) * 100}%` }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Extra: Mensagens motivacionais */}
+        <div className="message">
+          <p>Você está mandando bem!</p>
+        </div>
+        <div className="cronometro-sidebar">
+          <Cronometro handleGetHour={handleGetHour} current={current}></Cronometro>
+        </div>
+
       </div>
-      <Cronometro handleGetHour={handleGetHour} current={current}></Cronometro>
+      
     </aside>
   );
 }

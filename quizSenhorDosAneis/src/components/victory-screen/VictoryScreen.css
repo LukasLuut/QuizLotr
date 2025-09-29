@@ -1,0 +1,72 @@
+
+
+.victory-stat {
+background: rgba(255, 255, 255, 0.1);
+padding: 1rem;
+border-radius: 8px;
+min-width: 100px;
+}
+
+
+/* Rótulo (ex: Tempo, Pontuação) */
+.label {
+font-size: 0.9rem;
+color: #ccc;
+}
+
+
+/* Valor da estatística */
+.value {
+font-size: 1.2rem;
+font-weight: bold;
+margin-top: 0.5rem;
+}
+
+
+/* Botão de jogar novamente */
+.victory-button {
+background: #fff;
+color: #000;
+border: none;
+padding: 0.8rem 1.5rem;
+font-size: 1rem;
+font-weight: bold;
+border-radius: 8px;
+cursor: pointer;
+transition: transform 0.2s ease, background 0.2s ease;
+}
+
+
+/* Efeitos do botão ao passar o mouse */
+.victory-button:hover {
+background: #eaeaea;
+transform: scale(1.05);
+}
+
+
+/* Efeito do botão ao clicar */
+.victory-button:active {
+transform: scale(0.95);
+}
+
+
+/* Texto pequeno de instrução */
+.victory-note {
+margin-top: 1rem;
+font-size: 0.8rem;
+color: #bbb;
+}
+
+
+/* Animação de fade-in para o fundo */
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+
+
+/* Animação de zoom para o card */
+@keyframes scaleIn {
+from { transform: scale(0.9); opacity: 0; }
+to { transform: scale(1); opacity: 1; }
+}

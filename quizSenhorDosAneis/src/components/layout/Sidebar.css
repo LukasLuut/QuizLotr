@@ -1,16 +1,13 @@
 .sidebar{
     
     background-image:url('../../assets/images/box/box-lateral.png') ;
-    background-size: contain;
+    background-size: 100% 70%;
     background-repeat: no-repeat;
     background-position: bottom;
     height: 73vh;
     margin-top: 30%;
     color: aliceblue;
     position: relative;
-    
-    
-
 }
 
 
@@ -18,11 +15,12 @@
 .player-info {
     font-family: 'Uncial Antiqua', cursive;
     font-weight: 100;
-    padding-bottom: 100px;
     color: goldenrod;
     font-size: 20px;
     display: flex;  
-    line-height: 1;  
+    line-height: 1; 
+    
+     
 }
 
 .span-title{
@@ -63,16 +61,11 @@
 
 }
 
-.message{
-    margin-bottom: 25px;
-}
-
-
 .player-name{
     padding: 20%;
     margin-left: 21%;
     padding-top: 17%;
-    margin-bottom: 20px;
+   
 }
 
 .player-info2{
@@ -81,4 +74,68 @@
     position: fixed;
     z-index: 1;
     filter: drop-shadow(0px -2px 10px rgba(0, 0, 0, 0.541));
+}
+
+.box-state-atual{
+    position: absolute;    
+    
+    height: 48vh;
+    display: flex;
+    flex-direction: column;    
+    justify-content: center;
+    top: 31%;
+    left: 14%;
+}
+
+.cronometro-sidebar{
+    height: 60%;
+    bottom: 0;
+    margin-bottom: -25%;
+    margin-top: -5%;
+}
+
+
+@media (max-width: 768px) {
+    .sidebar{
+    top: 55%;
+    position: absolute; 
+    background-image:url('../../assets/images/box/box-lateral-girado.png');
+    width: 90vw;
+    height: 40vh;
+    }
+
+    .player-info{
+        
+    }
+    .box-state-atual{
+        position: absolute; 
+        top: 90px;
+        left: 0;      
+        
+    }   
+    .cronometro-sidebar{
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    top: 12px;
+    left: 190px;
+    } 
+
+    .span-title, .border-profile-side,
+    .player-info2
+    {
+        display: none;
+    } 
+    
+    .message{
+        opacity: 0;
+    }
+
+    .player-name{
+        position: absolute;
+        bottom: 80px;
+        left: -120px;
+        filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.541));
+    }
+
 }

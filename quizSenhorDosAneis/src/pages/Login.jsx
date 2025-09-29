@@ -119,7 +119,7 @@ function Login() {
 
   return (
     <div className={`login-body ${fadeIn ? "fade-in-login" : ""}`}>
-      {mostrarPopup && <PopUpDTO erro={erroMessage} />}
+      <PopUpDTO erro={erroMessage} isOpen={mostrarPopup} />
       <div className="login-page">
         {/* Aqui o Formulário */}
         <div className="form-container ">

@@ -119,7 +119,7 @@ input::placeholder{
   min-height: 100%;
   transform: translate(-50%, -50%);
   z-index: -1;
-  object-fit: contain;
+  object-fit: fill;
 }
 
 form{

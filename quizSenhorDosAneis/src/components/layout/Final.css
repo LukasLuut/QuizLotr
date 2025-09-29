@@ -1,61 +1,143 @@
-.quadro-final{
-    position: fixed;
-    width: 1200px;
-    height: 600px;
-    top: 50px;
-    left: 360px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 4000;
-    
 
+/* Fundo preto translúcido cobrindo a tela */
+.victory-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0); /* camada escura */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.6s ease forwards;
 }
 
-.quadro-final img{
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 2;
-    overflow: hidden;
-    filter: drop-shadow(-10px 20px 15px rgb(28, 19, 0));
-    
+/* Vídeo de fundo */
+.video-final {
+  position: absolute;
+  width: 100vw;   /* agora baseado na altura da tela */
+  height: auto;
+  object-fit:cover;
+  z-index: -1;
+
+  
 }
 
-.video-final{
-    position: absolute;
-    z-index: 1;
-    width: 78%;
-    height: 90%;
-    object-fit: cover;
+/* Card central onde ficam as informações */
+.victory-card {
+  
+  color: goldenrod;
+  padding: 2rem;
+  top: 25%;
+  padding-top: 15%;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  animation: scaleIn 0.4s ease forwards;
+  position: fixed;
+  z-index: 2;
+}
+
+/* Título principal */
+.victory-title {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-family: Ringbearer;
+  font-weight: 100;
+}
+.victory-img{
+  width: 150%;
+  height: auto;
+  position: fixed;
+  top: -35%;
+  left: -22%;
+}
+
+.img-box-conquista-final{
+  width: 110%;
+  top: -14%;  
+  left: -5%;
+  position: fixed;
+  z-index: -1;
+  filter: drop-shadow(10px 15px 21px rgba(0,0,0,1)); 
 
 }
+/* Container das estatísticas */
+.victory-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1.5rem;
+}
+
+/* Bloco individual de estatística */
+.victory-stat {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  min-width: 100px;
+}
+
+.label {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+
+
+.btn-final:active {
+  transform: scale(0.95);
+}
+
+/* Texto pequeno de instrução */
+.victory-note {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: #bbb;
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+
 
 
 .btn-final {
   position: fixed;
-  bottom: 200px;
-  left: 670px;
+  bottom: 8%;
+  left: 34%;
   z-index: 1000;
   border: none;
   width:600px;
   height: 150px;
-  
+  transition: transform 0.2s ease, background 0.2s ease;
   background-image: url('../../assets/images/button/btn-vermelho-off-db.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
-
   color: goldenrod;
   font-family: Ringbearer;
   font-size: 25px;
-
-  filter: drop-shadow(10px 15px 21px rgba(0,0,0,1));
-
- 
+  z-index: 10000;
+  filter: drop-shadow(10px 15px 21px rgba(0,0,0,1)); 
   /* transições */
-  transition: opacity 0.5s ease, transform 0.2s ease, filter 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .btn-final:hover {

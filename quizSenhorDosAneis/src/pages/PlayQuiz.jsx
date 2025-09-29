@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import VideoTransition from "../components/videoTransition/VideoTransition"; // importa o novo componente
+import Menu from '../components/layout/Menu'
 
 import QuizContainer from "../components/layout/QuizContainer";
 import Sidebar from "../components/layout/Sidebar";
@@ -61,9 +62,12 @@ function Quiz({ setMusicaAtual }) {
 //--------------------------Transição de áreas do mapa-------------------------------
   const handleFundo = () => {
     setFundoFrente(true);
-    setTitleScene(true)
+   
     setTitleFadeOut(true)
 
+    setTimeout(() => {
+         setTitleScene(true)
+       },600)
     //esse timer envia false para o narrador 
     //antes para gerar animação de fade-out
     setTimeout(() => {
@@ -117,6 +121,7 @@ function Quiz({ setMusicaAtual }) {
     
     
     handleRanking();
+    
     //desliga a opacidade para aparecer o título primeiro
     setFadeIn(false);
     //roda o título
@@ -175,12 +180,30 @@ function Quiz({ setMusicaAtual }) {
         setTimeout(() => {
           
           handleTitleScene();
-        }, 200)
+        }, 500)
         handleFundo();
       }, 500);
       return () => clearTimeout(timeout);
     }
   }, [isMoving]);
+
+
+
+
+// --------------------------- Abertura do modal MENU ---------------------------
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.code === "Space") {
+        event.preventDefault(); // evita scroll
+        setIsMenuOpen((prev) => !prev); // alterna abrir/fechar
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown, false);
+  }, []);
 
   
   
@@ -210,7 +233,10 @@ return (
       disabled={fundoFrente}
     >
       {overlayVisible ? "👁 Mostrar fundo" : "🔒 UI visível"}
-    </button>
+    </button>    
+      
+      {/* Renderiza o Menu só se estiver aberto */}
+      {isMenuOpen && <Menu />}
 
     <div className={`quiz-page ${fadeIn ? "fade-in" : ""}`}>
       {/* Sidebar esquerda */}
@@ -225,7 +251,7 @@ return (
       </div>
 
       {/* Container principal */}
-      <div className={`${fundoFrente ? "hidden-ui" : "visible-ui"}`}>
+      <div className={`box-question-center ${fundoFrente ? "hidden-ui" : "visible-ui"}`}>
         <QuizContainer
           handleUpdateUser={handleUpdateUser}
           handleUpdateScore={handleUpdateScore}
@@ -252,7 +278,7 @@ return (
 
       
     </div>
-    {/* Transição de vídeos (novo componente) */}
+      {/* Transição de vídeos (novo componente) */}
        <VideoTransition ref={videoRef} fadeDuration={500} />
   </div>
 );
