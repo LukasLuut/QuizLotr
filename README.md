@@ -44,7 +44,7 @@ questões, acumula pontos e compete no ranking.
 ------------------------------------------------------------------------
 
 
-## 📂 Estrutura do Projeto
+## 📂 Estrutura do Projeto - Frontend
 
     src/
      ├─ assets/           # imagens, vídeos, fontes, sons
@@ -57,7 +57,33 @@ questões, acumula pontos e compete no ranking.
 
 ------------------------------------------------------------------------
 
-## 🚀 Como Rodar Localmente
+## 📂 Estrutura do Projeto - Backend
+
+    retorno-do-dev/
+        ├─ node_modules/           # dependências do projeto
+        ├─ src/                    # código-fonte da aplicação
+        │  ├─ controllers/         # lógica dos controladores (manipulação de requisições)
+        │  ├─ dtos/                # Data Transfer Objects (validação e tipagem de dados)
+        │  ├─ middlewares/         # middlewares (interceptadores de requisições)
+        │  ├─ migrations/          # arquivos de migração do banco de dados
+        │  ├─ models/              # definição dos modelos (entidades)
+        │  ├─ routes/              # definição das rotas da aplicação
+        │  ├─ services/            # regras de negócio e lógica principal
+        │  ├─ utils/               # funções utilitárias auxiliares
+        │  ├─ app.ts               # configuração da aplicação
+        │  └─ data-source.ts       # configuração da fonte de dados (TypeORM)
+        │  └─ server.ts            # inicialização do servidor
+        ├─ .env                    # variáveis de ambiente
+        ├─ LICENSE                 # licença do projeto
+        ├─ package-lock.json       # controle de versões exato das dependências
+        ├─ package.json            # dependências e scripts do projeto
+        └─ tsconfig.json           # configuração do TypeScript
+
+
+------------------------------------------------------------------------
+
+
+## 🚀 Como Rodar Localmente Frontend
 
 1.  Clone este repositório:
 
@@ -75,19 +101,35 @@ questões, acumula pontos e compete no ranking.
 3.  Inicie o frontend:
 
     ``` bash
-    npm start
-    ```
-
-4.  Suba o backend:
-
-    ``` bash
-    cd ..
-    cd backend
-    npm install
     npm run dev
     ```
-    --Necessário configurar **.env**.
-   -- Necessário instalar Workbench.
+
+## Em outro terminal
+
+1.  Acesse o Backend:
+
+    ``` bash
+    cd backend
+    ```
+
+2. Instale as dependências:
+
+   ``` bash
+   npm install
+   ```
+
+3. Configure o **.env**
+
+    * Copie o arquivo **.env_example**
+    * Renomeie para **.env**
+    * Configure com as informações do seu banco de dados
+  
+4. Rode o servidor localmente
+
+   ``` bash
+   npm run dev
+   ```
+   
 ------------------------------------------------------------------------
 
 ## 📸 Demonstração
