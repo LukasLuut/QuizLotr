@@ -6,7 +6,7 @@ import Map from "../Map";
 import Final from "./Final";
 
 
-function QuizContainer({ handleUpdateUser, handleUpdateScore, isMovingChange }) {
+function QuizContainer({ handleUpdateUser, handleUpdateScore, isMovingChange, isStartedChange }) {
   const w = "360px";
   const h = "100px";
   const [question, setQuestion] = useState(1);
@@ -33,7 +33,7 @@ function QuizContainer({ handleUpdateUser, handleUpdateScore, isMovingChange }) 
     opcao2 = questions.answers[1]?.answer; // Usando o optional chaining (?.) para evitar erro se answers[1] não existir
     opcao3 = questions.answers[2]?.answer;
     opcao4 = questions.answers[3]?.answer;
-    console.log(questions.answers[0].correct);
+    
     opcao1R = questions.answers[0].correct;
     opcao2R = questions.answers[1]?.correct; // Usando o optional chaining (?.) para evitar erro se answers[1] não existir
     opcao3R = questions.answers[2]?.correct;
@@ -62,13 +62,12 @@ function QuizContainer({ handleUpdateUser, handleUpdateScore, isMovingChange }) 
   const [isMoving, setIsMoving] = useState(false);
   const handleMoving = (status) => {
   setIsMoving(status);
-  isMovingChange(status);
-  console.log("Bonequinho está andando? no CONTAINER", status);
+  isMovingChange(status);  
 };
 
 // ativa de 2 em 2 perguntas
 useEffect(() => {
-  if (question > 0 && question % 1 === 0) {
+  if (question > 0 && question % 4 === 0) {
     setAtivo(true);        
     setPerguntaAtivo(true);
   }
@@ -89,6 +88,14 @@ useEffect(() => {
     }, 2000); 
    
 }, [isMoving]);
+
+
+//variável que muda o status quando o boneco inicia caminhada
+const[isStarted,setIsStarted]=useState(false)
+const handleStarted=(status)=>{
+  setIsStarted(status);
+  isStartedChange(status);
+}
 
 //variável que recebe o valor true quando o personagem chega no ultimo mapa
  const [isFinished, setIsFinished] = useState(false);
@@ -117,7 +124,7 @@ useEffect(() => {
         <img className="box-question" src={boxQuestion} alt="" />
         {/* Imagem do mapa */}
         <div className="quiz-image">
-          <Map ativo={ativo} onMoving={handleMoving} onFinish={handleFinish} />
+          <Map ativo={ativo} onMoving={handleMoving} onFinish={handleFinish} onStart={handleStarted} />
         </div>
         {/* Pergunta */}
         <h2 className={`quiz-question ${perguntaAtivo ? "pergunta-off" : ""}`}>

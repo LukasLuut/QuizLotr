@@ -1,10 +1,10 @@
-import { Profiler, useState } from 'react'
+import { Profiler, useEffect, useState } from 'react'
 
 import './App.css'
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Start from './pages/Start'
-import Quiz from './pages/PlayQuiz'
+import PlayQuiz from './pages/PlayQuiz'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
 import Map from './components/Map'
@@ -23,19 +23,21 @@ import Final from './components/layout/Final';
 
 function App() {
   const [musicaAtual, setMusicaAtual] = useState(null);
-
+  
+  useEffect(()=>{
+    console.log(musicaAtual)
+  },[musicaAtual])
+  
   return (
     <>  {/* Player sempre montado */}
-      <PlayerMusica className="player-musica" cursor="pointer" musica={musicaAtual}></PlayerMusica>
+      <PlayerMusica className="player-musica" musica={musicaAtual}></PlayerMusica>
 
     <Router>
       <Routes>
         <Route path="/" element={<Start setMusicaAtual={setMusicaAtual}/>} />
-        <Route path="/final" element={<Final setMusicaAtual={setMusicaAtual}/>} />
-        <Route path="/option" element={<OptionProfile></OptionProfile>} />
         <Route path="/login" element={<Login setMusicaAtual={setMusicaAtual}/>} />
         <Route path="/profile" element={<Profile  setMusicaAtual={setMusicaAtual}/>} />
-        <Route path="/quiz" element={<Quiz setMusicaAtual={setMusicaAtual}/>} />
+        <Route path="/playquiz" element={<PlayQuiz setMusicaAtual={setMusicaAtual}/>} />
       </Routes>
     </Router>
     </>

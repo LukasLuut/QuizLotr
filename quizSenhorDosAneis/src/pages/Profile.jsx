@@ -40,7 +40,8 @@ function Profile({ setMusicaAtual }) {
   };
 
   const handleVideoEnd = () => {
-    navigate("/quiz", {state: dataUser}); // ao terminar o vídeo, vai para Quiz
+    navigate("/playquiz", {state: dataUser}); // ao terminar o vídeo, vai para Quiz
+    setMusicaAtual(Musica1);
   };
 
   const pularIntro = () => {
@@ -48,17 +49,17 @@ function Profile({ setMusicaAtual }) {
     setMusicaAtual(Musica1); // inicia música ao pular
     setTimeout(() => {
       if (videoRef.current) videoRef.current.pause();
-      navigate("/quiz", {state: dataUser});
+      navigate("/playquiz", {state: dataUser});
     }, 2000); 
   };
 
-  //inicia a música 5s antes do vídeo acabar
+  //inicia a música 15s antes do vídeo acabar
   useEffect(() => {
     const video = videoRef.current;
 
     if (video) {
       const handleTimeUpdate = () => {
-        if (video.duration - video.currentTime <= 10) {
+        if (video.duration - video.currentTime <= 15) {
           setMusicaAtual(Musica1);
           video.removeEventListener("timeupdate", handleTimeUpdate);
         }
@@ -70,7 +71,7 @@ function Profile({ setMusicaAtual }) {
         video.removeEventListener("timeupdate", handleTimeUpdate);
       };
     }
-  }, [playTransitionVideo, setMusicaAtual]);
+  }, [playTransitionVideo]);
 
   return (
     <div className='bg-black-profile'>

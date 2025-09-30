@@ -7,6 +7,14 @@ import QuizContainer from "../components/layout/QuizContainer";
 import Sidebar from "../components/layout/Sidebar";
 import BoxWoodenR from "../assets/images/box/box-aviso-gg.png";
 
+import shireAmbience from "../assets/audio/ambience/shire-ambience.mp3"
+import briAmbience from "../assets/audio/ambience/bri-ambience.mp3"
+import rivendellAmbience from "../assets/audio/ambience/rivendell-ambience.mp3"
+import moriaAmbience from "../assets/audio/ambience/moria-ambience.mp3"
+import lorienAmbience from "../assets/audio/ambience/lorien-ambience.mp3"
+import argonathAmbience from "../assets/audio/ambience/argonath-ambience.mp3"
+import mordorAmbience from "../assets/audio/ambience/mordor-ambience.mp3"
+
 import bgShire from "../assets/videos/Hobbington.mp4";
 import bgBri from "../assets/videos/bri.mp4";
 import bgRivendel from "../assets/videos/lorien.mp4";
@@ -18,7 +26,7 @@ import bgArgonath from "../assets/videos/argonath.mp4";
 import "./PlayQuiz.css";
 import Narrator from "../components/narrador/Narrador";
 
-function Quiz({ setMusicaAtual }) {
+function PlayQuiz({ setMusicaAtual }) {
   const location = useLocation();
   const data = location.state; // user info
   const token = localStorage.getItem("token");
@@ -41,7 +49,7 @@ function Quiz({ setMusicaAtual }) {
     bgMordor,
   ];
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [fadeIn, setFadeIn] = useState(false);
+  
 
   // Controle do botão de transparência da UI
   const [overlayVisible, setOverlayVisible] = useState(true);
@@ -49,7 +57,7 @@ function Quiz({ setMusicaAtual }) {
   const [overlayHovered, setOverlayHovered] = useState(false);
   const toggleOverlay = () => setOverlayVisible((prev) => !prev);
 
-  const [fundoFrente, setFundoFrente] = useState(false);
+  const [fundoFrente, setFundoFrente] = useState(true);
   const [titleScene, setTitleScene] = useState(false)
 
   // Controle do bonequinho / isMoving vindo do QuizContainer
@@ -59,24 +67,98 @@ function Quiz({ setMusicaAtual }) {
     console.log("Bonequinho está andando?", status);
   };
 
+
+
+// --------------------------- Toca ao abrir a página ---------------------------
+
+  const [fadeIn, setFadeIn] = useState(false);
+  
+  useEffect(() => {
+
+    
+    //desliga a opacidade para aparecer o título primeiro    
+    setFadeIn(false)
+    //roda o título
+    handleFundo();
+    handleRanking();
+
+    
+    
+    
+    //depois de 3s liga a opacidade para aparecer UI
+    setTimeout(()=>{
+      setFadeIn(true);
+      
+      
+    },2900)
+    
+    videoRef.current.setBg(0)
+    const interval = setInterval(handleRanking, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
+  setInterval(() => {
+    handleRanking();
+  }, 10000)
+
+  
+ 
+//--------------------------Transição de musicas do mapa-------------------------------
+// Cuidado, se p State da música mudar muito rápido, instancia 2x o player de música
+// quando isso acontece, 2 músicas tocam ao mesmo tempo 
+
+ const musicas = [
+    briAmbience, rivendellAmbience, moriaAmbience,
+   lorienAmbience, argonathAmbience, mordorAmbience, mordorAmbience
+];
+ const [tocarMusica,setTocarMusica]=useState(false)
+  // Estado para índice da música atual
+  const [indice, setIndice] = useState(0);
+
+  // Música atual é derivada do índice
+  const musicaAtual = musicas[indice];
+
+  // Troca de música quando condição for satisfeita
+  const proximaMusica = () => {
+    setIndice((prev) => (prev + 1) % musicas.length); 
+    setMusicaAtual(musicaAtual);
+    // o % faz voltar para a primeira quando acabar
+  };
+
+  const handleStarted = (status)=>{
+    setTocarMusica(status);    
+  }
+
+  useEffect(()=>{   
+    if(tocarMusica){
+        proximaMusica()
+        console.log("trocando de música"+musicaAtual)
+        setTimeout(()=>{          
+          setTocarMusica(false) 
+      },500)}
+      
+  },[tocarMusica])
+
 //--------------------------Transição de áreas do mapa-------------------------------
   const handleFundo = () => {
+    
+    
     setFundoFrente(true);
    
-    setTitleFadeOut(true)
+    setTitleFadeOut(true);
 
     setTimeout(() => {
          setTitleScene(true)
-       },600)
+       },600);
     //esse timer envia false para o narrador 
     //antes para gerar animação de fade-out
     setTimeout(() => {
         setTitleFadeOut(false);
-       },2100)
+       },2100);
     setTimeout(() => {
-      setFundoFrente(false)
-      setTitleScene(false)
-    }, 2800)
+      setFundoFrente(false);
+      setTitleScene(false);
+    }, 2800);
   }
 
   
@@ -116,29 +198,6 @@ function Quiz({ setMusicaAtual }) {
       console.error("Erro:", err);
     }
   };
-// --------------------------- Toca ao abrir a página ---------------------------
-  useEffect(() => {
-    
-    
-    handleRanking();
-    
-    //desliga a opacidade para aparecer o título primeiro
-    setFadeIn(false);
-    //roda o título
-    handleFundo();
-    //depois de 3s liga a opacidade para aparecer UI
-    setTimeout(()=>{
-      setFadeIn(true);
-    },2900)
-    
-    videoRef.current.setBg(0)
-    const interval = setInterval(handleRanking, 10000);
-    return () => clearInterval(interval);
-  }, []);
-
-  setInterval(() => {
-    handleRanking();
-  }, 10000)
 
   
 // ----------------------------------------------------------------------------------------
@@ -211,7 +270,7 @@ function Quiz({ setMusicaAtual }) {
 
   // --------------------------- JSX ---------------------------
 return (
-  <div className="bg-black-quiz">
+  <div className="bg-black-quiz" >
     {/* Narrador / título */}
     {titleScene && (
       <div className={`title-scene ${titleScene ? "visible-ui" : "hidden-ui"}`}>
@@ -256,14 +315,12 @@ return (
           handleUpdateUser={handleUpdateUser}
           handleUpdateScore={handleUpdateScore}
           isMovingChange={handleMoving}
+          isStartedChange={handleStarted}
         />
       </div>
-
+     
       {/* Sidebar direita */}
-      <div
-        className={`${
-          fundoFrente ? "hidden-ui" : "visible-ui"
-        } box-lateral-r`}
+      <div className={`${ fundoFrente ? "hidden-ui" : "visible-ui"} box-lateral-r`}
       >
         <img className="box-lateral-img " src={BoxWoodenR} alt="" />
         <div className="box-leaderboard">
@@ -275,14 +332,15 @@ return (
           <div className="listboard" id="listboard"></div>
         </div>
       </div>
-
-      
     </div>
-      {/* Transição de vídeos (novo componente) */}
-       <VideoTransition ref={videoRef} fadeDuration={500} />
+      <div className="bg-video2-play-quiz ">
+        {/* Transição de vídeos (novo componente) */}
+         <VideoTransition ref={videoRef} fadeDuration={500} />
+      </div>
+       
   </div>
 );
 }
 
 
-export default Quiz;
+export default PlayQuiz;

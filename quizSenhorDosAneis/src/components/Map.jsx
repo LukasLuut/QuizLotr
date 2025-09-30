@@ -23,7 +23,7 @@ const characterIcon = new L.Icon({
   iconAnchor: [24, 48],
 });
 
-export default function MapaTerraMedia({ ativo, onMoving, onFinish }) {
+export default function MapaTerraMedia({ ativo, onMoving, onFinish, onStart }) {
   const bounds = [
     [0, 0],
     [4344, 5000],
@@ -57,7 +57,7 @@ export default function MapaTerraMedia({ ativo, onMoving, onFinish }) {
 
       <IntroZoom></IntroZoom>
       {/* Bonequinho animado */}
-      <MovingCharacter ativo={ativo} onMoving={onMoving} onFinish={onFinish} />
+      <MovingCharacter ativo={ativo} onMoving={onMoving} onFinish={onFinish} onStart={onStart} />
 
       {/* Marcadores temáticos */}
       <Marker position={[3210, 1520]} icon={shireIcon}>
@@ -93,7 +93,7 @@ export function IntroZoom() {
 }
 
 
-export function MovingCharacter({ ativo, startZoom = 0.2, endZoom = -1, onMoving, onFinish }) {
+export function MovingCharacter({ ativo, startZoom = 0.2, endZoom = -1, onMoving, onFinish, onStart }) {
   const map = useMap();
   const [routeIndex, setRouteIndex] = useState(0);
   const markerRef = useRef(null);
@@ -155,11 +155,18 @@ export function MovingCharacter({ ativo, startZoom = 0.2, endZoom = -1, onMoving
     // Notifica pai que começou
     marker.on("start", () => {
       onMoving?.(true);
+      
+      
+      
       map.setZoom(startZoom, { animate: true, duration: 0.5 });
     });
 
     marker.on("end", () => {
       onMoving?.(false);
+     
+      
+      
+
       map.setZoom(endZoom, { animate: true, duration: 0.5 });
 
       if (routeIndex === paths.length - 1) {
@@ -179,6 +186,8 @@ export function MovingCharacter({ ativo, startZoom = 0.2, endZoom = -1, onMoving
 
   function handleClick() {
     nextRoute();
+    onStart?.(true);
+      console.log("onSTARTTTTTTTTTTTTTTT") 
     setShowButton(false); // esconde depois do clique
   }
    const [showButton, setShowButton] = useState(false);
@@ -189,7 +198,7 @@ export function MovingCharacter({ ativo, startZoom = 0.2, endZoom = -1, onMoving
     if(ativo)setShowButton(true);
     onMoving?.(true)
 
-  }, [ativo]) // exemplo: ativa o botão
+  }, [ativo]) // ativa o botão
 
   return (
     <div>{showButton && (

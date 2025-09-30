@@ -1,9 +1,9 @@
 import "./Login.css";
 import bgVideo from "../assets/videos/The-Argonath-Animated-Wallpaper.mp4.mp4";
-import Button from "../components/buttons/Button";
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MusicaArgonath from "../assets/audio/the-argonath-song.mp3";
+
 import BtnMenu from "../components/buttons/BtnMenu";
 import PopUpDTO from "../components/PopUpDTO";
 
@@ -34,10 +34,10 @@ function Login() {
       const res = await fetch(`http://localhost:3000/auth/login`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Corrigido: "Content-Type", não "content-Type"
+          "Content-Type": "application/json", 
         },
         body: JSON.stringify({
-          name: name, // Substitua com o valor real, se necessário
+          name: name, 
           password: password,
         }),
       });

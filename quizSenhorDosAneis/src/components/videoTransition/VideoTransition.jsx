@@ -44,10 +44,10 @@ const VideoTransition = forwardRef(({ fadeDuration = 1500, onChange }, ref) => {
     if (onChange) onChange(next);
 
     // truque: espera 1 frame para aplicar fade-in
-    setFadeClass("fade-out");
+    setFadeClass("fade-out-transition-video");
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        setFadeClass("fade-in");
+        setFadeClass("fade-in-transition-video");
       });
     });
   }
@@ -70,7 +70,7 @@ const VideoTransition = forwardRef(({ fadeDuration = 1500, onChange }, ref) => {
         return (
           <video
             key={index}
-            className={`bg-video ${isActive ? fadeClass : "fade-out"}`}
+            className={`bg-video-transition-video ${isActive ? fadeClass : "fade-out"}`}
             autoPlay
             muted
             loop

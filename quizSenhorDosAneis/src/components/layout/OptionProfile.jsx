@@ -67,7 +67,7 @@ function OptionProfile({ isOpen, onClose, onSubmit, id }) {
       });
 
       if (!res.ok) {
-        console.log(res);
+        console.log("componente OptionProfile"+res);
         throw new Error();
       }
 
@@ -100,7 +100,7 @@ function OptionProfile({ isOpen, onClose, onSubmit, id }) {
       });
 
       if (!res.ok) {
-        console.log(res);
+        console.log("componente OptionProfile"+res);
         throw new Error();
       }
 

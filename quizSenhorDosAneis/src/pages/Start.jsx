@@ -31,8 +31,7 @@ function Start({ setMusicaAtual }) {
       elem.msRequestFullscreen();
     }
 
-    // Navegar para o quiz
-    // navigate('/quiz');
+    
   };
 
 

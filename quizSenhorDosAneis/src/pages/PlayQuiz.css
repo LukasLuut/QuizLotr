@@ -28,6 +28,7 @@
   height: 100vh;  
   object-fit: fill;
   z-index: -1; /* sempre no fundo */
+  opacity: 0;
   
 }
 
@@ -163,7 +164,7 @@ filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
   width: 100%;
   text-align: center;
   text-justify: center;
-   letter-spacing: 40px;
+  letter-spacing: 40px;
 }
 
 .video-front {
@@ -217,7 +218,7 @@ filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
 
 
 /* vídeos individuais */
-/* .bg-video2 {
+.bg-video2 {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -226,7 +227,21 @@ filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
   transition: opacity 0.8s ease-in-out;
   opacity: 1;
   z-index: -2;
-} */
+  
+
+}
+
+.bg-video2-play-quiz {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  opacity: 1;
+  z-index: -2;
+  animation: fadeOpacity 3s ease;
+
+}
 
 /* classes trocadas ao mudar index */
 .visible-video {
@@ -238,6 +253,10 @@ filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
   z-index: -2;
 }
 
+@keyframes fadeOpacity {
+  from{opacity: 0}
+  to{opacity: 1;}
+}
 
 /* animação para revelar a palavra */
 @keyframes typing {
