@@ -35,9 +35,10 @@ function PlayQuiz({ setMusicaAtual }) {
   const [playerName] = useState(data.user.name);
   const [score, setScore] = useState(0);
   const [current, setCurrent] = useState(1);
-  const total = 7;
+  const total = 21;
   const [segundos, setSegundos] = useState(1);
-  const videoRef = useRef();//deve controlar a mudança de background
+  const videoRef = useRef(); //deve controlar a mudança de background
+  let scoreTotal = 0;
 
   const videoBackgrounds = [
     bgShire,
@@ -53,7 +54,7 @@ function PlayQuiz({ setMusicaAtual }) {
 
   // Controle do botão de transparência da UI
   const [overlayVisible, setOverlayVisible] = useState(true);
-  const [titleFadeOut, setTitleFadeOut]=useState(true)
+  const [titleFadeOut, setTitleFadeOut] = useState(true);
   const [overlayHovered, setOverlayHovered] = useState(false);
   const toggleOverlay = () => setOverlayVisible((prev) => !prev);
 
@@ -164,12 +165,12 @@ function PlayQuiz({ setMusicaAtual }) {
   
   //titulo da área aparece e desaparece depois de 3s
   const handleTitleScene = () => {
-    setTitleScene(true)
+    setTitleScene(true);
 
     setTimeout(() => {
-      setTitleScene(false)
-    }, 3000)
-  }
+      setTitleScene(false);
+    }, 3000);
+  };
 
   // --------------------------- Ranking ---------------------------
   const handleRanking = async () => {
@@ -180,15 +181,15 @@ function PlayQuiz({ setMusicaAtual }) {
       const container = document.getElementById("listboard");
       container.innerHTML = "";
 
-      rankingList.forEach((user) => {
+      rankingList.forEach((u) => {
         const div = document.createElement("div");
         div.className = "nameRanking";
 
         const nameUser = document.createElement("h1");
         const scoreUser = document.createElement("h1");
 
-        nameUser.textContent = user.name;
-        scoreUser.textContent = user.score;
+        nameUser.textContent = u.user.name;
+        scoreUser.textContent = u.scoreRound;
 
         div.appendChild(nameUser);
         div.appendChild(scoreUser);
@@ -198,13 +199,55 @@ function PlayQuiz({ setMusicaAtual }) {
       console.error("Erro:", err);
     }
   };
+  // --------------------------- Toca ao abrir a página ---------------------------
+  useEffect(() => {
+    handleRanking();
+    //desliga a opacidade para aparecer o título primeiro
+    setFadeIn(false);
+    //roda o título
+    handleFundo();
+    //depois de 3s liga a opacidade para aparecer UI
+    setTimeout(() => {
+      setFadeIn(true);
+    }, 2900);
 
-  
-// ----------------------------------------------------------------------------------------
-  const handleUpdateUser = () => { };
+    videoRef.current.setBg(0);
+    const interval = setInterval(handleRanking, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
-  const handleUpdateScore = async (score = 300) => {
-    const scoreByTime = Math.round(score / segundos);
+  // ----------------------------------------------------------------------------------------
+ 
+
+  const handleUpdateScore = async (score = 300, isFinished) => {
+    if (score == -999) {
+      try {
+        const res = await fetch(`http://localhost:3000/users/me/score/zero`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            id: data.user.id,
+          }),
+        });
+
+        if (!res.ok) throw new Error("Erro ao atualizar pontuação");
+        const resData = await res.json();
+        setScore(resData.score);
+      } catch (err) {
+        console.error("Erro:", err);
+      }
+
+      return;
+    }
+
+    scoreTotal += score;
+
+    if(isFinished) {
+      scoreTotal += Math.round(scoreTotal / segundos);
+    }
 
     try {
       const res = await fetch(`http://localhost:3000/users/me/score`, {
@@ -215,17 +258,37 @@ function PlayQuiz({ setMusicaAtual }) {
         },
         body: JSON.stringify({
           id: data.user.id,
-          score: scoreByTime,
+          score: isFinished ? scoreTotal : score,
         }),
       });
+
       if (!res.ok) throw new Error("Erro ao atualizar pontuação");
       const resData = await res.json();
       setScore(resData.score);
       setCurrent((prev) => prev + 1);
+
     } catch (err) {
       console.error("Erro:", err);
     }
   };
+
+  const handleSetRound = async () => {
+    try {
+      const round = await fetch(`http://localhost:3000/users/me/round`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          id: data.user.id,
+          score: score,
+        }),
+      });
+    } catch (err) {
+      console.error("Erro:", err)
+    }
+  }
 
   const handleGetHour = (timer) => setSegundos(timer);
 
@@ -233,11 +296,10 @@ function PlayQuiz({ setMusicaAtual }) {
   useEffect(() => {
     if (!isMoving) {
       const timeout = setTimeout(() => {
-        videoRef.current.nextBg()
+        videoRef.current.nextBg();
         setCurrentVideoIndex((prev) => (prev + 1) % videoBackgrounds.length);
         setFadeIn(true); // Fade-in do novo vídeo
         setTimeout(() => {
-          
           handleTitleScene();
         }, 500)
         handleFundo();
@@ -269,18 +331,20 @@ function PlayQuiz({ setMusicaAtual }) {
 
 
   // --------------------------- JSX ---------------------------
-return (
-  <div className="bg-black-quiz" >
-    {/* Narrador / título */}
-    {titleScene && (
-      <div className={`title-scene ${titleScene ? "visible-ui" : "hidden-ui"}`}>
-        <Narrator
-          index={currentVideoIndex}
-          active={titleFadeOut}
-          typingSpeed={125}
-        />
-      </div>
-    )}
+  return (
+    <div className="bg-black-quiz">
+      {/* Narrador / título */}
+      {titleScene && (
+        <div
+          className={`title-scene ${titleScene ? "visible-ui" : "hidden-ui"}`}
+        >
+          <Narrator
+            index={currentVideoIndex}
+            active={titleFadeOut}
+            typingSpeed={125}
+          />
+        </div>
+      )}
 
     {/* Botão de controle */}
     <button
@@ -297,25 +361,27 @@ return (
       {/* Renderiza o Menu só se estiver aberto */}
       {isMenuOpen && <Menu />}
 
-    <div className={`quiz-page ${fadeIn ? "fade-in" : ""}`}>
-      {/* Sidebar esquerda */}
-      <div className={`${fundoFrente ? "hidden-ui" : "visible-ui"} box-lateral`}>
-        <Sidebar
-          playerName={playerName}
-          score={score}
-          current={current}
-          total={total}
-          handleGetHour={handleGetHour}
-        />
-      </div>
+      <div className={`quiz-page ${fadeIn ? "fade-in" : ""}`}>
+        {/* Sidebar esquerda */}
+        <div
+          className={`${fundoFrente ? "hidden-ui" : "visible-ui"} box-lateral`}
+        >
+          <Sidebar
+            playerName={playerName}
+            score={score}
+            current={current}
+            total={total}
+            handleGetHour={handleGetHour}
+          />
+        </div>
 
       {/* Container principal */}
       <div className={`box-question-center ${fundoFrente ? "hidden-ui" : "visible-ui"}`}>
         <QuizContainer
-          handleUpdateUser={handleUpdateUser}
           handleUpdateScore={handleUpdateScore}
           isMovingChange={handleMoving}
           isStartedChange={handleStarted}
+          handleSetRound={handleSetRound}
         />
       </div>
      

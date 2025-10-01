@@ -35,7 +35,7 @@ function Final({ time = null, score = 0 }) {
       }
     } else {
       // segunda vez: redireciona para /quiz
-      navigate("/quiz");
+      navigate("/playquiz");
     }
   };
 

@@ -6,7 +6,7 @@ import Map from "../Map";
 import Final from "./Final";
 
 
-function QuizContainer({ handleUpdateUser, handleUpdateScore, isMovingChange, isStartedChange }) {
+function QuizContainer({ handleUpdateScore, isMovingChange, isStartedChange, handleSetRound }) {
   const w = "360px";
   const h = "100px";
   const [question, setQuestion] = useState(1);
@@ -108,6 +108,8 @@ const handleFinish = (status) => {
 //efeito que inicia finalização do jogo
 useEffect(() => {
   if (isFinished) {
+    handleSetRound();
+    handleUpdateScore(-999, true);
     setAtivo(false);        
     setPerguntaAtivo(true);
   }
