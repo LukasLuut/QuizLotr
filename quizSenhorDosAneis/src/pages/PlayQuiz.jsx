@@ -201,7 +201,9 @@ function PlayQuiz({ setMusicaAtual }) {
   };
   // --------------------------- Toca ao abrir a página ---------------------------
   useEffect(() => {
-    handleRanking();
+    setTimeout(()=> {
+      handleRanking();
+    }, 5000)
     //desliga a opacidade para aparecer o título primeiro
     setFadeIn(false);
     //roda o título
@@ -285,6 +287,11 @@ function PlayQuiz({ setMusicaAtual }) {
           score: score,
         }),
       });
+
+      const result = await round.json();
+      console.log("ESSE É O CONSOLE DO HANDLE SET ROUND", result.scoreRound)
+      return result.scoreRound;
+
     } catch (err) {
       console.error("Erro:", err)
     }
@@ -382,6 +389,9 @@ function PlayQuiz({ setMusicaAtual }) {
           isMovingChange={handleMoving}
           isStartedChange={handleStarted}
           handleSetRound={handleSetRound}
+          score={score}
+          time={segundos}
+          data={data}
         />
       </div>
      

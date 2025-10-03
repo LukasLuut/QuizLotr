@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, use, useEffect } from "react";
 import imgFinal from "../../assets/images/box/map-box.png";
 import "./Final.css";
 import videoFinal from "../../assets/videos/finalLotr.mp4";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import victoryPNG from "../../assets/images/victory.png"
 import imgBoxVictory from "../../assets/images/box/box-conquista.png";
 
-function Final({ time = null, score = 0 }) {
+function Final({ time = null, score = 0, data, setIsFinished }) {
   const [showFinal, setShowFinal] = useState(false);
   const [buttonText, setButtonText] = useState("Destruir o Anel");
   const videoRef = useRef(null);
@@ -35,7 +35,11 @@ function Final({ time = null, score = 0 }) {
       }
     } else {
       // segunda vez: redireciona para /quiz
-      navigate("/playquiz");
+      console.log("ERA PRA REDIRECIONAR ISSO AQUI")
+      setShowFinal(false);
+      setIsFinished(false);
+      navigate("/playquiz", {state: data});
+      window.location.reload();
     }
   };
 
@@ -58,12 +62,12 @@ function Final({ time = null, score = 0 }) {
 
             <div className="victory-stats">
               <div className="victory-stat">
-                <span className="label">Tempo</span>
+                <span className="label">Tempo: </span>
                 <span className="value">{formatTime(time)}</span>
               </div>
 
               <div className="victory-stat">
-                <span className="label">Pontuação</span>
+                <span className="label">Pontuação: </span>
                 <span className="value">{score}</span>
               </div>
               

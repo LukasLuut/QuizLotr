@@ -6,11 +6,13 @@ import Map from "../Map";
 import Final from "./Final";
 
 
-function QuizContainer({ handleUpdateScore, isMovingChange, isStartedChange, handleSetRound }) {
+function QuizContainer({ handleUpdateScore, isMovingChange, isStartedChange, handleSetRound, time, score, data}) {
   const w = "360px";
   const h = "100px";
   const [question, setQuestion] = useState(1);
   const [questions, setQuestions] = useState([]);
+  const [scoreToSave, setScoreToSave] = useState(0);
+  const [timeToSave, setTimeToSave] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,7 +69,7 @@ function QuizContainer({ handleUpdateScore, isMovingChange, isStartedChange, han
 
 // ativa de 2 em 2 perguntas
 useEffect(() => {
-  if (question > 0 && question % 4 === 0) {
+  if (question > 0 && question % 1 === 0) {
     setAtivo(true);        
     setPerguntaAtivo(true);
   }
@@ -108,7 +110,9 @@ const handleFinish = (status) => {
 //efeito que inicia finalização do jogo
 useEffect(() => {
   if (isFinished) {
-    handleSetRound();
+    const currentScore = handleSetRound();
+    setTimeToSave(time)
+    setScoreToSave(currentScore)
     handleUpdateScore(-999, true);
     setAtivo(false);        
     setPerguntaAtivo(true);
@@ -165,7 +169,7 @@ useEffect(() => {
           />
         </div>
       </div>
-      {isFinished && <Final />}
+      {isFinished && <Final time={timeToSave} score={scoreToSave} data={data} setIsFinished={setIsFinished}/>}
     </div>
   );
 }
