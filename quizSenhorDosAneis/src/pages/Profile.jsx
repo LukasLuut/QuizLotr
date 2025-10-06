@@ -85,7 +85,7 @@ function Profile({ setMusicaAtual }) {
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
                 onSubmit={(data) => console.log("Dados enviados:", data)}
-                id={dataUser.user.id}
+                id={dataUser.id}
               />
             <div className='btn-box'> 
               <BtnMenu onClick={handleStartQuiz} texto='Novo Jogo'></BtnMenu>            

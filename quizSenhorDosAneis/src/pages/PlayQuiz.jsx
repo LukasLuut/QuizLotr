@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import VideoTransition from "../components/videoTransition/VideoTransition"; // importa o novo componente
 import Menu from '../components/layout/Menu'
 
@@ -81,7 +81,7 @@ function PlayQuiz({ setMusicaAtual }) {
     setFadeIn(false)
     //roda o título
     handleFundo();
-    handleRanking();
+    // handleRanking();
 
     
     
@@ -179,6 +179,8 @@ function PlayQuiz({ setMusicaAtual }) {
       const rankingList = await res.json();
 
       const container = document.getElementById("listboard");
+      
+      if(!container) { return; }
       container.innerHTML = "";
 
       rankingList.forEach((u) => {
@@ -366,7 +368,7 @@ function PlayQuiz({ setMusicaAtual }) {
     </button>    
       
       {/* Renderiza o Menu só se estiver aberto */}
-      {isMenuOpen && <Menu />}
+      {isMenuOpen && <Menu data={data} setIsMenuOpen={setIsMenuOpen}/>}
 
       <div className={`quiz-page ${fadeIn ? "fade-in" : ""}`}>
         {/* Sidebar esquerda */}

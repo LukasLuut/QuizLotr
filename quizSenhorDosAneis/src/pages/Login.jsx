@@ -131,21 +131,21 @@ function Login() {
             {/* Input de User*/}
             <div className="form-group">
               <label htmlFor="username">Nome de usuário</label>
-              <input autocomplete="off" type="text" id="username" placeholder="Ex: Frodo" />
+              <input autoComplete="off" type="text" id="username" placeholder="Ex: Frodo" />
             </div>
 
             {/* Input de Email*/}
             {mostrarEmail && (
               <div className="form-group">
                 <label htmlFor="email">Email</label>
-                <input autocomplete="off" type="email" id="email" placeholder="Ex: frodo@shire.me" />
+                <input autoComplete="off" type="email" id="email" placeholder="Ex: frodo@shire.me" />
               </div>
             )}
 
             {/* Input de senha*/}
             <div className="form-group">
               <label htmlFor="password">Senha</label>
-              <input autocomplete="off" type="password" id="password" placeholder="••••••••" />
+              <input autoComplete="off" type="password" id="password" placeholder="••••••••" />
             </div>
 
             <BtnMenu

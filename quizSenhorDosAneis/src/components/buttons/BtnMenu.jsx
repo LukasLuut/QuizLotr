@@ -9,7 +9,10 @@ function BtnMenu({
   handleEntrarClick,
   handleRegistrarClick,
   handleAtualizarClick,
-  handleDeletarClick
+  handleDeletarClick,
+  handleSair,
+  handleReiniciar,
+  handleFecharModal
 }) {
   const audioRef = useRef(new Audio(hoverSound));
 
@@ -53,8 +56,14 @@ function BtnMenu({
         } else if (texto == "Entrar") {
           handleStartQuiz();
           handleEntrarClick();
-        } else {
+        } else if (texto == "Registrar") {
           handleRegistrarClick();
+        } else if (texto == "Sair") {
+          handleSair();
+        } else if (texto == "Reiniciar") {
+          handleReiniciar();
+        } else if (texto == "Continuar") {
+          handleFecharModal();
         }
       }}
       onMouseEnter={handleHover}
