@@ -96,6 +96,10 @@
   content: url("../assets/images/button/btn-nao-base.png");
 }
 
-
+@media (max-width: 768px) {
+  .confirm-box {
+    left: 0;
+  }
+}
 
 

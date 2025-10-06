@@ -249,6 +249,7 @@ function PlayQuiz({ setMusicaAtual }) {
 
     if(isFinished) {
       scoreTotal += Math.round(scoreTotal / segundos);
+      setFundoFrente(true);
     }
 
     try {
@@ -333,10 +334,9 @@ function PlayQuiz({ setMusicaAtual }) {
     return () => window.removeEventListener("keydown", handleKeyDown, false);
   }, []);
 
+   // --------------------------- Controlador do UI mobile ---------------------------
   
-  
-
-
+    
   // --------------------------- JSX ---------------------------
   return (
     <div className="bg-black-quiz">
@@ -371,7 +371,7 @@ function PlayQuiz({ setMusicaAtual }) {
       <div className={`quiz-page ${fadeIn ? "fade-in" : ""}`}>
         {/* Sidebar esquerda */}
         <div
-          className={`${fundoFrente ? "hidden-ui" : "visible-ui"} box-lateral`}
+          className={`${fundoFrente ? "hidden-ui" : "visible-ui"}  box-lateral`}
         >
           <Sidebar
             playerName={playerName}

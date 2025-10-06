@@ -18,7 +18,7 @@
 .video-final {
   position: absolute;
   width: 100vw;   /* agora baseado na altura da tela */
-  height: auto;
+  height: 100vh;
   object-fit:cover;
   z-index: -1;
 
@@ -30,14 +30,15 @@
   
   color: goldenrod;
   padding: 2rem;
-  top: 25%;
+  top: 15%;
   padding-top: 15%;
   text-align: center;
-  width: 90%;
+  width: 70%;
   max-width: 400px;
   animation: scaleIn 0.4s ease forwards;
   position: fixed;
   z-index: 2;
+  
 }
 
 /* Título principal */
@@ -110,8 +111,8 @@
 }
 
 @keyframes scaleIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(0.8); opacity: 1; }
 }
 
 
@@ -119,8 +120,8 @@
 
 .btn-final {
   position: fixed;
-  bottom: 8%;
-  left: 34%;
+  bottom: 15%;
+  left: 34.5%;
   z-index: 1000;
   border: none;
   width:600px;
@@ -144,5 +145,39 @@
   transform: translateY(-2px) scale(1.02);
   filter: drop-shadow(4px 20px 15px rgba(0,0,0,2));
   background-image: url('../../assets/images/button/btn-vermelho-on-db.png');
+}
+
+
+@media (max-width: 768px) {
+  .victory-card {
+      top: 17%;
+  }
+
+  .btn-final {
+    top: 40%;
+     transform: scale(0.7);
+     left: -9%;
+     width: 500px;
+  }
+
+  .victory-img{
+    top: -25%;
+  }
+
+  .img-box-conquista-final{
+    top: 0%;
+  }
+  .victory-title{
+    padding-top: 75%;
+  }
+
+  .img-box-conquista-final{
+    height: 550px;
+  }
+  .btn-position-final{
+     width: 390px;
+     left: 4.5%;
+     top: 70%;
+  }
 }
 

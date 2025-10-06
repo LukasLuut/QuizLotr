@@ -139,6 +139,15 @@
 }
 
 
-
+@media (max-width: 768px) {
+  .profile-container{
+    width: 100vw;
+  }
+  .btn-box{
+    left: 13px;
+    top: 300px;
+    transform: scale(0.8);
+  }
+}
 
 

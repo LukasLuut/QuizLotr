@@ -23,11 +23,6 @@ import Final from './components/layout/Final';
 
 function App() {
   const [musicaAtual, setMusicaAtual] = useState(null);
-  
-  useEffect(()=>{
-    console.log(musicaAtual)
-  },[musicaAtual])
-  
   return (
     <>  {/* Player sempre montado */}
       <PlayerMusica className="player-musica" musica={musicaAtual}></PlayerMusica>

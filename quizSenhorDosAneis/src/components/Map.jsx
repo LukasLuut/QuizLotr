@@ -158,6 +158,7 @@ export function MovingCharacter({ ativo, startZoom = 0.2, endZoom = -1, onMoving
       
       
       
+      
       map.setZoom(startZoom, { animate: true, duration: 0.5 });
     });
 
@@ -170,7 +171,6 @@ export function MovingCharacter({ ativo, startZoom = 0.2, endZoom = -1, onMoving
       map.setZoom(endZoom, { animate: true, duration: 0.5 });
 
       if (routeIndex === paths.length - 1) {
-        console.log("Última rota atingida:", true);
         onFinish?.(true);
       }
     });
@@ -187,7 +187,7 @@ export function MovingCharacter({ ativo, startZoom = 0.2, endZoom = -1, onMoving
   function handleClick() {
     nextRoute();
     onStart?.(true);
-      console.log("onSTARTTTTTTTTTTTTTTT") 
+      
     setShowButton(false); // esconde depois do clique
   }
    const [showButton, setShowButton] = useState(false);

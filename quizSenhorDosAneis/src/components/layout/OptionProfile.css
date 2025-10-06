@@ -56,6 +56,44 @@
   justify-content: center;
   align-items: center;
   z-index: 2000;
+ 
 }
 
+@media (max-width: 768px) {
+    .option-profile-bg{
+        background-image: url('../../assets/images/box/box-lateral.png');
+        margin-left: 11%;
+    }
+
+    .modal-overlay form{
+        
+        left: -4%;
+        width: 90vw;
+    }
+
+    .option-profile-bg input{
+        width: 250px;
+        
+    }
+
+     .option-profile-bg label{
+        font-size: 15px;
+        
+    }
+        
+    .option-profile-bg h2{
+        width: 90vw;
+        margin-top:-20%;
+        margin-left: 25%;
+        
+        text-justify: center;
+    }
+    .btn-menu-update-profile{
+        transform: scale(0.4);
+        position: absolute;
+        bottom: -90px;
+        right: -200px;
+        
+    }
+}
 

@@ -163,5 +163,10 @@ form{
   opacity: 1;
 }
 
+@media (max-width: 768px) {
+  .title-login{
+    font-size: 78px;
+  }
+}
 
 

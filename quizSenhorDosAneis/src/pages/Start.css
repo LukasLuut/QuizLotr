@@ -140,3 +140,11 @@ svg{
   from { transform: scale(0.8); }
   to   { transform: scale(1.1); }
 }
+
+@media (max-width: 768px) {
+  .img-logo{
+    width: 80vw;
+    margin-bottom: 20px;
+    margin-top: 90px;
+  }
+}

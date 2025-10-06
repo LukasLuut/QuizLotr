@@ -30,12 +30,13 @@ function Final({ time = null, score = 0, data, setIsFinished }) {
       // primeira vez: mostra o final e toca o vídeo
       setShowFinal(true);
       setButtonText("Jogar novamente");
+      setBtnPosition(true);
       if (videoRef.current) {
         videoRef.current.play();
       }
     } else {
       // segunda vez: redireciona para /quiz
-      console.log("ERA PRA REDIRECIONAR ISSO AQUI")
+      
       setShowFinal(false);
       setIsFinished(false);
       navigate("/playquiz", {state: data});
@@ -43,10 +44,12 @@ function Final({ time = null, score = 0, data, setIsFinished }) {
     }
   };
 
+  const[btnPosition, setBtnPosition]=useState(false)
+
   return (
     <div className="div-body-final">
       {/* Botão principal */}
-      <button className="btn-final" onClick={handleClick}>
+      <button className={`btn-final ${btnPosition ? "btn-position-final" : ""}`} onClick={handleClick}>
         {buttonText}
       </button>
 
@@ -72,10 +75,6 @@ function Final({ time = null, score = 0, data, setIsFinished }) {
               </div>
               
             </div>
-
-            <p className="victory-note">
-              Toque em "{buttonText}" para reiniciar.
-            </p>
           </div>
         </div>
       )}

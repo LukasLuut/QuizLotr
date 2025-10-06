@@ -43,7 +43,7 @@ function Start({ setMusicaAtual }) {
     <div className='bg'>
       <div className="loader__container">
         {/*Aqui e o titulo*/}
-        <img src={lordOfTheRings} alt="Lord of the Rings" />
+        <img className='img-logo' src={lordOfTheRings} alt="Lord of the Rings" />
 
 
         <div className='rings'>

@@ -43,7 +43,7 @@ function QuizContainer({ handleUpdateScore, isMovingChange, isStartedChange, han
   }
 
   function handleAnswer(isCorrect) {
-    console.log("Resposta correta?", isCorrect);
+    
 
     // Avança para a próxima pergunta depois de 1s
     setTimeout(() => {
@@ -104,7 +104,7 @@ const handleStarted=(status)=>{
 
 const handleFinish = (status) => {
   setIsFinished(status);
-  console.log("Mapa terminou todas as rotas?", status);
+  
 };
 
 //efeito que inicia finalização do jogo

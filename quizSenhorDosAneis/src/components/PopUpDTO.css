@@ -75,3 +75,9 @@
   margin-bottom: 7%;
   filter: drop-shadow(4px 1px 3px rgba(0, 0, 0, 2));
 }
+
+@media (max-width: 768px) {
+  .pop-up-dto {
+    left: 4%;
+  }
+}
