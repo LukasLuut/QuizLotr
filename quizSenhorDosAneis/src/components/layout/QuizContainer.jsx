@@ -69,7 +69,7 @@ function QuizContainer({ handleUpdateScore, isMovingChange, isStartedChange, han
 
 // ativa de 2 em 2 perguntas
 useEffect(() => {
-  if (question > 0 && question % 1 === 0) {
+  if (question > 0 && question % 5 === 0) {
     setAtivo(true);        
     setPerguntaAtivo(true);
   }

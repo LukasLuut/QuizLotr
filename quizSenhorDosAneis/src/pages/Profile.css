@@ -25,10 +25,10 @@
     padding: 0;
     position: relative;
     border-radius: 1px;
-    box-shadow: 10px 10px 10px black;
+    /*box-shadow: 10px 10px 10px black;*/
     display: flex;
     flex-direction: column;
-    background-color: rgba(0, 0, 0, 0.856);
+    /*background-color: rgba(0, 0, 0, 0.856);*/
 }
 
 .flag-profile {

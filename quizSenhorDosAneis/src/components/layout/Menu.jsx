@@ -72,7 +72,6 @@ function Menu(data, setIsMenuOpen) {
       <div className='box-btn'>
         <BtnMenu handleFecharModal={handleFecharModal} texto='Continuar'></BtnMenu>
         <BtnMenu handleReiniciar={handleReiniciar} texto='Reiniciar'></BtnMenu>
-        <BtnMenu texto='Salvar'></BtnMenu>
         <BtnMenu handleSair={handleSair} texto='Sair'></BtnMenu>
       </div>
 

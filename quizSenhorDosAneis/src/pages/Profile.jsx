@@ -53,6 +53,11 @@ function Profile({ setMusicaAtual }) {
     }, 2000); 
   };
 
+  const handleSair = () => {
+    localStorage.clear();
+    navigate("/login", { replace: true });
+  }
+
   //inicia a música 15s antes do vídeo acabar
   useEffect(() => {
     const video = videoRef.current;
@@ -89,9 +94,8 @@ function Profile({ setMusicaAtual }) {
               />
             <div className='btn-box'> 
               <BtnMenu onClick={handleStartQuiz} texto='Novo Jogo'></BtnMenu>            
-              <BtnMenu onClick={()=>setMusicaAtual(null)} texto='Continuar'></BtnMenu>
               <BtnMenu onClick={() => setModalOpen(true) } texto='Editar Perfil'></BtnMenu>
-              <BtnMenu onClick={handleVideoEnd} texto='Sair'></BtnMenu>
+              <BtnMenu onClick={handleSair} texto='Sair'></BtnMenu>
             </div>
           </div>
         </div>

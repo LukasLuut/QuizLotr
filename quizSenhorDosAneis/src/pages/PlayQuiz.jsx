@@ -27,6 +27,7 @@ import "./PlayQuiz.css";
 import Narrator from "../components/narrador/Narrador";
 
 function PlayQuiz({ setMusicaAtual }) {
+
   const location = useLocation();
   const data = location.state; // user info
   const token = localStorage.getItem("token");
@@ -35,10 +36,10 @@ function PlayQuiz({ setMusicaAtual }) {
   const [playerName] = useState(data.user.name);
   const [score, setScore] = useState(0);
   const [current, setCurrent] = useState(1);
-  const total = 21;
+  const total = 35;
   const [segundos, setSegundos] = useState(1);
   const videoRef = useRef(); //deve controlar a mudança de background
-  let scoreTotal = 0;
+  let scoreTotal = 0;   
 
   const videoBackgrounds = [
     bgShire,
@@ -102,6 +103,7 @@ function PlayQuiz({ setMusicaAtual }) {
     handleRanking();
   }, 10000)
 
+  
   
  
 //--------------------------Transição de musicas do mapa-------------------------------

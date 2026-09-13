@@ -1,5 +1,5 @@
 import './OptionProfile.css'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BtnMenu from '../buttons/BtnMenu'
 import { useNavigate } from 'react-router-dom';
 import TemCerteza from '../TemCerteza'
@@ -18,6 +18,43 @@ function OptionProfile({ isOpen, onClose, onSubmit, id }) {
   const [confirmationMsg, setConfirmationMsg]=useState('')// Controla a mensagem que aparece no popUp
   const idUser = id;
   const navigate = useNavigate();
+
+  useEffect(() => {
+  const buscarUsuario = async () => {
+
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await fetch("http://localhost:3000/users/me", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        console.log("componente OptionProfile", res);
+        throw new Error("Erro ao buscar usuário");
+      }
+
+      const data = await res.json();
+
+      console.log(data);
+
+      setForm((prev) => ({
+        ...prev,
+        name: data.name,
+        email: data.email,
+      }));
+
+    } catch (err) {
+      console.error("Erro:", err);
+    }
+  };
+
+  buscarUsuario();
+}, []);
 
   // ---------------------------
   //  Funções auxiliares
