@@ -109,7 +109,8 @@ questões, acumula pontos e compete no ranking.
 1.  Acesse o Backend:
 
     ``` bash
-    cd backend
+    cd ..
+    cd retorno-do-dev
     ```
 
 2. Instale as dependências:
