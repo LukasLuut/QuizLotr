@@ -43,7 +43,7 @@ function Profile() {
   useEffect(() => {
     setFadeIn(true);
     let alive = true;
-    // Partida em andamento: oferece "Continuar jornada"
+    // Partida em andamento: oferece "Continuar"
     api
       .currentRound()
       .then((round) => alive && setCurrentRound(round))
@@ -158,7 +158,7 @@ function Profile() {
             </div>
             <nav className="btn-box" aria-label="Opções do jogador">
               {currentRound && (
-                <Button onClick={continueGame}>Continuar jornada</Button>
+                <Button onClick={continueGame}>Continuar</Button>
               )}
               <Button onClick={() => setModal("mode")}>Novo Jogo</Button>
               <Button onClick={() => setModal("achievements")}>Conquistas</Button>

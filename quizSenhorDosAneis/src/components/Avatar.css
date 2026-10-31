@@ -1,4 +1,5 @@
-/* Moldura redonda (perfil-border) com a foto centralizada no círculo interno */
+/* Moldura redonda (perfil-border, 640 px) funciona como aro: a foto vai até a borda
+   interna do aro grosso (59 px de 640 ≈ 9,2%) e fica por baixo dele */
 .avatar {
   position: relative;
   display: inline-block;
@@ -8,9 +9,9 @@
 
 .avatar-photo {
   position: absolute;
-  inset: 24%;
-  width: 52%;
-  height: 52%;
+  inset: 9.5%;
+  width: 81%;
+  height: 81%;
   object-fit: cover;
   border-radius: 50%;
 }

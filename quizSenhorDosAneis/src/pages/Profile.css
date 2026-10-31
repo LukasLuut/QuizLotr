@@ -139,23 +139,25 @@
   scale: 0.82;
   font-size: 30px;
   flex: none;
+  /* a escala não encolhe a caixa do layout: margem negativa aproxima os botões */
+  margin-block: -14px;
 }
 
-/* Com "Continuar jornada" são 5 botões: um pouco menores para caber no pergaminho */
+/* Com "Continuar" são 5 botões: um pouco menores para caber no pergaminho */
 .btn-box:has(> :nth-child(5)) .btn-menu {
   scale: 0.74;
-  margin-block: -5px;
+  margin-block: -17px;
 }
 
 @media (max-height: 820px) {
   .btn-box .btn-menu {
     scale: 0.7;
-    margin-block: -12px;
+    margin-block: -20px;
   }
 
   .btn-box:has(> :nth-child(5)) .btn-menu {
     scale: 0.6;
-    margin-block: -19px;
+    margin-block: -25px;
   }
 }
 
@@ -163,7 +165,7 @@
   .btn-box .btn-menu,
   .btn-box:has(> :nth-child(5)) .btn-menu {
     scale: 0.64;
-    margin-block: -10px;
+    margin-block: -22px;
   }
 }
 

@@ -56,5 +56,5 @@ test("cadastro, login, uma pergunta, salvar e continuar a jornada", async ({ pag
   await shot("menu");
   await page.getByRole("button", { name: "Salvar e sair" }).click();
   await expect(page).toHaveURL(/\/profile$/);
-  await expect(page.getByRole("button", { name: "Continuar jornada" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Continuar", exact: true })).toBeVisible();
 });
