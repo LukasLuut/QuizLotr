@@ -1,9 +1,16 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, Index } from 'typeorm'
 import { User } from './User'
 import { RoundAnswer } from './RoundAnswer'
-import type { GameMode } from '../game/rules'
+import type { GameMode, Help, Journey } from '../game/rules'
 
 export type RoundStatus = 'active' | 'finished' | 'failed' | 'abandoned'
+export type FailReason = 'lives' | 'corrupted'
+
+// Efeitos de ajuda na pergunta atual (sobrevivem a um F5)
+export interface QuestionAssist {
+  eliminated?: number[]
+  palantir?: { answerId: number; percent: number }[]
+}
 
 // Uma partida. Todo o estado do jogo (pergunta atual, pontos, vidas) fica aqui, no servidor.
 @Entity('rounds')
@@ -24,6 +31,46 @@ export class Round {
 
   @Column({ type: 'varchar', length: 20, default: 'active' })
   status: RoundStatus
+
+  // 'main' = Sociedade do Anel; 'hobbit' = jornada bônus (fora do ranking)
+  @Column({ type: 'varchar', length: 20, default: 'main' })
+  journey: Journey
+
+  // Personagem do jogador no início da partida (define as habilidades)
+  @Column({ type: 'varchar', length: 20, default: 'gandalf' })
+  persona: string
+
+  // O Peso do Anel: 0 a 100; em 100 a partida termina
+  @Column({ type: 'int', default: 0 })
+  corruption: number
+
+  @Column({ type: 'int', default: 0 })
+  ringUses: number
+
+  // Quantas vezes cada ajuda já foi usada
+  @Column({ type: 'simple-json', nullable: true })
+  helpsUsed: Partial<Record<Help, number>> | null
+
+  @Column({ type: 'simple-json', nullable: true })
+  currentAssist: QuestionAssist | null
+
+  // Escudo de Gondor (Boromir) já gasto
+  @Column({ type: 'boolean', default: false })
+  shieldUsed: boolean
+
+  // Regiões em que a Teimosia Anã (Gimli) já segurou a sequência
+  @Column({ type: 'simple-json', nullable: true })
+  streakShieldRegions: number[] | null
+
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  failReason: FailReason | null
+
+  // Acertos em menos de 3 s (conquista Relâmpago)
+  @Column({ type: 'int', default: 0 })
+  fastCorrect: number
+
+  @Column({ type: 'int', default: 0 })
+  livesLost: number
 
   // Perguntas sorteadas para a partida, em ordem
   @Column({ type: 'simple-json' })

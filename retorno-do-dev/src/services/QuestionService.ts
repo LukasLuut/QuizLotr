@@ -2,7 +2,7 @@ import { EntityManager } from 'typeorm'
 import { AppDataSource } from '../data-source'
 import { Question } from '../models/Question'
 import { NotFoundError } from '../errors/HttpError'
-import { QUESTIONS_PER_REGION, REGIONS, shuffle } from '../game/rules'
+import { JOURNEY_PLAN, Journey, shuffle } from '../game/rules'
 
 export interface PublicQuestion {
   id: number
@@ -29,10 +29,11 @@ export class QuestionService {
   }
 
   // Sorteia as perguntas de uma partida: N por região, regiões na ordem da jornada
-  async drawForRound(perRegion = QUESTIONS_PER_REGION): Promise<number[]> {
+  async drawForRound(journey: Journey = 'main'): Promise<number[]> {
+    const { regions, perRegion } = JOURNEY_PLAN[journey]
     const rows = await this.repo.find({ select: { id: true, region: true } })
     const ids: number[] = []
-    for (let region = 0; region < REGIONS.length; region++) {
+    for (const region of regions) {
       const pool = rows.filter(r => r.region === region).map(r => r.id)
       ids.push(...shuffle(pool).slice(0, perRegion))
     }

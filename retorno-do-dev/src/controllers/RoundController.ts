@@ -8,7 +8,7 @@ const roundId = (req: Request) => Number((req as any).validated.params.id)
 
 export class RoundController {
   async start(req: Request, res: Response) {
-    res.status(201).json(await service.start(req.user!.id, req.body.mode))
+    res.status(201).json(await service.start(req.user!.id, req.body.mode, req.body.journey))
   }
 
   async current(req: Request, res: Response) {
@@ -24,8 +24,12 @@ export class RoundController {
   }
 
   async answer(req: Request, res: Response) {
-    const { questionId, answerId } = req.body
-    res.json(await service.answer(req.user!.id, roundId(req), questionId, answerId ?? null))
+    const { questionId, answerId, useRing } = req.body
+    res.json(await service.answer(req.user!.id, roundId(req), questionId, answerId ?? null, !!useRing))
+  }
+
+  async help(req: Request, res: Response) {
+    res.json(await service.help(req.user!.id, roundId(req), req.body.help))
   }
 
   async pause(req: Request, res: Response) {

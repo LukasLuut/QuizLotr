@@ -106,11 +106,11 @@ describe('conta do jogador', () => {
 })
 
 describe('foto de perfil', () => {
-  it('aceita só personagens da lista e permite voltar ao padrão', async () => {
+  it('aceita só personagens da lista (liberados) e permite voltar ao padrão', async () => {
     const p = await createPlayer()
-    const saved = await api().put('/users/me').set(auth(p.token)).send({ avatar: 'galadriel' })
+    const saved = await api().put('/users/me').set(auth(p.token)).send({ avatar: 'frodo' })
     expect(saved.status).toBe(200)
-    expect(saved.body.avatar).toBe('galadriel')
+    expect(saved.body.avatar).toBe('frodo')
     const reset = await api().put('/users/me').set(auth(p.token)).send({ avatar: null })
     expect(reset.body.avatar).toBeNull()
   })

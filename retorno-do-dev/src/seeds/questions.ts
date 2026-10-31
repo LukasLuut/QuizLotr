@@ -1,4 +1,4 @@
-// Banco de perguntas por região da jornada (0 = Condado ... 7 = Montanha da Perdição).
+// Banco de perguntas por região (0 = Condado ... 7 = Montanha da Perdição; 8-10 = O Hobbit).
 // Gerado a partir do seed original, com correções de lore e perguntas novas.
 export interface SeedQuestion {
   region: number
@@ -1376,5 +1376,34 @@ export const QUESTIONS: SeedQuestion[] = [
         correct: true
       }
     ]
-  }
+  },
+  // Jornada bônus "O Hobbit" (8 = Montanhas Sombrias, 9 = Floresta das Trevas, 10 = Erebor)
+  ...hobbit([
+    [8, 1, 'Que objeto Bilbo encontra no chão de uma caverna sob as Montanhas Sombrias?', ['Um anel de ouro', 'Uma espada élfica', 'Uma pedra preciosa', 'Um mapa antigo'], 0, 'Perdido no escuro, Bilbo encontra o Um Anel, que o Gollum havia deixado cair.'],
+    [8, 2, 'Qual é a última pergunta de Bilbo no jogo de enigmas com o Gollum?', ['O que tem raízes que ninguém vê?', 'O que é que eu tenho no meu bolso?', 'O que não tem pernas e anda?', 'Qual é o meu nome?'], 1, 'Bilbo, sem enigmas, pergunta o que tem no bolso: o Anel. O Gollum não sabe responder.'],
+    [8, 2, 'Como se chamam as espadas que Gandalf e Thorin pegam na toca dos trolls?', ['Andúril e Narsil', 'Glamdring e Orcrist', 'Ferroada e Herugrim', 'Anglachel e Gúthwinë'], 1, 'Glamdring, a Martelo-de-Inimigos, fica com Gandalf; Orcrist, a Fendedora-de-Orcs, com Thorin.'],
+    [8, 1, 'Quem resgata a Companhia das árvores em chamas, perseguida por orcs e wargs?', ['Os elfos de Valfenda', 'Beorn', 'As Águias', 'Radagast'], 2, 'As Grandes Águias, a pedido de Gandalf, levam a Companhia para longe do fogo.'],
+    [8, 2, 'Que forma Beorn, o troca-peles, pode assumir?', ['Lobo', 'Urso', 'Águia', 'Javali'], 1, 'Beorn vive entre as Montanhas Sombrias e a Floresta das Trevas e pode se tornar um grande urso negro.'],
+    [9, 1, 'Que nome Bilbo dá à sua pequena espada depois de lutar contra as aranhas?', ['Ferroada', 'Glamdring', 'Orcrist', 'Picada'], 0, 'Ao vencer a aranha gigante sozinho, Bilbo chama a lâmina de Ferroada.'],
+    [9, 2, 'Qual é o rei dos elfos da Floresta das Trevas que prende os anões?', ['Elrond', 'Celeborn', 'Thranduil', 'Thingol'], 2, 'Thranduil, pai de Legolas, prende Thorin e os anões em seus salões subterrâneos.'],
+    [9, 1, 'Como os anões fogem dos salões do Rei Élfico?', ['Por um túnel secreto', 'Dentro de barris pelo rio', 'Voando nas Águias', 'Disfarçados de elfos'], 1, 'Bilbo, invisível, solta os anões e os coloca em barris vazios lançados ao rio.'],
+    [9, 2, 'Que aviso Gandalf dá sobre a trilha da Floresta das Trevas?', ['Não beber de nenhum rio', 'Não sair da trilha', 'Não acender fogueiras', 'Andar só de dia'], 1, 'Sair da trilha leva a Companhia à perdição: logo os anões se perdem e caem nas teias das aranhas.'],
+    [9, 3, 'Que nome Bilbo usa para provocar as aranhas e afastá-las dos anões?', ['Atercop', 'Gollum', 'Smaug', 'Morgoth'], 0, 'Bilbo canta zombando das aranhas e as chama de Atercop, até atraí-las para longe dos amigos.'],
+    [10, 1, 'Que tesouro Thorin deseja acima de todos os outros em Erebor?', ['A Arkenstone', 'O Anel de Thrór', 'A Coroa de Durin', 'O Mithril de Moria'], 0, 'A Arkenstone, o Coração da Montanha, era a joia mais preciosa da casa de Durin.'],
+    [10, 2, 'Quem mata o dragão Smaug?', ['Thorin', 'Bard, o Arqueiro', 'Gandalf', 'Beorn'], 1, 'Bard acerta a Flecha Negra no único ponto sem escamas do peito de Smaug, avisado por um tordo.'],
+    [10, 2, 'Que cidade Smaug destrói depois de sair da Montanha Solitária?', ['Valle', 'Cidade do Lago (Esgaroth)', 'Bri', 'Minas Tirith'], 1, 'Furioso, Smaug ataca Esgaroth, a Cidade do Lago, onde acaba abatido por Bard.'],
+    [10, 2, 'Como se chama a batalha que encerra a aventura de O Hobbit?', ['Batalha dos Campos de Pelennor', 'Batalha dos Cinco Exércitos', 'Batalha do Abismo de Helm', 'Batalha de Dagorlad'], 1, 'Elfos, homens e anões enfrentam orcs e wargs diante de Erebor, na Batalha dos Cinco Exércitos.'],
+    [10, 3, 'O que Bilbo faz com a Arkenstone para tentar evitar a guerra?', ['Esconde no Condado', 'Entrega a Bard e Thranduil', 'Joga no Lago', 'Devolve a Smaug'], 1, 'Bilbo entrega a Arkenstone a Bard e Thranduil, para que a troquem por uma parte justa do tesouro.'],
+  ]),
 ]
+
+// Formato compacto: [região, dificuldade, pergunta, alternativas, índice da correta, explicação]
+function hobbit(rows: [number, number, string, string[], number, string][]): SeedQuestion[] {
+  return rows.map(([region, difficulty, question, options, correct, explanation]) => ({
+    region,
+    difficulty,
+    question,
+    explanation,
+    answers: options.map((answer, i) => ({ answer, correct: i === correct })),
+  }))
+}

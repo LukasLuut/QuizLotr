@@ -5,7 +5,7 @@ import { CreateUserDTO } from '../dtos/CreateUserDTO'
 import { UpdateUserDTO } from '../dtos/UpdateUserDTO'
 import { LoginUserDTO } from '../dtos/LoginUserDTO'
 import { Achievement } from '../models/Achievement'
-import { achievementByCode, isPersona } from '../game/rules'
+import { PERSONA_INFO, achievementByCode, isPersona, isPersonaUnlocked, levelFromAchievements } from '../game/rules'
 
 export const DEFAULT_TITLE = 'Viajante do Condado'
 
@@ -18,11 +18,13 @@ export interface PublicUser {
   // título exibido abaixo do nome (vem de uma conquista desbloqueada)
   title: string
   titleCode: string | null
+  // Nível do viajante (= conquistas desbloqueadas): libera personagens e a jornada O Hobbit
+  level: number
   createdAt: Date
 }
 
 // Única forma de um usuário sair da API: só campos públicos, nunca a senha
-export function toPublicUser(user: User): PublicUser {
+export function toPublicUser(user: User, level = 0): PublicUser {
   return {
     id: user.id,
     name: user.name,
@@ -32,6 +34,7 @@ export function toPublicUser(user: User): PublicUser {
     avatar: isPersona(user.avatar) ? user.avatar : null,
     title: (user.titleCode && achievementByCode(user.titleCode)?.title) || DEFAULT_TITLE,
     titleCode: user.titleCode ?? null,
+    level,
     createdAt: user.createdAt,
   }
 }
@@ -67,13 +70,17 @@ export class UserService {
 
     const valid = user ? await user.validatePassword(data.password) : false
     if (!user || !valid) throw new UnauthorizedError('E-mail ou senha inválidos')
-    return toPublicUser(user)
+    return toPublicUser(user, await this.levelOf(user.id))
   }
 
   async findById(id: number): Promise<PublicUser> {
     const user = await this.userRepository.findOne({ where: { id } })
     if (!user) throw new NotFoundError('Usuário não encontrado')
-    return toPublicUser(user)
+    return toPublicUser(user, await this.levelOf(id))
+  }
+
+  private async levelOf(userId: number) {
+    return levelFromAchievements(await AppDataSource.getRepository(Achievement).count({ where: { userId } }))
   }
 
   // Atualiza só os campos permitidos, copiados um a um (sem Object.assign do body)
@@ -91,7 +98,13 @@ export class UserService {
       }
     }
     if (data.password !== undefined) user.password = await User.hashPassword(data.password)
-    if (data.avatar !== undefined) user.avatar = data.avatar
+    if (data.avatar !== undefined) {
+      // personagens acima do nível do viajante continuam bloqueados
+      if (isPersona(data.avatar) && !isPersonaUnlocked(data.avatar, await this.levelOf(id))) {
+        throw new BadRequestError(`${PERSONA_INFO[data.avatar].name} abre no nível ${PERSONA_INFO[data.avatar].unlockLevel} do viajante`)
+      }
+      user.avatar = data.avatar
+    }
     if (data.titleCode !== undefined) {
       if (data.titleCode !== null) {
         // só vale título de conquista que o jogador já desbloqueou

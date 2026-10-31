@@ -34,6 +34,13 @@ export class RoundAnswer {
   @Column({ type: 'int', default: 0 })
   elapsedSeconds: number
 
+  @Column({ type: 'boolean', default: false })
+  usedRing: boolean
+
+  // Pulada com o Passolargo
+  @Column({ type: 'boolean', default: false })
+  skipped: boolean
+
   @CreateDateColumn({ precision: 3, default: () => 'CURRENT_TIMESTAMP(3)' })
   answeredAt: Date
 }
