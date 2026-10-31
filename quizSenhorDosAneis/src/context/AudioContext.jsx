@@ -8,7 +8,8 @@ import whooshSound from "../assets/audio/sfx/whoosh.mp3";
 
 const SFX = { click: clickSound, correct: correctSound, wrong: wrongSound, win: winSound, whoosh: whooshSound };
 const MUSIC_LEVEL = 0.6; // música um pouco abaixo dos efeitos
-const FADE_MS = 1200;
+// crossfade longo entre as músicas das regiões, como na versão original
+const FADE_MS = 2500;
 const STORAGE = { muted: "quizlotr-muted", volume: "quizlotr-volume" };
 
 const readSetting = (key, fallback) => {

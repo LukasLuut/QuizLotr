@@ -55,10 +55,11 @@ function PlayQuiz() {
     setOutcome(null);
   }, [roundId]);
 
-  // Ambiência da região atual
+  // Ambiência: na viagem, a música do destino já começa a entrar (fade antes da chegada)
+  const musicRegion = phase === "travelling" && state.targetRegion !== null ? state.targetRegion : region;
   useEffect(() => {
-    if (round) playMusic(regionAt(region).ambience);
-  }, [region, round, playMusic]);
+    if (round) playMusic(regionAt(musicRegion).ambience);
+  }, [musicRegion, round, playMusic]);
 
   // Som de acerto/erro quando o servidor responde
   useEffect(() => {

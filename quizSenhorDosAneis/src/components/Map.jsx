@@ -38,9 +38,23 @@ const endOf = (region) => {
   return path[path.length - 1];
 };
 
-const SEGMENT_MS = 500;
 const TRAVEL_ZOOM = 0.2;
 const REST_ZOOM = -1;
+// Velocidade constante do personagem (unidades do mapa por ms) e limites da viagem
+const WALK_SPEED = 0.15;
+const MIN_TRAVEL_MS = 3800;
+const MAX_TRAVEL_MS = 7000;
+// Quanto a câmera se aproxima do personagem a cada quadro (0..1)
+const FOLLOW_EASE = 0.1;
+
+// Duração de cada trecho proporcional ao comprimento: o Frodo anda sempre na mesma
+// velocidade, em vez de acelerar nos trechos longos e quase parar nos curtos
+function segmentDurations(path) {
+  const lengths = path.slice(1).map((p, i) => Math.hypot(p[0] - path[i][0], p[1] - path[i][1]));
+  const total = lengths.reduce((a, b) => a + b, 0) || 1;
+  const travelMs = Math.min(MAX_TRAVEL_MS, Math.max(MIN_TRAVEL_MS, total / WALK_SPEED));
+  return lengths.map((len) => Math.max(16, Math.round((len / total) * travelMs)));
+}
 
 export default function MapaTerraMedia({ region = 0, targetRegion = null, travelling = false, showAdvance = false, intro = false, onAdvance, onArrive }) {
   return (
@@ -127,6 +141,7 @@ export function IntroZoom({ target }) {
 export function MovingCharacter({ region, targetRegion, travelling, intro, onArrive }) {
   const map = useMap();
   const markerRef = useRef(null);
+  const centered = useRef(false);
   const onArriveRef = useRef(onArrive);
   onArriveRef.current = onArrive;
 
@@ -136,8 +151,10 @@ export function MovingCharacter({ region, targetRegion, travelling, intro, onArr
     const pos = endOf(region);
     if (markerRef.current) map.removeLayer(markerRef.current);
     markerRef.current = L.marker(pos, { icon: characterIcon, keyboard: false, interactive: false }).addTo(map);
-    // Centraliza no personagem (na partida nova, a animação de abertura já faz isso)
-    if (!intro) map.setView(pos, REST_ZOOM, { animate: false });
+    // Centraliza no personagem só ao abrir a tela (na partida nova, a animação de abertura
+    // já faz isso; na chegada de uma viagem, o zoom de saída suave cuida do enquadramento)
+    if (!intro && !centered.current) map.setView(pos, REST_ZOOM, { animate: false });
+    centered.current = true;
   }, [map, region, travelling]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Viagem até a próxima região
@@ -149,31 +166,50 @@ export function MovingCharacter({ region, targetRegion, travelling, intro, onArr
       return;
     }
 
-    if (markerRef.current) map.removeLayer(markerRef.current);
-    const marker = movingMarker(path, Array(path.length - 1).fill(SEGMENT_MS), { icon: characterIcon, interactive: false }).addTo(map);
-    markerRef.current = marker;
+    let marker = null;
+    let frame = null;
+    let cancelled = false;
 
-    // A câmera segue o personagem só enquanto ele anda
-    let follow = null;
-    const stopFollow = () => {
-      if (follow) clearInterval(follow);
-      follow = null;
+    // A câmera segue o personagem com amortecimento (aproxima um pouco a cada quadro),
+    // sem os saltos de um panTo a intervalos fixos
+    const follow = () => {
+      if (!marker) return;
+      const target = marker.getLatLng();
+      const center = map.getCenter();
+      const next = L.latLng(center.lat + (target.lat - center.lat) * FOLLOW_EASE, center.lng + (target.lng - center.lng) * FOLLOW_EASE);
+      map.setView(next, map.getZoom(), { animate: false });
+      frame = requestAnimationFrame(follow);
     };
 
-    marker.on("start", () => {
-      map.setZoom(TRAVEL_ZOOM, { animate: true });
-      follow = setInterval(() => map.panTo(marker.getLatLng(), { animate: false }), 40);
-    });
-    marker.on("end", () => {
-      stopFollow();
-      map.setView(marker.getLatLng(), REST_ZOOM, { animate: true });
-      onArriveRef.current?.();
-    });
-    marker.start();
+    let started = false;
+    const startWalking = () => {
+      if (cancelled || started) return;
+      started = true;
+      if (markerRef.current) map.removeLayer(markerRef.current);
+      marker = movingMarker(path, segmentDurations(path), { icon: characterIcon, interactive: false }).addTo(map);
+      markerRef.current = marker;
+      marker.on("end", () => {
+        cancelAnimationFrame(frame);
+        // chegada: afasta o zoom devagar, centralizado no destino
+        map.flyTo(marker.getLatLng(), REST_ZOOM, { duration: 1.4, easeLinearity: 0.3 });
+        onArriveRef.current?.();
+      });
+      marker.start();
+      frame = requestAnimationFrame(follow);
+    };
+
+    // partida: aproxima a câmera no personagem antes de ele começar a andar
+    map.once("moveend", startWalking);
+    map.flyTo(path[0], TRAVEL_ZOOM, { duration: 1, easeLinearity: 0.3 });
+    // se a câmera já estava no lugar (sem moveend), começa assim mesmo
+    const fallback = setTimeout(startWalking, 1300);
 
     return () => {
-      stopFollow();
-      marker.off();
+      cancelled = true;
+      clearTimeout(fallback);
+      cancelAnimationFrame(frame);
+      map.off("moveend", startWalking);
+      marker?.off();
     };
   }, [map, travelling, targetRegion]);
 
