@@ -12,7 +12,7 @@ test("cadastro, login, uma pergunta, salvar e continuar a jornada", async ({ pag
 
   // Cadastro
   await page.getByRole("button", { name: "Criar nova conta" }).click();
-  await page.getByLabel("Nome do personagem").fill("Frodo Teste");
+  await page.getByLabel("Nome de usuário").fill("Frodo Teste");
   await page.getByLabel("E-mail").fill(email);
   await page.getByLabel("Senha").fill(PASSWORD);
   await page.getByRole("button", { name: "Registrar" }).click();

@@ -1,157 +1,141 @@
-.bg {
-  background-image: url(../assets/images/marble.jpg);
-  background-size: cover;
-  width: 100vw;
-  min-height: 100vh;
-  min-height: 100dvh;
-  background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+/* Visual da versão original. As regras que eram globais (* e svg) ficam restritas
+   a esta tela; a fonte Hobbington é declarada em index.css. */
+
+.bg{
+    background-image: url(../assets/images/marble.jpg);
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.loader__container {
-  width: min(560px, 92vw);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: clamp(16px, 4vh, 40px);
+.loader__container{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 10px;
 }
 
-/* logo e anel cabem juntos na altura da tela: o START fica sempre visível */
-.img-logo {
-  width: auto;
-  max-width: 100%;
-  max-height: 36dvh;
+.rings svg{
+  width:500px;
+  height:450px;
 }
 
-.rings {
-  width: min(450px, 90vw, 44dvh);
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  margin-top: clamp(8px, 2vh, 24px);
-  margin-bottom: 70px; /* espaço do botão START, que fica abaixo do anel */
-}
-
-.rings svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.loader__ring {
-  overflow: visible;
-  width: 66%;
-  aspect-ratio: 1;
+.loader__ring{
+  width: 300px;
+  height: 300px;
   position: relative;
   z-index: 2;
-  border: none;
-  background: transparent;
-  border-radius: 50%;
   transition: transform 0.3s ease;
+  position: absolute;
+  /* era uma div: zera o visual padrão de botão */
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: 50%;
 }
 
 /* Hover do anel inteiro */
 .loader__ring:hover,
-.loader__ring:focus-visible {
-  transform: scale(1.1);
+.loader__ring:focus-visible{
+    transform: scale(1.1);
 }
 
 /* Hover da inscrição secundária */
 .rings:hover .loader__inscription2,
-.rings:focus-within .loader__inscription2 {
-  transform: scale(1.1);
-  animation: ring 60s linear infinite, fadeOpacity 1.5s linear infinite alternate;
+.rings:focus-within .loader__inscription2{
+    transform: scale(1.1);
+    animation: ring 60s linear infinite, fadeOpacity 1.5s linear infinite alternate;
+}
+
+.rings{
+  width: 450px;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: absolute;
+  bottom: -350px;
 }
 
 /* Hover do texto circular */
 .rings:hover .circle-text,
-.rings:focus-within .circle-text {
-  animation: grow 1s ease forwards, fadeOpacity 1.5s linear forwards;
+.rings:focus-within .circle-text{
+  animation: grow 1s ease forwards, fadeOpacity 1.5s linear forwards, glow 1.5s linear infinite alternate ;
 }
 
 .circle-text {
   font-size: 20px;
   fill: rgb(0, 0, 0);
-  font-family: "Hobbington", var(--font-title);
+  font-family: 'Hobbington';
   letter-spacing: 1px;
+  position: absolute;
   transform-origin: center;
   transition: all 0.3s ease;
   opacity: 0;
+  bottom: 20px;
 }
 
 .loader__inscription {
-  position: absolute;
-  inset: 0;
   width: 100%;
   animation: ring 60s linear infinite;
+  position: absolute;
+  bottom: 0px;
+  left: 0;
   transition: transform 0.3s ease;
 }
 
-.loader__inscription2 {
-  z-index: 1;
-  opacity: 0;
-  transition: all 0.3s ease;
+.loader__inscription2{
+    position: absolute;
+    z-index: 1;
+    bottom: 0px;
+    opacity: 0;
+    transition: all 0.3s ease;
 }
 
-.btn-start {
-  position: absolute;
-  bottom: -66px;
-  left: 50%;
-  translate: -50% 0;
-  font-family: var(--font-title);
-  z-index: 3;
-  border: none;
-  font-size: clamp(18px, 4vw, 22px);
-  min-width: 170px;
-  height: 62px;
-  padding: 0 34px;
-  background: url(../assets/images/button/btn-marrom-dourado.png) center / 100% 100% no-repeat transparent;
-  color: var(--color-text-main);
-  text-shadow: 0 1px 2px #000;
-  transition: transform 0.2s ease;
-}
-
-.btn-start:hover,
-.btn-start:focus-visible {
-  transform: scale(1.04);
-  background-image: url(../assets/images/button/btn-dourado-2.png);
+.btn-start{
+    display: flex;
+    position: absolute;
+    bottom: 165px;
+    font-family: 'Uncial Antiqua', cursive;
+    z-index: 1;
+    border: none;
+    font-size: 25px;
+    /* aparência padrão de botão da versão original */
+    padding: 1px 6px;
+    background-color: buttonface;
+    color: buttontext;
 }
 
 /* Keyframes */
 @keyframes ring {
-  from {
-    transform: rotateZ(0deg);
-  }
-  to {
-    transform: rotateZ(360deg);
-  }
+  from { transform: rotateZ(0deg); }
+  to   { transform: rotateZ(360deg); }
 }
 
 @keyframes fadeOpacity {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-  }
+  0%   { opacity: 0; }
+  50%  { opacity: 0.5; }
+  100% { opacity: 1; }
 }
 
 @keyframes grow {
-  from {
-    transform: scale(0.8);
-  }
-  to {
-    transform: scale(1.1);
+  from { transform: scale(0.8); }
+  to   { transform: scale(1.1); }
+}
+
+@media (max-width: 768px) {
+  .img-logo{
+    width: 80vw;
+    margin-bottom: 20px;
+    margin-top: 90px;
   }
 }

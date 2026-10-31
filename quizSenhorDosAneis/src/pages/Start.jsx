@@ -31,6 +31,7 @@ function Start() {
   return (
     <main className="bg">
       <div className="loader__container">
+        {/* Aqui é o título */}
         <img className="img-logo" src={lordOfTheRings} alt="O Senhor dos Anéis" />
 
         <div className="rings">
@@ -40,6 +41,7 @@ function Start() {
             <img className="loader__inscription loader__inscription2" src={circleOneRing2} alt="" />
           </button>
 
+          {/* Círculo com o texto do Anel */}
           <svg viewBox="0 0 300 300" aria-hidden="true">
             <defs>
               <path id="circlePath" d="M 150, 150 m -120,0 a 120,120 0 1,1 240,0 a 120,120 0 1,1 -240,0" />

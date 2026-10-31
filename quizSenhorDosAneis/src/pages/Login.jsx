@@ -80,16 +80,16 @@ function Login() {
       <PopUpDTO message={popup?.message} variant={popup?.variant} isOpen={!!popup} />
       <main className="login-page">
         <div className="form-container">
-          <h1 className="title-login">
-            Quiz da <span className="nowrap">Terra-médiA</span>
-          </h1>
+          <div className="title-container">
+            <h1 className="title-login">Quiz da Terra-médiA</h1>
+          </div>
 
-          <form className="login-form" onSubmit={handleSubmit} noValidate>
+          <form onSubmit={handleSubmit} noValidate>
             {isRegister && (
-              <div className="field">
-                <label htmlFor="username">Nome do personagem</label>
+              <div className="form-group">
+                <label htmlFor="username">Nome de usuário</label>
                 <input
-                  autoComplete="nickname"
+                  autoComplete="off"
                   type="text"
                   id="username"
                   name="name"
@@ -101,7 +101,7 @@ function Login() {
               </div>
             )}
 
-            <div className="field">
+            <div className="form-group">
               <label htmlFor="email">E-mail</label>
               <input
                 autoComplete="email"
@@ -115,7 +115,7 @@ function Login() {
               />
             </div>
 
-            <div className="field">
+            <div className="form-group">
               <label htmlFor="password">Senha</label>
               <input
                 autoComplete={isRegister ? "new-password" : "current-password"}
@@ -125,14 +125,8 @@ function Login() {
                 placeholder="••••••••"
                 value={form.password}
                 onChange={update}
-                aria-describedby={isRegister ? "password-hint" : undefined}
                 required
               />
-              {isRegister && (
-                <span id="password-hint" className="field-hint">
-                  Mínimo de 6 caracteres, com maiúscula, minúscula, número e símbolo (@$!%*?&#).
-                </span>
-              )}
             </div>
 
             <Button type="submit" disabled={submitting}>
@@ -141,7 +135,7 @@ function Login() {
           </form>
 
           <button type="button" className="link" onClick={() => switchMode(isRegister ? "login" : "register")}>
-            {isRegister ? "Já tenho conta: entrar" : "Criar nova conta"}
+            {isRegister ? "Entrar" : "Criar nova conta"}
           </button>
         </div>
 

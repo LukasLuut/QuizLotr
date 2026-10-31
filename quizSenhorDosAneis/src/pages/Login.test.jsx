@@ -28,7 +28,7 @@ describe("Login", () => {
     const register = vi.fn().mockRejectedValue(new Error("Senha deve conter pelo menos um número"));
     renderLogin({ register });
     await userEvent.click(screen.getByRole("button", { name: "Criar nova conta" }));
-    await userEvent.type(screen.getByLabelText("Nome do personagem"), "Sam");
+    await userEvent.type(screen.getByLabelText("Nome de usuário"), "Sam");
     await userEvent.type(screen.getByLabelText("E-mail"), "sam@condado.me");
     await userEvent.type(screen.getByLabelText("Senha"), "Abc@def");
     await userEvent.click(screen.getByRole("button", { name: "Registrar" }));

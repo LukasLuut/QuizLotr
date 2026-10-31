@@ -1,75 +1,131 @@
+/* Visual da versão original. As regras de label, input e form, que eram globais,
+   ficam restritas à tela de login; a fonte Ringbearer é declarada em index.css. */
+
 .login-body {
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
   color: var(--color-text-main);
+  margin: 0;
   opacity: 0;
   transition: opacity 2s ease;
-  padding: 16px;
 }
 
 .fade-in-login {
   opacity: 1;
+  transition: opacity 2s ease;
 }
 
-.login-page {
+/* Fonte do título */
+.title-login {
+  font-family: 'Ringbearer', serif;
+  font-size: 100px;
+  color: var(--color-text-heading);
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px var(--shadow-strong);
+  font-weight: 200;
+  text-wrap: wrap;
+  margin-top: -20px;
+}
+
+.title-container {
+  width: 70%;
+}
+
+.login-body .form-group {
+  margin-bottom: 30px;
+  width: 400px;
+}
+
+.login-body label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--color-text-label);
+  text-shadow: 1px 1px 2px var(--shadow-strong);
+}
+
+.login-body input {
   width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-input);
+  background: rgba(18, 18, 18, 0.4);
+  color: var(--color-text-input);
+  font-size: 14px;
+  font-family: 'Uncial Antiqua', cursive;
+}
+
+.login-body input:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 8px var(--shadow-glow);
+  outline: none;
+}
+
+.login-body input::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.login-body .link {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  color: #0099ff;
+  text-decoration: underline;
+  text-shadow: 1px 1px 2px var(--shadow-strong);
+  font-size: 16px;
+}
+
+.login-body .link:hover {
+  color: var(--color-text-link-hover);
+}
+
+/* Botão de madeira com as dimensões originais (400x105 em escala 0,82, fonte 30 px) */
+.login-body .btn-menu {
+  width: 400px;
+  height: 105px;
+  aspect-ratio: auto;
+  scale: 0.82;
+  font-size: 30px;
+}
+
+.bg-video-login {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: auto;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  object-fit: fill;
+}
+
+.login-body form {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .form-container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  width: min(420px, 100%);
 }
 
-/* Fonte do título */
-.title-login {
-  font-family: var(--font-display);
-  font-size: clamp(44px, min(12vw, 11dvh), 92px);
-  color: var(--color-text-heading);
-  text-align: center;
-  margin-bottom: clamp(8px, 2vh, 20px);
-  text-shadow: 1px 1px 2px var(--shadow-strong);
-  font-weight: 200;
-  line-height: 1;
-  text-wrap: balance;
-}
+@media (max-width: 768px) {
+  .title-login {
+    font-size: 78px;
+  }
 
-/* Formulário dentro da moldura de madeira em pé (box-lateral) */
-.login-form {
-  --w: min(440px, calc(100vw - 32px));
-  width: var(--w);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(12px, 2.2vh, 20px);
-  background: url(../assets/images/box/box-lateral.webp) center / 100% 100% no-repeat;
-  padding: calc(var(--w) * 0.16) calc(var(--w) * 0.14) calc(var(--w) * 0.12);
-  filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.75));
-}
-
-.field-hint {
-  font-size: 13px;
-  color: #e8dcc0;
-  text-shadow: 1px 1px 2px #000;
-}
-
-.login-form .btn-menu {
-  width: 100%;
-  max-width: 300px;
-}
-
-.bg-video-login {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: var(--z-background);
-  object-fit: cover;
+  .login-body .form-group {
+    width: min(400px, calc(100vw - 32px));
+  }
 }
