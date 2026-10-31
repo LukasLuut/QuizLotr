@@ -59,7 +59,7 @@
 
 .profile-avatar {
   position: relative;
-  width: 40%;
+  width: 30%;
   aspect-ratio: 1;
   flex: none;
   border: none;
@@ -140,24 +140,30 @@
   font-size: 30px;
   flex: none;
   /* a escala não encolhe a caixa do layout: margem negativa aproxima os botões */
-  margin-block: -14px;
+  margin-block: -11.5px;
+}
+
+/* Sair: mais estreito (só na horizontal; a altura da madeira se mantém) */
+.btn-box .btn-menu:last-child {
+  width: 300px;
+  background-size: 100% 94%;
 }
 
 /* Com "Continuar" são 5 botões: um pouco menores para caber no pergaminho */
 .btn-box:has(> :nth-child(5)) .btn-menu {
   scale: 0.74;
-  margin-block: -17px;
+  margin-block: -14.5px;
 }
 
 @media (max-height: 820px) {
   .btn-box .btn-menu {
     scale: 0.7;
-    margin-block: -20px;
+    margin-block: -17.5px;
   }
 
   .btn-box:has(> :nth-child(5)) .btn-menu {
     scale: 0.6;
-    margin-block: -25px;
+    margin-block: -22.5px;
   }
 }
 
@@ -165,7 +171,7 @@
   .btn-box .btn-menu,
   .btn-box:has(> :nth-child(5)) .btn-menu {
     scale: 0.64;
-    margin-block: -22px;
+    margin-block: -19.5px;
   }
 }
 
