@@ -42,6 +42,11 @@ export const initialState = {
   region: 0,
   targetRegion: null,
   question: null,
+  // O Peso do Anel: armado para a próxima resposta
+  ringArmed: false,
+  // efeitos das ajudas na pergunta atual
+  assist: { eliminated: [], palantir: null },
+  helpBusy: false,
   selectedId: null,
   result: null,
   summary: null,
@@ -62,7 +67,38 @@ export function gameReducer(state, action) {
     case "scene-done":
       return state.phase === "scene" ? { ...state, phase: "question-loading", fresh: false } : state;
     case "question-loaded":
-      return { ...state, phase: "answering", question: action.question, selectedId: null, result: null };
+      return {
+        ...state,
+        phase: "answering",
+        question: action.question,
+        selectedId: null,
+        result: null,
+        ringArmed: false,
+        assist: { eliminated: action.question.eliminated || [], palantir: action.question.palantir || null },
+      };
+    case "ring-toggle":
+      return state.phase === "answering" ? { ...state, ringArmed: !state.ringArmed } : state;
+    case "help-sent":
+      return { ...state, helpBusy: true };
+    case "help-failed":
+      return { ...state, helpBusy: false };
+    case "help-result": {
+      const r = action.result;
+      return {
+        ...state,
+        helpBusy: false,
+        assist: {
+          eliminated: r.eliminated ?? state.assist.eliminated,
+          palantir: r.palantir ?? state.assist.palantir,
+        },
+        round: {
+          ...state.round,
+          helpsUsed: r.helpsUsed ?? state.round.helpsUsed,
+          lives: r.lives !== undefined ? r.lives : state.round.lives,
+          corruption: r.corruption ?? state.round.corruption,
+        },
+      };
+    }
     case "answer-sent":
       return state.phase === "answering" ? { ...state, phase: "submitting", selectedId: action.answerId } : state;
     case "answer-result": {
@@ -70,6 +106,8 @@ export function gameReducer(state, action) {
       return {
         ...state,
         phase: "feedback",
+        helpBusy: false,
+        ringArmed: false,
         result: r,
         summary: r.summary,
         achievements: [...state.achievements, ...(r.newAchievements || [])],
@@ -80,6 +118,9 @@ export function gameReducer(state, action) {
           lives: r.lives,
           answered: r.answered,
           status: r.status,
+          corruption: r.corruption ?? state.round.corruption,
+          ringUses: r.ringUses ?? state.round.ringUses,
+          helpsUsed: r.helpsUsed ?? state.round.helpsUsed,
           correctCount: state.round.correctCount + (r.isCorrect ? 1 : 0),
         },
       };
@@ -108,9 +149,10 @@ export function gameReducer(state, action) {
 
 /**
  * Sessão de jogo ligada à API de partidas.
- * mode: "normal" | "desafio" (só para partida nova); resume: tenta continuar a partida ativa.
+ * mode: "normal" | "desafio" e journey: "main" | "hobbit" (só para partida nova);
+ * resume: tenta continuar a partida ativa.
  */
-export function useGameSession({ mode = "normal", resume = false, paused = false } = {}) {
+export function useGameSession({ mode = "normal", journey = "main", resume = false, paused = false } = {}) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
   const init = useRef(null);
   const busy = useRef(false); // trava síncrona contra clique duplo
@@ -123,7 +165,7 @@ export function useGameSession({ mode = "normal", resume = false, paused = false
         const current = await api.currentRound();
         const stored = readStoredRound();
         if (current && (resume || stored === current.id)) return { round: current, fresh: false };
-        const round = await api.startRound(mode);
+        const round = await api.startRound(mode, journey);
         return { round, fresh: true };
       })();
     }
@@ -141,7 +183,7 @@ export function useGameSession({ mode = "normal", resume = false, paused = false
     return () => {
       alive = false;
     };
-  }, [mode, resume, state.phase === "loading"]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [mode, journey, resume, state.phase === "loading"]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const roundId = state.round?.id;
 
@@ -188,7 +230,7 @@ export function useGameSession({ mode = "normal", resume = false, paused = false
       busy.current = true;
       dispatch({ type: "answer-sent", answerId });
       try {
-        const result = await api.answer(roundId, questionId, answerId);
+        const result = await api.answer(roundId, questionId, answerId, state.ringArmed);
         dispatch({ type: "answer-result", result });
       } catch (err) {
         dispatch({ type: "error", message: err.message, retryPhase: "question-loading" });
@@ -196,7 +238,26 @@ export function useGameSession({ mode = "normal", resume = false, paused = false
         busy.current = false;
       }
     },
-    [state.phase, paused, roundId, questionId]
+    [state.phase, paused, roundId, questionId, state.ringArmed]
+  );
+
+  // Ajuda temática. O Passolargo responde como uma resposta (pula para a próxima).
+  const requestHelp = useCallback(
+    async (code) => {
+      if (state.phase !== "answering" || paused || busy.current || !roundId) return;
+      busy.current = true;
+      dispatch({ type: code === "passolargo" ? "answer-sent" : "help-sent", answerId: null });
+      try {
+        const result = await api.help(roundId, code);
+        dispatch({ type: code === "passolargo" ? "answer-result" : "help-result", result });
+      } catch (err) {
+        if (code === "passolargo") dispatch({ type: "error", message: err.message, retryPhase: "question-loading" });
+        else dispatch({ type: "help-failed" });
+      } finally {
+        busy.current = false;
+      }
+    },
+    [state.phase, paused, roundId]
   );
 
   // SÓ PARA TESTES (desenvolvimento): responde no servidor o resto da região atual
@@ -228,18 +289,20 @@ export function useGameSession({ mode = "normal", resume = false, paused = false
   const restart = useCallback(async () => {
     try {
       if (roundId && state.round?.status === "active") await api.abandon(roundId);
-      const round = await api.startRound(state.round?.mode || mode);
+      const round = await api.startRound(state.round?.mode || mode, state.round?.journey || journey);
       storeRound(round.id);
       dispatch({ type: "round-loaded", round, fresh: true });
     } catch (err) {
       dispatch({ type: "error", message: err.message, retryPhase: "loading" });
     }
-  }, [roundId, state.round, mode]);
+  }, [roundId, state.round, mode, journey]);
 
   return {
     state,
     answer,
     timeout: useCallback(() => answer(null), [answer]),
+    requestHelp,
+    toggleRing: useCallback(() => dispatch({ type: "ring-toggle" }), []),
     startTravel: useCallback(() => dispatch({ type: "travel-start" }), []),
     arrived: useCallback(() => dispatch({ type: "arrived" }), []),
     achievementShown: useCallback((code) => dispatch({ type: "achievement-shown", code }), []),

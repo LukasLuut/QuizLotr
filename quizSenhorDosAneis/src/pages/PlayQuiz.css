@@ -13,6 +13,10 @@
   inset: 0;
   z-index: 0;
   animation: fadeOpacity 3s ease;
+  /* O Peso do Anel: o mundo perde a cor e fica turvo conforme a corrupção cresce */
+  filter: saturate(calc(1 - var(--corruption, 0) * 0.85)) brightness(calc(1 - var(--corruption, 0) * 0.3))
+    blur(calc(var(--corruption, 0) * 4px));
+  transition: filter 1.5s ease;
 }
 
 .quiz-page {
@@ -130,6 +134,7 @@
   position: fixed;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: var(--z-hud);
@@ -236,4 +241,87 @@
 .toggle-overlay-btn.visible-ui:hover,
 .toggle-overlay-btn.visible-ui:focus-visible {
   opacity: 1;
+}
+
+/* Regra da região, abaixo do título na cena de chegada */
+.scene-rule {
+  max-width: min(640px, 90vw);
+  margin-top: 8px;
+  padding: 10px 22px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(218, 165, 32, 0.5);
+  color: #e6d8b0;
+  font-family: var(--font-title);
+  font-size: clamp(15px, 1.3vw, 20px);
+  text-align: center;
+  animation: scene-rule-in 0.8s 1.2s ease-out both;
+}
+
+.scene-rule strong {
+  display: block;
+  color: goldenrod;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.25em;
+}
+
+@keyframes scene-rule-in {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+/* A UI também desbota (de leve, para continuar legível) */
+.quiz-page.visible-ui {
+  filter: saturate(calc(1 - var(--corruption, 0) * 0.55)) blur(calc(var(--corruption, 0) * 0.6px));
+  transition: opacity 1s ease, filter 1.5s ease;
+}
+
+/* Névoa do Anel: vinheta escura com brasas nas bordas que "respira" */
+.corruption-haze {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-hud);
+  pointer-events: none;
+  opacity: calc(var(--corruption, 0) * 0.95);
+  background:
+    radial-gradient(ellipse at center, transparent 35%, rgba(40, 8, 0, 0.55) 75%, rgba(10, 0, 0, 0.9) 100%),
+    radial-gradient(circle at 20% 80%, rgba(255, 90, 20, 0.12), transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(255, 60, 10, 0.1), transparent 45%);
+  transition: opacity 1.5s ease;
+  animation: ring-haze 6s ease-in-out infinite alternate;
+}
+
+@keyframes ring-haze {
+  from {
+    transform: scale(1);
+    filter: blur(0);
+  }
+  to {
+    transform: scale(1.06);
+    filter: blur(6px);
+  }
+}
+
+/* Corrupção alta: a imagem ondula levemente, como vista através do Anel */
+.is-corrupted .bg-video2-play-quiz {
+  animation: ring-waver 4.5s ease-in-out infinite alternate;
+}
+
+@keyframes ring-waver {
+  from {
+    transform: scale(1.02) translateX(-0.4%);
+  }
+  to {
+    transform: scale(1.04) translateX(0.4%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .corruption-haze,
+  .is-corrupted .bg-video2-play-quiz {
+    animation: none;
+  }
 }

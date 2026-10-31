@@ -8,7 +8,7 @@ import PopUpDTO from "../PopUpDTO";
 import Avatar from "../Avatar";
 import { useAuth } from "../../context/AuthContext";
 import { api } from "../../services/api";
-import { DEFAULT_PERSONA, PERSONAS } from "../../config/personas";
+import { DEFAULT_PERSONA, PERSONAS, isUnlocked } from "../../config/personas";
 
 /**
  * Modal de edição do cadastro: foto, título (das conquistas desbloqueadas), nome,
@@ -182,22 +182,30 @@ function OptionProfile({ isOpen, onClose }) {
 
       {/* Quadro de escolha da foto: só os personagens disponíveis */}
       <Modal isOpen={pickerOpen} onClose={() => setPickerOpen(false)} labelledBy={pickerTitleId} overlayClassName="persona-overlay" className="persona-modal">
-        <h2 id={pickerTitleId}>Escolha sua foto</h2>
+        <h2 id={pickerTitleId}>Escolha seu personagem</h2>
+        <p className="persona-hint">Nível do viajante {user?.level ?? 0}. Cada personagem traz duas habilidades; novos personagens abrem com as conquistas.</p>
         <div className="persona-options" role="radiogroup" aria-labelledby={pickerTitleId}>
           {PERSONAS.map((p) => {
             const selected = (user?.avatar || DEFAULT_PERSONA) === p.code;
+            const locked = !isUnlocked(p, user?.level ?? 0);
+            const abilities = p.abilities.map((a) => `${a.name}: ${a.description}`).join(" · ");
             return (
               <button
                 key={p.code}
                 type="button"
                 role="radio"
                 aria-checked={selected}
-                className={`persona-option ${selected ? "selected" : ""}`}
+                className={`persona-option ${selected ? "selected" : ""} ${locked ? "locked" : ""}`}
                 onClick={() => choosePersona(p.code)}
-                disabled={busy}
+                disabled={busy || locked}
+                title={locked ? `Abre no nível ${p.unlockLevel}` : abilities}
+                aria-label={`${p.name}${locked ? ` (abre no nível ${p.unlockLevel})` : ""}. ${abilities}`}
               >
                 <Avatar persona={p.code} />
                 <span className="persona-name">{p.name}</span>
+                <span className="persona-abilities" aria-hidden="true">
+                  {locked ? `🔒 Nível ${p.unlockLevel}` : p.abilities.map((a) => a.icon).join(" ")}
+                </span>
               </button>
             );
           })}

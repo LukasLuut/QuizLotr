@@ -13,10 +13,12 @@ import Avatar from "../components/Avatar";
 import { useAuth } from "../context/AuthContext";
 import { useAudio } from "../context/AudioContext";
 import { api } from "../services/api";
-import { GAME_MODES, REGIONS } from "../config/regions";
+import { GAME_MODES, HOBBIT_UNLOCK_LEVEL, JOURNEYS, REGIONS } from "../config/regions";
 import { clearStoredRound } from "../hooks/useGameSession";
 
 const shireMusic = REGIONS[0].ambience;
+// música de abertura de cada jornada
+const JOURNEY_MUSIC = { main: shireMusic, hobbit: REGIONS[8].ambience };
 
 function Profile() {
   const { user, logout } = useAuth();
@@ -31,6 +33,9 @@ function Profile() {
   const [showSkip, setShowSkip] = useState(false);
   const [modal, setModal] = useState(null); // null | "edit" | "achievements" | "mode"
   const [currentRound, setCurrentRound] = useState(null);
+  const [journey, setJourney] = useState("main");
+  const level = user?.level ?? 0;
+  const hobbitLocked = level < HOBBIT_UNLOCK_LEVEL;
   const pendingNav = useRef(null);
   const videoRef = useRef(null);
   const timers = useRef([]);
@@ -53,7 +58,7 @@ function Profile() {
   const later = (fn, ms) => timers.current.push(setTimeout(fn, ms));
 
   const goToQuiz = () => {
-    playMusic(shireMusic);
+    playMusic(JOURNEY_MUSIC[pendingNav.current?.journey] || shireMusic);
     navigate("/playquiz", { state: pendingNav.current });
   };
 
@@ -61,7 +66,7 @@ function Profile() {
   const startNewGame = (mode) => {
     setModal(null);
     clearStoredRound();
-    pendingNav.current = { mode, resume: false };
+    pendingNav.current = { mode, journey, resume: false };
     setFadeToBlack(true);
     playMusic(null);
     later(() => setPlayTransitionVideo(true), 3000);
@@ -75,7 +80,7 @@ function Profile() {
 
   const skipIntro = () => {
     setFadeOut(true);
-    playMusic(shireMusic);
+    playMusic(JOURNEY_MUSIC[pendingNav.current?.journey] || shireMusic);
     later(() => {
       videoRef.current?.pause();
       goToQuiz();
@@ -88,7 +93,7 @@ function Profile() {
     if (!video) return;
     const onTime = () => {
       if (video.duration && video.duration - video.currentTime <= 15) {
-        playMusic(shireMusic);
+        playMusic(JOURNEY_MUSIC[pendingNav.current?.journey] || shireMusic);
         video.removeEventListener("timeupdate", onTime);
       }
     };
@@ -115,6 +120,8 @@ function Profile() {
             </div>
             <div className="profile-info">
               <h1 className="profile-name">{user?.name}</h1>
+              {/* nível do viajante = conquistas desbloqueadas */}
+              <p className="profile-level">Nível do viajante: {level}</p>
               <p className="profile-best">Melhor pontuação: {user?.bestScore ?? 0}</p>
             </div>
             <nav className="btn-box" aria-label="Opções do jogador">
@@ -136,6 +143,25 @@ function Profile() {
         <Modal isOpen={modal === "mode"} onClose={() => setModal(null)} labelledBy={modeTitleId} className="mode-modal">
           <h2 id={modeTitleId}>Escolha sua jornada</h2>
           {currentRound && <p className="mode-warning">Começar de novo encerra a partida em andamento.</p>}
+          <div className="journey-options" role="radiogroup" aria-label="Jornada">
+            {Object.entries(JOURNEYS).map(([key, j]) => {
+              const locked = key === "hobbit" && hobbitLocked;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  role="radio"
+                  aria-checked={journey === key}
+                  disabled={locked}
+                  className={`journey-option ${journey === key ? "selected" : ""}`}
+                  onClick={() => setJourney(key)}
+                >
+                  <span className="mode-option-title">{j.label}</span>
+                  <span className="mode-option-desc">{locked ? `🔒 Abre no nível ${HOBBIT_UNLOCK_LEVEL} do viajante (você está no ${level}).` : j.description}</span>
+                </button>
+              );
+            })}
+          </div>
           <div className="mode-options">
             {Object.entries(GAME_MODES).map(([key, m]) => (
               <button key={key} type="button" className="mode-option" onClick={() => startNewGame(key)}>

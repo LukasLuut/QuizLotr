@@ -13,7 +13,10 @@ import { useAudio } from "../../context/AudioContext";
  */
 function Final({ summary, onRestart, onProfile }) {
   const won = summary.status === "finished";
-  const [showFinal, setShowFinal] = useState(!won);
+  const hobbit = summary.journey === "hobbit";
+  const corrupted = summary.failReason === "corrupted";
+  // só a jornada principal termina destruindo o Anel
+  const [showFinal, setShowFinal] = useState(!won || hobbit);
   const videoRef = useRef(null);
   const { playSfx } = useAudio();
   const headingRef = useRef(null);
@@ -39,17 +42,19 @@ function Final({ summary, onRestart, onProfile }) {
 
       {showFinal && (
         <div className={`victory-overlay ${won ? "" : "defeat"}`} role="dialog" aria-modal="true" aria-labelledby="final-title">
-          {won && <video ref={videoRef} src={videoFinal} className="video-final" poster={finalPoster} muted autoPlay loop playsInline aria-hidden="true" />}
+          {won && !hobbit && <video ref={videoRef} src={videoFinal} className="video-final" poster={finalPoster} muted autoPlay loop playsInline aria-hidden="true" />}
 
           <div className="victory-card">
             <h2 id="final-title" className="victory-title" tabIndex={-1} ref={headingRef}>
-              {won ? "O Anel foi destruído!" : "A jornada terminou"}
+              {won ? (hobbit ? "Lá e de volta outra vez!" : "O Anel foi destruído!") : corrupted ? "O Anel tomou você" : "A jornada terminou"}
             </h2>
             <div className="victory-card-body">
             <p className="victory-sub">
               {won
-                ? `Modo ${GAME_MODES[summary.mode]?.label ?? summary.mode}`
-                : `Você chegou até a pergunta ${summary.answered} de ${summary.total}.`}
+                ? `${hobbit ? "O Hobbit · " : ""}Modo ${GAME_MODES[summary.mode]?.label ?? summary.mode}`
+                : corrupted
+                  ? `A corrupção chegou a 100% na pergunta ${summary.answered} de ${summary.total}. Use o Anel com cautela.`
+                  : `Você chegou até a pergunta ${summary.answered} de ${summary.total}.`}
             </p>
 
             <dl className="victory-stats">
@@ -66,6 +71,12 @@ function Final({ summary, onRestart, onProfile }) {
               <div className="victory-stat">
                 <dt className="label">Maior sequência</dt>
                 <dd className="value">{summary.maxStreak}</dd>
+              </div>
+              <div className="victory-stat">
+                <dt className="label">Usos do Anel</dt>
+                <dd className="value">
+                  {summary.ringUses} ({summary.corruption}% de corrupção)
+                </dd>
               </div>
               <div className="victory-stat">
                 <dt className="label">Tempo de resposta</dt>

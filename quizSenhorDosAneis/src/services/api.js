@@ -116,11 +116,13 @@ export const api = {
   deleteMe: () => request("/users/me", { method: "DELETE" }),
   achievements: () => request("/users/me/achievements"),
 
-  startRound: (mode = "normal") => request("/rounds", { method: "POST", body: { mode } }),
+  startRound: (mode = "normal", journey = "main") => request("/rounds", { method: "POST", body: { mode, journey } }),
   currentRound: () => request("/rounds/current"),
   roundState: (id) => request(`/rounds/${id}`),
   question: (id, signal) => request(`/rounds/${id}/question`, { signal }),
-  answer: (id, questionId, answerId) => request(`/rounds/${id}/answer`, { method: "POST", body: { questionId, answerId } }),
+  answer: (id, questionId, answerId, useRing = false) =>
+    request(`/rounds/${id}/answer`, { method: "POST", body: { questionId, answerId, useRing } }),
+  help: (id, help) => request(`/rounds/${id}/help`, { method: "POST", body: { help } }),
   pause: (id) => request(`/rounds/${id}/pause`, { method: "POST" }),
   resume: (id) => request(`/rounds/${id}/resume`, { method: "POST" }),
   abandon: (id) => request(`/rounds/${id}/abandon`, { method: "POST" }),

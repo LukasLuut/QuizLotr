@@ -31,6 +31,10 @@ const PATHS = [
   [[2656, 2715], [2600, 2781], [2531, 2804], [2462, 2904], [2447, 2957], [2392, 2935], [2350, 2957], [2364, 3028], [2324, 3033], [2279, 2995], [2247, 3060], [2211, 3058], [2132, 3022], [2026, 3044], [1981, 3076]], // 5 - Argonath
   [[1981, 3076], [2028, 3121], [2071, 3202], [2033, 3285], [1975, 3367]], // 6 - Mordor
   [[1975, 3367], [1917, 3442], [1872, 3487], [1823, 3512], [1747, 3497], [1718, 3543], [1748, 3622]], // 7 - Montanha da Perdição
+  // Jornada bônus "O Hobbit"
+  [[3240, 2620]], // 8 - Montanhas Sombrias (início)
+  [[3240, 2620], [3260, 2680], [3270, 2800], [3256, 2980], [3240, 3150], [3256, 3350], [3300, 3420]], // 9 - Floresta das Trevas
+  [[3300, 3420], [3380, 3440], [3432, 3380], [3520, 3440], [3582, 3462]], // 10 - Erebor
 ];
 
 const endOf = (region) => {
@@ -75,7 +79,7 @@ export default function MapaTerraMedia({ region = 0, targetRegion = null, travel
       >
         <ImageOverlay url={mapImage} bounds={BOUNDS} zIndex={1} />
         <KeepCenterOnResize />
-        {intro && <IntroZoom target={endOf(0)} />}
+        {intro && <IntroZoom target={endOf(region)} />}
         <MovingCharacter region={region} targetRegion={targetRegion} travelling={travelling} intro={intro} onArrive={onArrive} />
 
       </MapContainer>

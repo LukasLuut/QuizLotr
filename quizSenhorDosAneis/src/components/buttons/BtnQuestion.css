@@ -110,3 +110,33 @@
 .btn-question.dim {
   filter: drop-shadow(6px 10px 14px rgba(0, 0, 0, 1)) brightness(0.6);
 }
+
+/* Alternativa eliminada pelo Conselho de Gandalf */
+.btn-question.eliminated {
+  opacity: 0.22;
+  filter: grayscale(1) drop-shadow(6px 10px 14px rgba(0, 0, 0, 1));
+}
+
+.btn-question-badge {
+  position: absolute;
+  z-index: 3;
+  right: 7%;
+  top: 50%;
+  translate: 0 -50%;
+  min-width: 3.2em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(20, 30, 60, 0.8);
+  border: 1px solid rgba(150, 190, 255, 0.6);
+  color: #cfe0ff;
+  font-family: var(--font-title);
+  font-size: 0.62em;
+  box-shadow: 0 0 10px rgba(110, 160, 255, 0.55);
+  animation: palantir-glow 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes palantir-glow {
+  to {
+    box-shadow: 0 0 16px rgba(140, 180, 255, 0.85);
+  }
+}

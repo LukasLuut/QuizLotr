@@ -37,7 +37,7 @@ test("cadastro, login, uma pergunta, salvar e continuar a jornada", async ({ pag
   await expect(options).toHaveCount(4, { timeout: 30_000 });
   await shot("pergunta");
   await options.first().click();
-  await expect(page.locator(".answer-explanation p")).toBeVisible();
+  await expect(page.locator(".answer-explanation p").last()).toBeVisible();
   await expect(options.first()).toBeDisabled();
   await shot("feedback");
 

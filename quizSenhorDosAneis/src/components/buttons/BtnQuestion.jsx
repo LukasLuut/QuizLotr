@@ -12,7 +12,7 @@ const STATUS_LABEL = { correct: " (resposta correta)", wrong: " (sua resposta, i
  * "default" | "selected" | "correct" | "wrong". Quem decide se a resposta
  * está certa é o servidor.
  */
-function BtnQuestion({ className = "", texto, status = "default", disabled = false, onClick, ...rest }) {
+function BtnQuestion({ className = "", texto, badge = null, status = "default", disabled = false, onClick, ...rest }) {
   const { playSfx } = useAudio();
 
   return (
@@ -29,6 +29,8 @@ function BtnQuestion({ className = "", texto, status = "default", disabled = fal
         {texto}
         {STATUS_LABEL[status] && <span className="visually-hidden">{STATUS_LABEL[status]}</span>}
       </span>
+      {/* Visão do Palantír: quanto os viajantes escolheram esta alternativa */}
+      {badge !== null && <span className="btn-question-badge">{badge}</span>}
 
       {/* Camadas de imagem que mudam conforme o estado (decorativas) */}
       <img className="btn-img base" src={btnQuestionMarrom} alt="" />

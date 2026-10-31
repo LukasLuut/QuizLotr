@@ -266,3 +266,55 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Nível do viajante */
+.profile-level {
+  font-family: var(--font-title);
+  font-size: clamp(13px, 2.2vw, 15px);
+  color: var(--color-gold);
+  margin-bottom: 4px;
+}
+
+/* Escolha da jornada (a bônus O Hobbit abre pelo nível) */
+.mode-modal {
+  aspect-ratio: auto;
+  min-height: calc(var(--w) * 0.66);
+}
+
+.journey-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.journey-option {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(218, 165, 32, 0.35);
+  background: rgba(0, 0, 0, 0.45);
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.journey-option .mode-option-title {
+  font-size: clamp(16px, 2.2vw, 20px);
+}
+
+.journey-option.selected {
+  border-color: goldenrod;
+  box-shadow: 0 0 12px rgba(255, 196, 64, 0.45);
+}
+
+.journey-option:disabled {
+  opacity: 0.6;
+}
+
+@media (max-width: 560px) {
+  .journey-options {
+    grid-template-columns: 1fr;
+  }
+}

@@ -16,6 +16,7 @@ import { useAuth } from "../context/AuthContext";
 import { useAudio } from "../context/AudioContext";
 import { clearStoredRound, useGameSession } from "../hooks/useGameSession";
 import { regionAt } from "../config/regions";
+import { pickLine } from "../config/lines";
 
 const isTyping = (el) => el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
 
@@ -24,9 +25,9 @@ function PlayQuiz() {
   const navigate = useNavigate();
   const { user, refreshUser } = useAuth();
   const { playMusic, playSfx } = useAudio();
-  const { mode = "normal", resume = false } = location.state || {};
+  const { mode = "normal", journey = "main", resume = false } = location.state || {};
   const [menuOpen, setMenuOpen] = useState(false);
-  const game = useGameSession({ mode, resume, paused: menuOpen });
+  const game = useGameSession({ mode, journey, resume, paused: menuOpen });
   const { state } = game;
   const { phase, round, region, result } = state;
 
@@ -37,18 +38,27 @@ function PlayQuiz() {
   const [outcome, setOutcome] = useState(null);
   const roundId = round?.id;
 
+  // fala do personagem: sorteada a cada resposta, sem repetir a anterior
+  const lastLine = useRef(null);
+  const persona = round?.persona;
+
   useEffect(() => {
     if (phase === "feedback" && result) {
+      const line = result.skipped ? null : pickLine(persona, result, lastLine.current);
+      if (line) lastLine.current = line;
       setOutcome({
         isCorrect: result.isCorrect,
         timeExpired: result.timeExpired,
+        skipped: result.skipped,
+        shielded: result.shielded,
         streak: result.streak,
         answered: result.answered,
         points: result.points,
         explanation: result.explanation,
+        line,
       });
     }
-  }, [phase, result]);
+  }, [phase, result, persona]);
 
   // Partida nova (Reiniciar / Jogar novamente) começa sem mensagem
   useEffect(() => {
@@ -142,15 +152,26 @@ function PlayQuiz() {
   // no fim, o quadro some e o botão "Destruir o Anel" fica sozinho sobre o vídeo
   const uiHidden = inScene || !!peek || phase === "finished";
   const showTitle = inScene || peek === "title" || peek === "fading";
+  const rule = round?.regionRules?.[region];
+  // O Peso do Anel: quanto maior a corrupção, mais turva e sem cor fica a tela (0..1)
+  const corruption = Math.min(1, (round?.corruption ?? 0) / 100);
 
   return (
-    <div className="bg-black-quiz">
-      {/* Título da região (narrador) */}
+    <div className={`bg-black-quiz ${corruption >= 0.4 ? "is-corrupted" : ""}`} style={{ "--corruption": corruption }}>
+      {/* Título da região (narrador) e a regra própria do lugar */}
       {showTitle && (
         <div className="title-scene">
           <Narrator text={regionAt(region).title} active={peek !== "fading"} />
+          {inScene && rule?.name && (
+            <p className="scene-rule">
+              <strong>{rule.name}</strong>
+              {rule.description}
+            </p>
+          )}
         </div>
       )}
+
+      <div className="corruption-haze" aria-hidden="true"></div>
 
       <button type="button" className={`toggle-overlay-btn ${uiHidden ? "hidden-ui" : "visible-ui"}`} onClick={handlePeek} disabled={uiHidden}>
         <span aria-hidden="true">👁</span> Ver paisagem
@@ -175,7 +196,17 @@ function PlayQuiz() {
         </div>
 
         <div className="box-question-center">
-          <QuizContainer game={state} paused={menuOpen} onAnswer={game.answer} onTimeout={game.timeout} onAdvance={game.startTravel} onArrive={game.arrived} onDebugSkip={game.debugSkipRegion} />
+          <QuizContainer
+            game={state}
+            paused={menuOpen}
+            onAnswer={game.answer}
+            onTimeout={game.timeout}
+            onAdvance={game.startTravel}
+            onArrive={game.arrived}
+            onDebugSkip={game.debugSkipRegion}
+            onHelp={game.requestHelp}
+            onToggleRing={game.toggleRing}
+          />
         </div>
 
         <div className="box-lateral-r">
