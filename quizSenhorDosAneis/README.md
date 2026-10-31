@@ -1,12 +1,27 @@
-# React + Vite
+# Quiz da Terra-média: frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 + Vite. Veja o [README principal](../README.md) para rodar o projeto completo.
 
-Currently, two official plugins are available:
+``` bash
+cp .env.example .env   # VITE_API_URL aponta para a API
+npm install
+npm run dev            # http://localhost:5173
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| Comando | O que faz |
+|---|---|
+| `npm run build` | Build de produção em `dist/` |
+| `npm run lint` | ESLint |
+| `npm test` | Vitest + Testing Library |
+| `npm run test:e2e` | Playwright (sobe API e Vite; precisa do MySQL configurado na API) |
 
-## Expanding the ESLint configuration
+## Como o jogo está organizado
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- `src/hooks/useGameSession.js`: a partida como máquina de estados
+  (`scene → question-loading → answering → submitting → feedback → travel-ready → travelling → … → finished`).
+  Toda pergunta, resposta e pontuação vem da API.
+- `src/config/regions.js`: as 8 regiões (nome, título do narrador, fundo e ambiência). A ordem é a mesma de
+  `PATHS` em `src/components/Map.jsx` e de `REGIONS` no backend.
+- `src/context/AudioContext.jsx`: música (uma por vez, com crossfade), efeitos, mudo e volume.
+- `src/context/AuthContext.jsx`: sessão; o usuário vem de `GET /users/me`, então F5 não perde nada.
+- `src/services/api.js`: a única camada que faz `fetch`.

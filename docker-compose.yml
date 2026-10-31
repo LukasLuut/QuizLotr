@@ -1,0 +1,51 @@
+# Sobe o jogo completo: MySQL + API + frontend.
+#   docker compose up --build
+# Jogo em http://localhost:8080 e API em http://localhost:3000.
+# Troque JWT_SECRET e as senhas antes de usar fora da sua máquina.
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: quiz_lotr
+      MYSQL_USER: quiz
+      MYSQL_PASSWORD: quiz_senha
+      MYSQL_ROOT_PASSWORD: root_senha
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uquiz", "-pquiz_senha"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build: ./retorno-do-dev
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: quiz
+      DB_PASSWORD: quiz_senha
+      DB_NAME: quiz_lotr
+      BCRYPT_SALT_ROUNDS: 10
+      JWT_SECRET: troque-este-segredo-em-producao
+      JWT_EXPIRES_IN: 86400
+      CORS_ORIGIN: http://localhost:8080
+    ports:
+      - "3000:3000"
+
+  web:
+    build:
+      context: ./quizSenhorDosAneis
+      args:
+        VITE_API_URL: http://localhost:3000
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+
+volumes:
+  db-data:

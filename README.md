@@ -1,154 +1,173 @@
+
 # 🧙‍♂️ Quiz Senhor dos Anéis
 
 Um jogo de perguntas e respostas inspirado no universo de **O Senhor dos
 Anéis**, desenvolvido em **React** com foco em UI/UX imersiva.\
-O jogador percorre um mapa no estilo da **Terra-média**, responde
-questões, acumula pontos e compete no ranking.
+O jogador leva o Anel do Condado até a Montanha da Perdição: a cada região
+respondida, o personagem avança no mapa da **Terra-média**, o cenário, a
+música e o narrador mudam, e a pontuação vai para o ranking.
 
 ------------------------------------------------------------------------
 
 ## ✨ Funcionalidades
 
--   🎮 **Quiz interativo** com animações e feedback imediato
--   🗺️ **Mapa estilo Terra-média** usando **Leaflet**, onde o personagem
-    se move conforme o progresso\
--   🎥 **Vídeos de fundo** com transições suaves (fade in/out)
--   🖼️ **UI temática** com fontes de fantasia, ornamentos e efeitos
-    visuais\
--   🏆 **Leaderboard** para exibir jogadores e pontuações
--   👤 **Perfil de usuário** com atualização e exclusão de conta
--   🔑 **Autenticação segura** com JWT e senhas criptografadas
--   🎵 **Sound Design** pensado para imersão e melhor experiência
+-   🎮 **Quiz em 8 regiões** (Condado, Bri, Valfenda, Moria, Lothlórien,
+    Argonath, Mordor e Montanha da Perdição), com 5 perguntas sorteadas
+    por região a cada partida e alternativas embaralhadas
+-   🛡️ **Pontuação calculada no servidor**: o gabarito nunca chega ao
+    navegador antes da resposta; acertos em sequência multiplicam os
+    pontos e responder rápido dá bônus
+-   ⚔️ **Dois modos**: *Jornada* (sem limite) e *Desafio* (3 vidas e 20 s
+    por pergunta)
+-   📜 **Resposta comentada**: ao errar, a alternativa certa aparece com
+    uma curiosidade de lore
+-   🏆 **Hall dos Heróis** com a melhor partida de cada jogador e
+    **conquistas** desbloqueadas durante o jogo
+-   💾 **Continuar jornada**: a partida fica salva no servidor (F5 ou
+    "Salvar e sair" não perdem o progresso)
+-   🗺️ **Mapa estilo Terra-média** com **Leaflet**
+-   🎵 **Sound design** com ambiência por região, botão de mudo e volume
+-   ♿ **Acessível**: jogável por teclado (Tab, Enter, 1–4 e Esc), foco
+    visível, modais com `role="dialog"` e respeito a *movimento reduzido*
+-   📱 **Responsivo** de 360 px a telas grandes
 
-   ## ✨ Badges da Guilda
+## ✨ Badges da Guilda
 
-![Forjado em React](https://img.shields.io/badge/Forjado%20em-React-61DAFB?style=for-the-badge\&logo=react\&logoColor=black)
-![Mapa por Leaflet](https://img.shields.io/badge/Mapa-Leaflet-199900?style=for-the-badge\&logo=leaflet\&logoColor=white)
+![Forjado em React](https://img.shields.io/badge/Forjado%20em-React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Mapa por Leaflet](https://img.shields.io/badge/Mapa-Leaflet-199900?style=for-the-badge&logo=leaflet&logoColor=white)
 ![Protegido por Bcrypt](https://img.shields.io/badge/Protegido%20por-Bcrypt-yellow?style=for-the-badge)
-![Guardado no GitHub](https://img.shields.io/badge/Guardado-no%20GitHub-lightgrey?style=for-the-badge\&logo=github)
+![Guardado no GitHub](https://img.shields.io/badge/Guardado-no%20GitHub-lightgrey?style=for-the-badge&logo=github)
 
 ---
 
 ## ⚒️ Forja de Ferramentas
 
-* **Frontend:** React, React Router
-* **Mapa:** Leaflet.js
-* **Estilização:** CSS (animações, media queries, fontes *Ringbearer* e *Uncial Antiqua*)
-* **Backend:** MySQL (Workbench), autenticação e tokens de acesso
-* **Segurança:** Criptografia de senhas com Bcrypt
-* **Arquitetura:** DTOs, tratamento de exceções e UI/UX imersiva
-* **Design**: Efeitos visuais com vídeos, imagens e efeitos sonoros
-
-
+* **Frontend:** React 19, React Router 7, Vite 7, Leaflet
+* **Backend:** Node 22, Express 5, TypeORM (migrations), MySQL 8
+* **Segurança:** bcrypt, JWT, validação com class-validator (whitelist),
+  helmet, rate limit no login, CORS restrito
+* **Testes:** Jest + Supertest (API), Vitest + Testing Library (web),
+  Playwright (ponta a ponta)
+* **Infra:** Docker Compose, GitHub Actions, Dependabot
 
 ------------------------------------------------------------------------
 
+## 🚀 Como rodar
 
-## 📂 Estrutura do Projeto - Frontend
+### Opção 1: Docker (mais simples)
 
-    src/
-     ├─ assets/           # imagens, vídeos, fontes, sons
-     ├─ components/       # componentes reutilizáveis (botões, modais, etc.)
-     │   ├─ buttons/      # botões personalizados
-     │   ├─ layout/       # containers e telas principais
-     │   └─ ui/           # elementos visuais extras
-     ├─ pages/            # páginas principais (Quiz, Login, Profile)
-     └─ App.jsx           # ponto de entrada React
+Pré-requisito: Docker com Compose.
 
-------------------------------------------------------------------------
+``` bash
+git clone https://github.com/LukasLuut/QuizLotr.git
+cd QuizLotr
+docker compose up --build
+```
 
-## 📂 Estrutura do Projeto - Backend
+Jogo em <http://localhost:8080> e API em <http://localhost:3000>.
 
-    retorno-do-dev/
-        ├─ node_modules/           # dependências do projeto
-        ├─ src/                    # código-fonte da aplicação
-        │  ├─ controllers/         # lógica dos controladores (manipulação de requisições)
-        │  ├─ dtos/                # Data Transfer Objects (validação e tipagem de dados)
-        │  ├─ middlewares/         # middlewares (interceptadores de requisições)
-        │  ├─ migrations/          # arquivos de migração do banco de dados
-        │  ├─ models/              # definição dos modelos (entidades)
-        │  ├─ routes/              # definição das rotas da aplicação
-        │  ├─ services/            # regras de negócio e lógica principal
-        │  ├─ utils/               # funções utilitárias auxiliares
-        │  ├─ app.ts               # configuração da aplicação
-        │  └─ data-source.ts       # configuração da fonte de dados (TypeORM)
-        │  └─ server.ts            # inicialização do servidor
-        ├─ .env                    # variáveis de ambiente
-        ├─ LICENSE                 # licença do projeto
-        ├─ package-lock.json       # controle de versões exato das dependências
-        ├─ package.json            # dependências e scripts do projeto
-        └─ tsconfig.json           # configuração do TypeScript
+### Opção 2: localmente
 
+Pré-requisitos: **Node 22** (veja `.nvmrc`) e **MySQL 8**.
 
-------------------------------------------------------------------------
+1.  Crie o banco:
 
-
-## 🚀 Como Rodar Localmente Frontend
-
-1.  Clone este repositório:
-
-    ``` bash
-    git clone https://github.com/LukasLuut/QuizLotr.git
-    cd quizSenhorDosAneis/
+    ``` sql
+    CREATE DATABASE quiz_lotr CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     ```
 
-2.  Instale as dependências:
+2.  Configure e suba a API:
 
     ``` bash
+    cd QuizLotr/retorno-do-dev
+    cp .env_example .env      # preencha usuário/senha do MySQL e um JWT_SECRET longo
     npm install
+    npm run dev               # aplica as migrations e cadastra as perguntas
     ```
 
-3.  Inicie o frontend:
+3.  Em outro terminal, suba o frontend:
 
     ``` bash
+    cd QuizLotr/quizSenhorDosAneis
+    cp .env.example .env      # VITE_API_URL=http://localhost:3000
+    npm install
     npm run dev
     ```
 
-## Em outro terminal
+4.  Abra <http://localhost:5173>.
 
-1.  Acesse o Backend:
+### Scripts úteis
 
-    ``` bash
-    cd ..
-    cd retorno-do-dev
-    ```
+| Onde | Comando | O que faz |
+|---|---|---|
+| API | `npm test` | Testes da API (usa o banco `quiz_lotr_test`, que é recriado) |
+| API | `npm run build && npm start` | Build e execução de produção |
+| API | `npm run seed` | Cadastra as perguntas (se o banco estiver vazio) |
+| API | `npm run migration:generate -- src/migrations/Nome` | Gera migration após mudar uma entidade |
+| Web | `npm test` | Testes de componentes |
+| Web | `npm run lint` | ESLint |
+| Web | `npm run test:e2e` | Partida de ponta a ponta no navegador (precisa do MySQL) |
 
-2. Instale as dependências:
-
-   ``` bash
-   npm install
-   ```
-
-3. Configure o **.env**
-
-    * Copie o arquivo **.env_example**
-    * Renomeie para **.env**
-    * Configure com as informações do seu banco de dados
-  
-4. Rode o servidor localmente
-
-   ``` bash
-   npm run dev
-   ```
-   
 ------------------------------------------------------------------------
 
-## 📸 Demonstração
+## 🔌 API
 
-*(print aqui posteriormente)*
+| Método | Rota | Auth | Descrição |
+|---|---|---|---|
+| POST | `/auth/register` | — | Cadastro (`name`, `email`, `password`) |
+| POST | `/auth/login` | — | Login por e-mail; devolve `{ user, token }` |
+| GET/PUT/DELETE | `/users/me` | ✔ | Conta do jogador logado |
+| GET | `/users/me/achievements` | ✔ | Conquistas (desbloqueadas ou não) |
+| POST | `/rounds` | ✔ | Nova partida (`mode`: `normal` ou `desafio`) |
+| GET | `/rounds/current` | ✔ | Partida em andamento, se houver |
+| GET | `/rounds/:id/question` | ✔ | Pergunta atual (sem gabarito) |
+| POST | `/rounds/:id/answer` | ✔ | Responde (`questionId`, `answerId`); o servidor pontua |
+| POST | `/rounds/:id/abandon` | ✔ | Encerra a partida |
+| GET | `/rounds/:id/summary` | ✔ | Resumo da partida |
+| GET | `/rounds/ranking?mode=normal&period=all` | — | Ranking (melhor partida por jogador) |
+| GET | `/health` | — | Verificação de saúde |
+
+Todos os erros saem como JSON `{ "message": "..." }`.
+
+------------------------------------------------------------------------
+
+## 📂 Estrutura
+
+    quizSenhorDosAneis/          # frontend
+     ├─ src/
+     │   ├─ assets/              # imagens, vídeos, fontes, sons
+     │   ├─ components/          # botões, modais, mapa, layout do jogo
+     │   ├─ config/regions.js    # regiões: nome, fundo, ambiência
+     │   ├─ context/             # sessão (AuthContext) e áudio (AudioContext)
+     │   ├─ hooks/               # useGameSession (máquina de estados), useRanking
+     │   ├─ pages/               # Start, Login, Profile, PlayQuiz
+     │   └─ services/api.js      # única camada de acesso à API
+     └─ e2e/                     # testes Playwright
+
+    retorno-do-dev/              # backend
+     ├─ src/
+     │   ├─ config/env.ts        # variáveis de ambiente validadas
+     │   ├─ controllers/ routes/ services/ dtos/ middlewares/
+     │   ├─ game/rules.ts        # regras de pontuação, modos e conquistas
+     │   ├─ models/              # entidades TypeORM
+     │   ├─ migrations/          # schema do banco
+     │   └─ seeds/               # banco de perguntas
+     └─ tests/                   # Jest + Supertest
 
 ------------------------------------------------------------------------
 
 ## 🎵 Créditos
 
--   **Efeitos sonoros**: [Freesound](https://freesound.org/)\
--   **Fontes temáticas**: Ringbearer, Uncial Antiqua, Tengwar Annatar\
+-   **Efeitos sonoros**: [Freesound](https://freesound.org/)
+-   **Fontes temáticas**: Ringbearer, Uncial Antiqua
 -   **Inspiração visual**: Mapas da Terra-média e UI medieval
+-   **Leaflet.MovingMarker** (Ewoken, MIT), em `src/lib/leaflet`
 
 ------------------------------------------------------------------------
 
 ## 📜 Licença
 
 Este projeto é de uso educacional e não possui afiliação oficial com a
-obra **O Senhor dos Anéis**.\
-Licenciado sob MIT.
+obra **O Senhor dos Anéis**. Trechos de vídeo e música pertencem aos
+seus respectivos donos.\
+Código licenciado sob MIT.
