@@ -109,18 +109,10 @@ function Profile() {
           <div className="flag-profile">
             <img className="flagg" src={flag} alt="" />
             <div className="profile-content">
-            <button
-              type="button"
-              className="profile-avatar"
-              onClick={() => setModal("edit")}
-              aria-label="Trocar foto de perfil"
-              title="Trocar foto de perfil"
-            >
+            {/* a foto só é trocada no Editar Perfil */}
+            <div className="profile-avatar">
               <Avatar persona={user?.avatar} name={user?.name} />
-              <span className="profile-avatar-hint" aria-hidden="true">
-                Trocar foto
-              </span>
-            </button>
+            </div>
             <div className="profile-info">
               <h1 className="profile-name">{user?.name}</h1>
               <p className="profile-best">Melhor pontuação: {user?.bestScore ?? 0}</p>

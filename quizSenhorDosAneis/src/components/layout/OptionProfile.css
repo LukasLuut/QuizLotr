@@ -62,57 +62,54 @@
   }
 }
 
-/* Escolha da foto: os 10 personagens em uma fileira de rostos */
-.persona-picker {
-  width: 100%;
-  border: none;
+/* Linha de identidade: foto atual (clicável) e seletor de título */
+.profile-identity {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
 }
 
-.persona-picker legend {
-  font-family: var(--font-display);
-  font-weight: 100;
-  font-size: clamp(16px, 2.6vw, 20px);
-  color: var(--color-text-label);
-  text-shadow: 1px 1px 2px var(--shadow-strong);
-  margin-bottom: 6px;
-}
-
-.persona-options {
-  display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-  gap: 6px;
-}
-
-.persona-option {
+.identity-avatar {
+  position: relative;
+  width: 96px;
+  flex: none;
   border: none;
   background: none;
   border-radius: 50%;
   padding: 0;
-  opacity: 0.75;
-  transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
 }
 
-.persona-option .avatar {
+.identity-avatar .avatar {
   width: 100%;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-.persona-option:hover,
-.persona-option:focus-visible {
+.identity-avatar-hint {
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  translate: -50% 0;
+  white-space: nowrap;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(20, 12, 5, 0.85);
+  border: 1px solid rgba(201, 162, 39, 0.7);
+  font-size: 11px;
+  color: var(--color-text-main);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.identity-avatar:hover .avatar,
+.identity-avatar:focus-visible .avatar {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 8px rgba(255, 196, 64, 0.6));
+}
+
+.identity-avatar:hover .identity-avatar-hint,
+.identity-avatar:focus-visible .identity-avatar-hint {
   opacity: 1;
-  transform: scale(1.08);
-}
-
-.persona-option.selected {
-  opacity: 1;
-  transform: scale(1.12);
-  filter: drop-shadow(0 0 8px rgba(255, 196, 64, 0.9));
-}
-
-.persona-picker:disabled .persona-option {
-  opacity: 0.5;
 }
 
 .identity-title {
@@ -143,10 +140,80 @@
   text-shadow: 1px 1px 2px #000;
 }
 
-/* celular: duas fileiras de cinco rostos */
-@media (max-width: 760px) {
-  .persona-options {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 10px 14px;
-  }
+/* Quadro de escolha da foto (acima do Editar Perfil), na moldura de madeira */
+.persona-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: var(--z-confirm);
+  padding: 16px;
+}
+
+.persona-modal {
+  --w: min(640px, calc(100vw - 32px));
+  width: var(--w);
+  background: url("../../assets/images/box/box-lateral-girado.webp") center / 100% 100% no-repeat;
+  padding: calc(var(--w) * 0.09) calc(var(--w) * 0.1) calc(var(--w) * 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  outline: none;
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.8));
+}
+
+.persona-modal h2 {
+  font-family: var(--font-display);
+  font-weight: 100;
+  font-size: clamp(24px, 4.5vw, 34px);
+  color: var(--color-gold);
+  text-shadow: 1px 3px 2px #000;
+}
+
+.persona-options {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px 18px;
+  width: 100%;
+}
+
+.persona-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  padding: 0;
+  opacity: 0.8;
+  transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+}
+
+.persona-option .avatar {
+  width: 100%;
+}
+
+.persona-name {
+  font-family: var(--font-display);
+  font-size: clamp(12px, 2.2vw, 16px);
+  color: var(--color-text-main);
+  text-shadow: 1px 1px 2px #000;
+}
+
+.persona-option:hover,
+.persona-option:focus-visible {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.persona-option.selected {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(255, 196, 64, 0.9));
+}
+
+.persona-option.selected .persona-name {
+  color: var(--color-gold);
 }

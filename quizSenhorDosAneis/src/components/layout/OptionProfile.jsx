@@ -22,6 +22,8 @@ function OptionProfile({ isOpen, onClose }) {
 
   const [form, setForm] = useState({ name: "", email: "", password: "", titleCode: "" });
   const [titles, setTitles] = useState([]); // conquistas desbloqueadas
+  const [pickerOpen, setPickerOpen] = useState(false); // quadro com os personagens
+  const pickerTitleId = useId();
   const [acao, setAcao] = useState(null); // null | "update" | "delete"
   const [busy, setBusy] = useState(false);
   const [popup, setPopup] = useState(null); // { message, variant }
@@ -67,6 +69,7 @@ function OptionProfile({ isOpen, onClose }) {
     setBusy(true);
     try {
       await updateUser({ avatar: code });
+      setPickerOpen(false);
       setPopup({ message: "Foto de perfil atualizada.", variant: "success" });
     } catch (err) {
       setPopup({ message: err.message, variant: "error" });
@@ -111,43 +114,36 @@ function OptionProfile({ isOpen, onClose }) {
         <h2 id={titleId}>Atualizar Cadastro</h2>
 
         <form className="option-profile-form" onSubmit={handleSubmit} noValidate>
-          {/* Foto: só os personagens disponíveis */}
-          <fieldset className="persona-picker" disabled={busy}>
-            <legend>Foto de perfil</legend>
-            <div className="persona-options" role="radiogroup" aria-label="Foto de perfil">
-              {PERSONAS.map((p) => {
-                const selected = (user?.avatar || DEFAULT_PERSONA) === p.code;
-                return (
-                  <button
-                    key={p.code}
-                    type="button"
-                    role="radio"
-                    aria-checked={selected}
-                    className={`persona-option ${selected ? "selected" : ""}`}
-                    onClick={() => choosePersona(p.code)}
-                    title={p.name}
-                  >
-                    <Avatar persona={p.code} name={p.name} />
-                  </button>
-                );
-              })}
-            </div>
-          </fieldset>
+          {/* Identidade: foto atual (clique para trocar) e título exibido no quiz */}
+          <div className="profile-identity">
+            <button
+              type="button"
+              className="identity-avatar"
+              onClick={() => setPickerOpen(true)}
+              disabled={busy}
+              aria-label="Trocar foto de perfil"
+              title="Trocar foto de perfil"
+            >
+              <Avatar persona={user?.avatar} name={user?.name} />
+              <span className="identity-avatar-hint" aria-hidden="true">
+                Trocar foto
+              </span>
+            </button>
 
-          {/* Título exibido abaixo do nome no quiz (vem das conquistas) */}
-          <div className="field identity-title">
-            <label htmlFor="perfil-titulo">Título</label>
-            <select id="perfil-titulo" name="titleCode" value={form.titleCode} onChange={handleChange}>
-              <option value="">Viajante do Condado</option>
-              {titles.map((t) => (
-                <option key={t.code} value={t.code}>
-                  {t.title}
-                </option>
-              ))}
-            </select>
-            <span className="identity-hint">
-              {titles.length === 0 ? "Desbloqueie conquistas para ganhar novos títulos." : "Títulos vêm das suas conquistas."}
-            </span>
+            <div className="field identity-title">
+              <label htmlFor="perfil-titulo">Título</label>
+              <select id="perfil-titulo" name="titleCode" value={form.titleCode} onChange={handleChange}>
+                <option value="">Viajante do Condado</option>
+                {titles.map((t) => (
+                  <option key={t.code} value={t.code}>
+                    {t.title}
+                  </option>
+                ))}
+              </select>
+              <span className="identity-hint">
+                {titles.length === 0 ? "Desbloqueie conquistas para ganhar novos títulos." : "Títulos vêm das suas conquistas."}
+              </span>
+            </div>
           </div>
 
           <div className="field">
@@ -182,6 +178,30 @@ function OptionProfile({ isOpen, onClose }) {
             </Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Quadro de escolha da foto: só os personagens disponíveis */}
+      <Modal isOpen={pickerOpen} onClose={() => setPickerOpen(false)} labelledBy={pickerTitleId} overlayClassName="persona-overlay" className="persona-modal">
+        <h2 id={pickerTitleId}>Escolha sua foto</h2>
+        <div className="persona-options" role="radiogroup" aria-labelledby={pickerTitleId}>
+          {PERSONAS.map((p) => {
+            const selected = (user?.avatar || DEFAULT_PERSONA) === p.code;
+            return (
+              <button
+                key={p.code}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                className={`persona-option ${selected ? "selected" : ""}`}
+                onClick={() => choosePersona(p.code)}
+                disabled={busy}
+              >
+                <Avatar persona={p.code} />
+                <span className="persona-name">{p.name}</span>
+              </button>
+            );
+          })}
+        </div>
       </Modal>
 
       <TemCerteza
