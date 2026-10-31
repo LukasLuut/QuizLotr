@@ -106,7 +106,9 @@
   vertical-align: middle;
 }
 
+/* alternativas presas à base do quadro: não sobem nem descem com o tamanho da pergunta */
 .quiz-options {
+  margin-top: auto;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px; /* 20 px entre as alternativas, nos dois sentidos */
