@@ -4,16 +4,6 @@ import Avatar from "../Avatar";
 import Cronometro from "./Cronometro";
 import { regionAt } from "../../config/regions";
 
-// Título do jogador conforme o aproveitamento até agora
-function playerTitle(correct, answered) {
-  if (answered === 0) return "Viajante do Condado";
-  const ratio = correct / answered;
-  if (ratio >= 0.9) return "Sábio de Valfenda";
-  if (ratio >= 0.7) return "Guardião de Gondor";
-  if (ratio >= 0.5) return "Guarda de Bri";
-  return "Hobbit perdido";
-}
-
 // Título da explicação: pontos ganhos, erro ou tempo esgotado
 function outcomeTitle(o) {
   if (o.timeExpired && !o.isCorrect) return "Tempo esgotado!";
@@ -37,7 +27,8 @@ export default function Sidebar({ player, round, region, outcome, timerRunning }
         <Avatar src={player?.avatar} name={player?.name} className="player-avatar" />
         <div className="player-text">
           <h2 className="player-name">{player?.name}</h2>
-          <p className="span-title">{playerTitle(round?.correctCount ?? 0, answered)}</p>
+          {/* título escolhido no Editar Perfil (vem das conquistas) */}
+          <p className="span-title">{player?.title || "Viajante do Condado"}</p>
         </div>
       </section>
 

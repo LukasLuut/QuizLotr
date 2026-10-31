@@ -124,3 +124,23 @@ describe('foto de perfil', () => {
     expect(res.status).toBe(400)
   })
 })
+
+describe('título do jogador', () => {
+  it('começa com o título padrão e só aceita títulos de conquistas desbloqueadas', async () => {
+    const p = await createPlayer()
+    const me = await api().get('/users/me').set(auth(p.token))
+    expect(me.body.title).toBe('Viajante do Condado')
+
+    const locked = await api().put('/users/me').set(auth(p.token)).send({ titleCode: 'sabio' })
+    expect(locked.status).toBe(400)
+
+    const round = await api().post('/rounds').set(auth(p.token)).send({})
+    await answerCurrent(p.token, round.body.id, true) // desbloqueia "Primeiros Passos"
+    const ok = await api().put('/users/me').set(auth(p.token)).send({ titleCode: 'primeiros-passos' })
+    expect(ok.status).toBe(200)
+    expect(ok.body.title).toBe('Primeiros Passos')
+
+    const reset = await api().put('/users/me').set(auth(p.token)).send({ titleCode: null })
+    expect(reset.body.title).toBe('Viajante do Condado')
+  })
+})

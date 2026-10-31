@@ -29,6 +29,10 @@ export class User {
   @Column({ type: 'mediumtext', nullable: true })
   avatar: string | null
 
+  // Título escolhido pelo jogador: código de uma conquista desbloqueada (ver game/rules.ts)
+  @Column({ type: 'varchar', length: 60, nullable: true })
+  titleCode: string | null
+
   // Melhor pontuação do jogador em uma partida concluída
   @Column({ type: 'int', default: 0 })
   bestScore: number

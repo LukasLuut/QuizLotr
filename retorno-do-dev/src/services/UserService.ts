@@ -1,9 +1,13 @@
 import { AppDataSource } from '../data-source'
 import { User } from '../models/User'
-import { ConflictError, NotFoundError, UnauthorizedError } from '../errors/HttpError'
+import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from '../errors/HttpError'
 import { CreateUserDTO } from '../dtos/CreateUserDTO'
 import { UpdateUserDTO } from '../dtos/UpdateUserDTO'
 import { LoginUserDTO } from '../dtos/LoginUserDTO'
+import { Achievement } from '../models/Achievement'
+import { achievementByCode } from '../game/rules'
+
+export const DEFAULT_TITLE = 'Viajante do Condado'
 
 export interface PublicUser {
   id: number
@@ -11,6 +15,9 @@ export interface PublicUser {
   email: string
   bestScore: number
   avatar: string | null
+  // título exibido abaixo do nome (vem de uma conquista desbloqueada)
+  title: string
+  titleCode: string | null
   createdAt: Date
 }
 
@@ -22,6 +29,8 @@ export function toPublicUser(user: User): PublicUser {
     email: user.email,
     bestScore: user.bestScore,
     avatar: user.avatar ?? null,
+    title: (user.titleCode && achievementByCode(user.titleCode)?.title) || DEFAULT_TITLE,
+    titleCode: user.titleCode ?? null,
     createdAt: user.createdAt,
   }
 }
@@ -82,6 +91,14 @@ export class UserService {
     }
     if (data.password !== undefined) user.password = await User.hashPassword(data.password)
     if (data.avatar !== undefined) user.avatar = data.avatar
+    if (data.titleCode !== undefined) {
+      if (data.titleCode !== null) {
+        // só vale título de conquista que o jogador já desbloqueou
+        const owned = await AppDataSource.getRepository(Achievement).findOne({ where: { userId: id, code: data.titleCode } })
+        if (!owned) throw new BadRequestError('Este título ainda não foi desbloqueado')
+      }
+      user.titleCode = data.titleCode
+    }
 
     await this.userRepository.save(user)
     return this.findById(id)

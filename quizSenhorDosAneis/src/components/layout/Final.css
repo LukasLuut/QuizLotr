@@ -47,16 +47,6 @@
   animation: final-scale 0.4s ease forwards;
 }
 
-.victory-img {
-  width: min(150px, 30vw);
-  height: auto;
-  margin-bottom: -9%;
-  position: relative;
-  z-index: 1;
-  flex: none;
-  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.9));
-}
-
 /* Título dentro da faixa vermelha do topo do escudo */
 .victory-title {
   position: absolute;

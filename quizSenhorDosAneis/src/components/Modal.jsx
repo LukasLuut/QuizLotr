@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
+// Pilha de modais abertos: o Esc fecha só o de cima, mesmo com o foco fora dele
+const openModals = [];
+
 const FOCUSABLE = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /**
@@ -16,15 +19,19 @@ function Modal({ isOpen, onClose, labelledBy, className = "", overlayClassName =
     if (!isOpen) return;
     const node = dialogRef.current;
     const previous = document.activeElement;
+    const token = {};
+    openModals.push(token);
     const focusables = () => [...node.querySelectorAll(FOCUSABLE)];
     (focusables()[0] || node).focus();
 
+    const onEscape = (e) => {
+      if (e.key !== "Escape" || openModals[openModals.length - 1] !== token) return;
+      e.stopPropagation();
+      e.preventDefault();
+      onCloseRef.current?.();
+    };
+
     const onKeyDown = (e) => {
-      if (e.key === "Escape") {
-        e.stopPropagation();
-        onCloseRef.current?.();
-        return;
-      }
       if (e.key !== "Tab") return;
       const items = focusables();
       if (items.length === 0) return;
@@ -40,8 +47,12 @@ function Modal({ isOpen, onClose, labelledBy, className = "", overlayClassName =
     };
 
     node.addEventListener("keydown", onKeyDown);
+    // captura: roda antes do atalho Esc da tela do jogo
+    document.addEventListener("keydown", onEscape, true);
     return () => {
       node.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("keydown", onEscape, true);
+      openModals.splice(openModals.indexOf(token), 1);
       if (previous && typeof previous.focus === "function") previous.focus();
     };
   }, [isOpen]);

@@ -1,30 +1,49 @@
 import "./OptionProfile.css";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../buttons/Button";
 import Modal from "../Modal";
 import TemCerteza from "../TemCerteza";
 import PopUpDTO from "../PopUpDTO";
+import Avatar from "../Avatar";
 import { useAuth } from "../../context/AuthContext";
+import { api } from "../../services/api";
+import { resizeImageToDataUrl } from "../../utils/image";
 
 /**
- * Modal de edição do cadastro. Só os campos alterados são enviados;
- * a senha só muda se for preenchida.
+ * Modal de edição do cadastro: foto, título (das conquistas desbloqueadas), nome,
+ * e-mail e senha. Só os campos alterados são enviados; a senha só muda se for preenchida.
+ * A foto é salva assim que escolhida.
  */
 function OptionProfile({ isOpen, onClose }) {
   const { user, updateUser, deleteAccount } = useAuth();
   const navigate = useNavigate();
   const titleId = useId();
 
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", titleCode: "" });
+  const [titles, setTitles] = useState([]); // conquistas desbloqueadas
+  const fileRef = useRef(null);
   const [acao, setAcao] = useState(null); // null | "update" | "delete" | "photo"
   const [busy, setBusy] = useState(false);
   const [popup, setPopup] = useState(null); // { message, variant }
 
   // Ao abrir, preenche com os dados atuais da sessão
   useEffect(() => {
-    if (isOpen && user) setForm({ name: user.name, email: user.email, password: "" });
+    if (isOpen && user) setForm({ name: user.name, email: user.email, password: "", titleCode: user.titleCode ?? "" });
   }, [isOpen, user]);
+
+  // Títulos disponíveis = conquistas já desbloqueadas
+  useEffect(() => {
+    if (!isOpen) return;
+    let alive = true;
+    api
+      .achievements()
+      .then((list) => alive && setTitles(list.filter((a) => a.unlocked)))
+      .catch(() => alive && setTitles([]));
+    return () => {
+      alive = false;
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     if (!popup) return;
@@ -39,7 +58,23 @@ function OptionProfile({ isOpen, onClose }) {
     if (form.name.trim() && form.name.trim() !== user?.name) body.name = form.name.trim();
     if (form.email.trim() && form.email.trim().toLowerCase() !== user?.email) body.email = form.email.trim();
     if (form.password) body.password = form.password;
+    if ((form.titleCode || null) !== (user?.titleCode ?? null)) body.titleCode = form.titleCode || null;
     return body;
+  };
+
+  const handlePhoto = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setBusy(true);
+    try {
+      await updateUser({ avatar: await resizeImageToDataUrl(file) });
+      setPopup({ message: "Foto de perfil atualizada.", variant: "success" });
+    } catch (err) {
+      setPopup({ message: err.message, variant: "error" });
+    } finally {
+      setBusy(false);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -81,6 +116,39 @@ function OptionProfile({ isOpen, onClose }) {
         <h2 id={titleId}>Atualizar Cadastro</h2>
 
         <form className="option-profile-form" onSubmit={handleSubmit} noValidate>
+          {/* Identidade: foto e título exibidos no quiz */}
+          <div className="profile-identity">
+            <button
+              type="button"
+              className="identity-avatar"
+              onClick={() => fileRef.current?.click()}
+              disabled={busy}
+              aria-label="Trocar foto de perfil"
+              title="Trocar foto de perfil"
+            >
+              <Avatar src={user?.avatar} name={user?.name} />
+              <span className="identity-avatar-hint" aria-hidden="true">
+                Trocar foto
+              </span>
+            </button>
+            <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" className="visually-hidden" tabIndex={-1} onChange={handlePhoto} />
+
+            <div className="field identity-title">
+              <label htmlFor="perfil-titulo">Título</label>
+              <select id="perfil-titulo" name="titleCode" value={form.titleCode} onChange={handleChange}>
+                <option value="">Viajante do Condado</option>
+                {titles.map((t) => (
+                  <option key={t.code} value={t.code}>
+                    {t.title}
+                  </option>
+                ))}
+              </select>
+              <span className="identity-hint">
+                {titles.length === 0 ? "Desbloqueie conquistas para ganhar novos títulos." : "Títulos vêm das suas conquistas."}
+              </span>
+            </div>
+          </div>
+
           <div className="field">
             <label htmlFor="perfil-nome">Nome</label>
             <input id="perfil-nome" name="name" type="text" autoComplete="nickname" value={form.name} onChange={handleChange} />

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import "./Final.css";
 import videoFinal from "../../assets/videos/finalLotr.mp4";
 import finalPoster from "../../assets/images/posters/finalLotr.jpg";
-import victoryPNG from "../../assets/images/victory.png";
 import Button from "../buttons/Button";
 import { formatarTempo } from "../../utils/format";
 import { GAME_MODES } from "../../config/regions";
@@ -42,7 +41,6 @@ function Final({ summary, onRestart, onProfile }) {
         <div className={`victory-overlay ${won ? "" : "defeat"}`} role="dialog" aria-modal="true" aria-labelledby="final-title">
           {won && <video ref={videoRef} src={videoFinal} className="video-final" poster={finalPoster} muted autoPlay loop playsInline aria-hidden="true" />}
 
-          {won && <img className="victory-img" src={victoryPNG} alt="" />}
           <div className="victory-card">
             <h2 id="final-title" className="victory-title" tabIndex={-1} ref={headingRef}>
               {won ? "O Anel foi destruído!" : "A jornada terminou"}

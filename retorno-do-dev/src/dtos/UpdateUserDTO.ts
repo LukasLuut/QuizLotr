@@ -35,4 +35,10 @@ export class UpdateUserDTO {
   @MaxLength(AVATAR_MAX_LENGTH, { message: 'A imagem é grande demais (máx. 300 KB)' })
   @Matches(/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/, { message: 'A imagem deve ser PNG, JPEG ou WebP' })
   avatar?: string | null
+
+  // Código da conquista usada como título (null volta ao título padrão)
+  @IsOptional()
+  @IsString({ message: 'Título inválido' })
+  @MaxLength(60, { message: 'Título inválido' })
+  titleCode?: string | null
 }
