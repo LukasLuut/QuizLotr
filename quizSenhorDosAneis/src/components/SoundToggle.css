@@ -45,3 +45,14 @@
     left: calc(14px + env(safe-area-inset-left, 0px));
   }
 }
+
+/* Discreto: 40% de opacidade, 100% ao passar o mouse ou focar */
+.sound-toggle {
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+.sound-toggle:hover,
+.sound-toggle:focus-within {
+  opacity: 1;
+}

@@ -227,3 +227,13 @@
     position: static;
   }
 }
+
+/* "Ver paisagem" discreto: 40% de opacidade, 100% ao passar o mouse ou focar */
+.toggle-overlay-btn.visible-ui {
+  opacity: 0.4;
+}
+
+.toggle-overlay-btn.visible-ui:hover,
+.toggle-overlay-btn.visible-ui:focus-visible {
+  opacity: 1;
+}
