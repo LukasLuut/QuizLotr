@@ -76,11 +76,19 @@ function PlayQuiz() {
 
   useEffect(() => () => peekTimers.current.forEach(clearTimeout), []);
 
-  // Teclado: Esc abre/fecha o menu; 1-4 escolhem a alternativa
+  // Teclado: Espaço abre/fecha o menu de pausa; 1-4 escolhem a alternativa
   useEffect(() => {
     const onKey = (e) => {
       if (isTyping(document.activeElement)) return;
-      if (e.key === "Escape" && phase !== "finished") {
+      if (e.code === "Space" && phase !== "finished") {
+        // com outro quadro aberto por cima (ex.: confirmação de Reiniciar), o Espaço não faz nada:
+        // nem fecha o menu, nem aperta o botão em foco (evita reiniciar sem querer)
+        const dialog = e.target.closest?.('[role="dialog"]');
+        if (dialog && !dialog.classList.contains("box-menu-dialog")) {
+          e.preventDefault();
+          return;
+        }
+        e.preventDefault(); // não aciona o botão em foco
         setMenuOpen((open) => !open);
         return;
       }

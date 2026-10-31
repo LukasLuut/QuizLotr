@@ -10,7 +10,9 @@ const FOCUSABLE = 'button:not([disabled]), [href], input:not([disabled]), select
  * Modal acessível: role="dialog", foco preso dentro, Esc fecha
  * e o foco volta para o elemento que abriu o modal.
  */
-function Modal({ isOpen, onClose, labelledBy, className = "", overlayClassName = "modal-overlay", closeOnOverlay = true, children }) {
+function Modal({ isOpen, onClose, labelledBy, className = "", overlayClassName = "modal-overlay", closeOnOverlay = true, closeOnEscape = true, children }) {
+  const closeOnEscapeRef = useRef(closeOnEscape);
+  closeOnEscapeRef.current = closeOnEscape;
   const dialogRef = useRef(null);
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
@@ -25,7 +27,7 @@ function Modal({ isOpen, onClose, labelledBy, className = "", overlayClassName =
     (focusables()[0] || node).focus();
 
     const onEscape = (e) => {
-      if (e.key !== "Escape" || openModals[openModals.length - 1] !== token) return;
+      if (e.key !== "Escape" || !closeOnEscapeRef.current || openModals[openModals.length - 1] !== token) return;
       e.stopPropagation();
       e.preventDefault();
       onCloseRef.current?.();

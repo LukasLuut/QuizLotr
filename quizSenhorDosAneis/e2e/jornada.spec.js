@@ -50,8 +50,8 @@ test("cadastro, login, uma pergunta, salvar e continuar a jornada", async ({ pag
   await expect(page.locator(".quiz-options button")).toHaveCount(4, { timeout: 30_000 });
   await expect(page.locator("#progress-label")).toHaveText(/Progresso\s*1\/40/);
 
-  // Esc abre o menu; "Salvar e sair" volta ao perfil com a jornada para continuar
-  await page.keyboard.press("Escape");
+  // Espaço abre o menu; "Salvar e sair" volta ao perfil com a jornada para continuar
+  await page.keyboard.press("Space");
   await expect(page.getByRole("dialog", { name: "Menu" })).toBeVisible();
   await shot("menu");
   await page.getByRole("button", { name: "Salvar e sair" }).click();
