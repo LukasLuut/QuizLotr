@@ -14,31 +14,6 @@ function playerTitle(correct, answered) {
   return "Hobbit perdido";
 }
 
-const ACERTOS = [
-  "Muito bem! Gandalf ficaria orgulhoso.",
-  "Resposta digna de um sábio de Valfenda.",
-  "Certeiro como a flecha de Legolas!",
-  "A Sociedade avança com você.",
-  "Bilbo anotaria isso no Livro Vermelho.",
-];
-const ERROS = [
-  "Até os sábios erram. Siga em frente.",
-  "Nem todos os que vagueiam estão perdidos.",
-  "Um tropeço no caminho. Levante-se, hobbit!",
-  "A sombra passou. A próxima é sua.",
-];
-
-// Mensagem da última resposta: só muda quando outra pergunta é respondida
-function message(outcome) {
-  if (!outcome) return "A jornada começa com um passo.";
-  if (outcome.timeExpired) return "O tempo acabou! Mais atenção na próxima.";
-  if (outcome.isCorrect) {
-    if (outcome.streak >= 5) return `${outcome.streak} acertos seguidos!`;
-    return ACERTOS[outcome.answered % ACERTOS.length];
-  }
-  return ERROS[outcome.answered % ERROS.length];
-}
-
 // Título da explicação: pontos ganhos, erro ou tempo esgotado
 function outcomeTitle(o) {
   if (o.timeExpired && !o.isCorrect) return "Tempo esgotado!";
@@ -48,8 +23,8 @@ function outcomeTitle(o) {
 /**
  * Coluna do jogador em duas caixas:
  * 1) placa com a identidade (foto, nome e título);
- * 2) painel da partida: região, pontuação e mensagem no topo; explicação da última
- *    resposta logo acima do cronômetro; embaixo, a barra de progresso.
+ * 2) painel da partida: região e pontuação no topo; explicação da última resposta
+ *    no meio; cronômetro e, embaixo, a barra de progresso.
  */
 export default function Sidebar({ player, round, region, outcome, timerRunning }) {
   const answered = round?.answered ?? 0;
@@ -88,11 +63,7 @@ export default function Sidebar({ player, round, region, outcome, timerRunning }
             )}
           </dl>
 
-          <p className={`message ${outcome ? (outcome.isCorrect ? "message-correct" : "message-wrong") : ""}`} aria-live="polite">
-            {message(outcome)}
-          </p>
-
-          {/* Explicação da última resposta: logo acima do cronômetro */}
+          {/* Explicação da última resposta: só muda quando outra pergunta é respondida */}
           <div className="answer-explanation" aria-live="polite">
             {outcome && (
               <p className={outcome.isCorrect ? "explanation-correct" : "explanation-wrong"}>
