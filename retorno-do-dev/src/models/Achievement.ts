@@ -1,16 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
-import { Answer } from './Answer';
-import { User } from './User';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, Unique } from 'typeorm'
+import { User } from './User'
 
+// Conquista desbloqueada por um jogador. Os textos ficam em game/rules.ts (ACHIEVEMENTS).
 @Entity('achievements')
+@Unique('UQ_user_achievement', ['userId', 'code'])
 export class Achievement {
-    @PrimaryGeneratedColumn()
-    id: number
+  @PrimaryGeneratedColumn()
+  id: number
 
-    @Column({ length: 400 })
-    title: string
+  @Column({ type: 'varchar', length: 60 })
+  code: string
 
-    @ManyToOne(() => User, user => user.achievements)
-    @JoinColumn({ name: 'userId' })
-    user: User;
+  @Column({ type: 'varchar', length: 120 })
+  title: string
+
+  @ManyToOne(() => User, user => user.achievements, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  user: User
+
+  @Column({ type: 'int' })
+  userId: number
+
+  @CreateDateColumn()
+  unlockedAt: Date
 }

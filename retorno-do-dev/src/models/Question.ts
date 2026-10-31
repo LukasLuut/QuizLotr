@@ -1,14 +1,27 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm'
-import { Answer } from './Answer';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Index } from 'typeorm'
+import { Answer } from './Answer'
 
 @Entity('questions')
 export class Question {
-    @PrimaryGeneratedColumn()
-    id: number
+  @PrimaryGeneratedColumn()
+  id: number
 
-    @Column({ length: 400 })
-    question: string
+  @Column({ type: 'varchar', length: 400 })
+  question: string
 
-    @OneToMany(() => Answer, answer => answer.question)
-    answers: Answer[];
+  // Região da jornada (0 = Condado ... 7 = Montanha da Perdição), ver game/rules.ts
+  @Index()
+  @Column({ type: 'tinyint', unsigned: true })
+  region: number
+
+  // 1 = fácil, 2 = médio, 3 = difícil
+  @Column({ type: 'tinyint', unsigned: true, default: 1 })
+  difficulty: number
+
+  // Curiosidade mostrada depois da resposta
+  @Column({ type: 'varchar', length: 400, nullable: true })
+  explanation: string | null
+
+  @OneToMany(() => Answer, answer => answer.question)
+  answers: Answer[]
 }

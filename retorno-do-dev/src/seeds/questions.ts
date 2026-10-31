@@ -1,0 +1,1380 @@
+// Banco de perguntas por região da jornada (0 = Condado ... 7 = Montanha da Perdição).
+// Gerado a partir do seed original, com correções de lore e perguntas novas.
+export interface SeedQuestion {
+  region: number
+  difficulty: number
+  question: string
+  explanation: string
+  answers: { answer: string; correct: boolean }[]
+}
+
+export const QUESTIONS: SeedQuestion[] = [
+  {
+    region: 0,
+    difficulty: 1,
+    question: "Qual é o nome da região onde vivem os Hobbits?",
+    explanation: "O Condado fica no noroeste da Terra-média e é o lar tranquilo dos Hobbits.",
+    answers: [
+      {
+        answer: "Valfenda",
+        correct: false
+      },
+      {
+        answer: "O Condado",
+        correct: true
+      },
+      {
+        answer: "Gondor",
+        correct: false
+      },
+      {
+        answer: "Mordor",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 0,
+    difficulty: 1,
+    question: "Qual Hobbit vive na famosa toca de Bolsão, no Condado?",
+    explanation: "Frodo herda Bolsão de seu tio Bilbo, que parte após a festa de aniversário.",
+    answers: [
+      {
+        answer: "Merry Brandebuque",
+        correct: false
+      },
+      {
+        answer: "Pippin Tûk",
+        correct: false
+      },
+      {
+        answer: "Frodo Bolseiro",
+        correct: true
+      },
+      {
+        answer: "Samwise Gamgi",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 0,
+    difficulty: 1,
+    question: "Quem organiza uma grande festa de aniversário no Condado no início de A Sociedade do Anel?",
+    explanation: "Bilbo celebra seus 111 anos com uma festa enorme e desaparece usando o Anel.",
+    answers: [
+      {
+        answer: "Frodo Bolseiro",
+        correct: false
+      },
+      {
+        answer: "Samwise Gamgi",
+        correct: false
+      },
+      {
+        answer: "Gandalf",
+        correct: false
+      },
+      {
+        answer: "Bilbo Bolseiro",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 0,
+    difficulty: 1,
+    question: "Qual personagem chega ao Condado montado em uma carroça no início de A Sociedade do Anel?",
+    explanation: "Gandalf chega com sua carroça carregada de fogos de artifício para a festa de Bilbo.",
+    answers: [
+      {
+        answer: "Aragorn",
+        correct: false
+      },
+      {
+        answer: "Gandalf",
+        correct: true
+      },
+      {
+        answer: "Legolas",
+        correct: false
+      },
+      {
+        answer: "Boromir",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 0,
+    difficulty: 1,
+    question: "Qual é o nome do jardineiro de Bolsão e fiel amigo de Frodo?",
+    explanation: "Sam cuida do jardim de Bolsão, como seu pai, o velho Feitor Gamgi.",
+    answers: [
+      {
+        answer: "Fredegar Bolger",
+        correct: false
+      },
+      {
+        answer: "Samwise Gamgi",
+        correct: true
+      },
+      {
+        answer: "Ted Ruivão",
+        correct: false
+      },
+      {
+        answer: "Lotho Sacola-Bolseiro",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 0,
+    difficulty: 1,
+    question: "Que idade Bilbo completa na festa de despedida no Condado?",
+    explanation: "Bilbo comemora seu “onzentésimo primeiro” aniversário, junto com os 33 anos de Frodo.",
+    answers: [
+      {
+        answer: "111 anos",
+        correct: true
+      },
+      {
+        answer: "120 anos",
+        correct: false
+      },
+      {
+        answer: "100 anos",
+        correct: false
+      },
+      {
+        answer: "99 anos",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 0,
+    difficulty: 1,
+    question: "Quais parentes de Bilbo cobiçam a toca de Bolsão?",
+    explanation: "Lobélia Sacola-Bolseiro passa anos tentando ficar com Bolsão.",
+    answers: [
+      {
+        answer: "Os Gamgi",
+        correct: false
+      },
+      {
+        answer: "Os Tûk",
+        correct: false
+      },
+      {
+        answer: "Os Sacola-Bolseiro",
+        correct: true
+      },
+      {
+        answer: "Os Brandebuque",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 1,
+    difficulty: 1,
+    question: "Qual é o nome da cidade onde Frodo, Sam, Merry e Pippin encontram Aragorn?",
+    explanation: "Os Hobbits conhecem Passolargo na hospedaria de Bri, a caminho de Valfenda.",
+    answers: [
+      {
+        answer: "Valfenda",
+        correct: false
+      },
+      {
+        answer: "Gondor",
+        correct: false
+      },
+      {
+        answer: "Isengard",
+        correct: false
+      },
+      {
+        answer: "Bri",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 1,
+    difficulty: 1,
+    question: "Qual é o nome da hospedaria onde os Hobbits ficam em Bri?",
+    explanation: "O Pônei Saltitante é a hospedaria de Cevado Carrapicho em Bri.",
+    answers: [
+      {
+        answer: "Pônei Saltitante",
+        correct: true
+      },
+      {
+        answer: "Dragão Verde",
+        correct: false
+      },
+      {
+        answer: "Bolsão",
+        correct: false
+      },
+      {
+        answer: "Casa de Elrond",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 1,
+    difficulty: 1,
+    question: "Qual é o nome usado por Aragorn quando os Hobbits o encontram em Bri?",
+    explanation: "Passolargo é o nome pelo qual Aragorn é conhecido entre os povos do norte.",
+    answers: [
+      {
+        answer: "Elessar",
+        correct: false
+      },
+      {
+        answer: "Passolargo",
+        correct: true
+      },
+      {
+        answer: "Mithrandir",
+        correct: false
+      },
+      {
+        answer: "Thorongil",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 1,
+    difficulty: 1,
+    question: "Quem entrega a Frodo a carta atrasada de Gandalf no Pônei Saltitante?",
+    explanation: "Cevado Carrapicho esqueceu de enviar a carta de Gandalf e só a entrega em Bri.",
+    answers: [
+      {
+        answer: "Cevado Carrapicho",
+        correct: true
+      },
+      {
+        answer: "Aragorn",
+        correct: false
+      },
+      {
+        answer: "Bill Samambaia",
+        correct: false
+      },
+      {
+        answer: "Gandalf",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 1,
+    difficulty: 1,
+    question: "O que acontece com Frodo ao usar o Um Anel?",
+    explanation: "O Anel torna invisível quem o usa — e chama a atenção dos servos de Sauron.",
+    answers: [
+      {
+        answer: "Só os Hobbits não o veem",
+        correct: false
+      },
+      {
+        answer: "Vira um Nazgûl",
+        correct: false
+      },
+      {
+        answer: "Perde o Anel",
+        correct: false
+      },
+      {
+        answer: "Ele desaparece",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 1,
+    difficulty: 1,
+    question: "Qual é o nome do pônei que Sam leva de Bri?",
+    explanation: "Bill, o pônei, acompanha a Sociedade até os portões de Moria.",
+    answers: [
+      {
+        answer: "Bob",
+        correct: false
+      },
+      {
+        answer: "Scadufax",
+        correct: false
+      },
+      {
+        answer: "Bill",
+        correct: true
+      },
+      {
+        answer: "Asfaloth",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 1,
+    difficulty: 1,
+    question: "Quem invade os quartos da hospedaria em Bri durante a noite?",
+    explanation: "Os Nazgûl atacam as camas vazias: Passolargo havia escondido os Hobbits.",
+    answers: [
+      {
+        answer: "Orcs de Moria",
+        correct: false
+      },
+      {
+        answer: "Os Cavaleiros Negros",
+        correct: true
+      },
+      {
+        answer: "Lobos de Isengard",
+        correct: false
+      },
+      {
+        answer: "Os Uruk-hai",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 2,
+    difficulty: 2,
+    question: "Quem é o senhor de Rivendel?",
+    explanation: "Elrond, o Meio-Elfo, é o senhor de Valfenda (Rivendell).",
+    answers: [
+      {
+        answer: "Gandalf",
+        correct: false
+      },
+      {
+        answer: "Galadriel",
+        correct: false
+      },
+      {
+        answer: "Elrond",
+        correct: true
+      },
+      {
+        answer: "Thranduil",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 2,
+    difficulty: 2,
+    question: "Qual personagem é curado em Rivendel após ser ferido pelo Rei Bruxo?",
+    explanation: "Frodo é ferido por uma lâmina de Morgul no Topo do Vento e curado por Elrond.",
+    answers: [
+      {
+        answer: "Sam",
+        correct: false
+      },
+      {
+        answer: "Merry",
+        correct: false
+      },
+      {
+        answer: "Pippin",
+        correct: false
+      },
+      {
+        answer: "Frodo",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 2,
+    difficulty: 2,
+    question: "Qual conselho é realizado em Rivendel para decidir o destino do Um Anel?",
+    explanation: "O Conselho de Elrond reúne elfos, anões, homens e hobbits para decidir o destino do Anel.",
+    answers: [
+      {
+        answer: "Conselho Branco",
+        correct: false
+      },
+      {
+        answer: "Conselho de Gondor",
+        correct: false
+      },
+      {
+        answer: "Conselho de Elrond",
+        correct: true
+      },
+      {
+        answer: "Conselho dos Istari",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 2,
+    difficulty: 2,
+    question: "Quantos membros formam a Sociedade do Anel?",
+    explanation: "Nove caminhantes partem de Valfenda, em oposição aos Nove Cavaleiros Negros.",
+    answers: [
+      {
+        answer: "Sete",
+        correct: false
+      },
+      {
+        answer: "Nove",
+        correct: true
+      },
+      {
+        answer: "Doze",
+        correct: false
+      },
+      {
+        answer: "Cinco",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 2,
+    difficulty: 2,
+    question: "Qual é o nome da filha de Elrond que vive em Rivendel e se apaixona por Aragorn?",
+    explanation: "Arwen, filha de Elrond, abre mão da imortalidade por amor a Aragorn.",
+    answers: [
+      {
+        answer: "Arwen",
+        correct: true
+      },
+      {
+        answer: "Galadriel",
+        correct: false
+      },
+      {
+        answer: "Éowyn",
+        correct: false
+      },
+      {
+        answer: "Rosie",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 2,
+    difficulty: 2,
+    question: "Que espada é reforjada e entregue a Aragorn em Valfenda?",
+    explanation: "Andúril, a Chama do Oeste, é forjada a partir dos fragmentos de Narsil.",
+    answers: [
+      {
+        answer: "Ferroada",
+        correct: false
+      },
+      {
+        answer: "Andúril",
+        correct: true
+      },
+      {
+        answer: "Orcrist",
+        correct: false
+      },
+      {
+        answer: "Glamdring",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 2,
+    difficulty: 2,
+    question: "Que presentes Bilbo dá a Frodo em Valfenda?",
+    explanation: "A cota de mithril salva Frodo da lança de um orc em Moria.",
+    answers: [
+      {
+        answer: "Ferroada e a cota de mithril",
+        correct: true
+      },
+      {
+        answer: "O Livro Vermelho e uma pena",
+        correct: false
+      },
+      {
+        answer: "O Frasco e a capa élfica",
+        correct: false
+      },
+      {
+        answer: "Um mapa e uma bússola",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 3,
+    difficulty: 2,
+    question: "Qual era o antigo nome de Moria?",
+    explanation: "Khazad-dûm foi o maior reino dos Anões, escavado sob as Montanhas Sombrias.",
+    answers: [
+      {
+        answer: "Minas Tirith",
+        correct: false
+      },
+      {
+        answer: "Dol Guldur",
+        correct: false
+      },
+      {
+        answer: "Khazad-dûm",
+        correct: true
+      },
+      {
+        answer: "Erebor",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 3,
+    difficulty: 2,
+    question: "Qual criatura desperta nas profundezas de Moria?",
+    explanation: "O Balrog, demônio da Primeira Era, despertou quando os Anões cavaram fundo demais.",
+    answers: [
+      {
+        answer: "Smaug",
+        correct: false
+      },
+      {
+        answer: "Shelob",
+        correct: false
+      },
+      {
+        answer: "Um Nazgûl",
+        correct: false
+      },
+      {
+        answer: "O Balrog",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 3,
+    difficulty: 2,
+    question: "Qual membro da Sociedade do Anel enfrenta o Balrog na Ponte de Khazad-dûm?",
+    explanation: "Gandalf enfrenta o Balrog na ponte com o famoso “Você não pode passar!”.",
+    answers: [
+      {
+        answer: "Aragorn",
+        correct: false
+      },
+      {
+        answer: "Boromir",
+        correct: false
+      },
+      {
+        answer: "Gimli",
+        correct: false
+      },
+      {
+        answer: "Gandalf",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 3,
+    difficulty: 2,
+    question: "Qual anão fica especialmente abalado ao descobrir o destino de seu povo em Moria?",
+    explanation: "Gimli encontra o túmulo de seu primo Balin na Câmara de Mazarbul.",
+    answers: [
+      {
+        answer: "Gimli",
+        correct: true
+      },
+      {
+        answer: "Thorin",
+        correct: false
+      },
+      {
+        answer: "Balin",
+        correct: false
+      },
+      {
+        answer: "Dwalin",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 3,
+    difficulty: 2,
+    question: "O que acontece com Gandalf contra o Balrog?",
+    explanation: "Gandalf cai no abismo com o Balrog e retorna depois como Gandalf, o Branco.",
+    answers: [
+      {
+        answer: "Cai em Moria",
+        correct: true
+      },
+      {
+        answer: "É capturado",
+        correct: false
+      },
+      {
+        answer: "Foge para Rivendel",
+        correct: false
+      },
+      {
+        answer: "Vira pedra",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 3,
+    difficulty: 2,
+    question: "Que palavra abre os Portões de Durin em Moria?",
+    explanation: "“Fale, amigo, e entre”: a senha é “amigo” em élfico, mellon.",
+    answers: [
+      {
+        answer: "Mellon",
+        correct: true
+      },
+      {
+        answer: "Mithril",
+        correct: false
+      },
+      {
+        answer: "Elendil",
+        correct: false
+      },
+      {
+        answer: "Khazad",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 3,
+    difficulty: 2,
+    question: "Que criatura ataca a Sociedade no lago diante dos portões de Moria?",
+    explanation: "O Vigia da Água agarra Frodo pelo tornozelo antes de a Sociedade entrar em Moria.",
+    answers: [
+      {
+        answer: "Um Troll das Cavernas",
+        correct: false
+      },
+      {
+        answer: "O Balrog",
+        correct: false
+      },
+      {
+        answer: "O Vigia da Água",
+        correct: true
+      },
+      {
+        answer: "Um Dragão",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 4,
+    difficulty: 2,
+    question: "Quem é a senhora de Lothlórien?",
+    explanation: "Galadriel é a Senhora da Floresta Dourada, guardiã de Nenya, um dos Três Anéis.",
+    answers: [
+      {
+        answer: "Arwen",
+        correct: false
+      },
+      {
+        answer: "Galadriel",
+        correct: true
+      },
+      {
+        answer: "Éowyn",
+        correct: false
+      },
+      {
+        answer: "Tauriel",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 4,
+    difficulty: 2,
+    question: "Qual é o nome do senhor de Lothlórien?",
+    explanation: "Celeborn governa Lothlórien ao lado de Galadriel.",
+    answers: [
+      {
+        answer: "Elrond",
+        correct: false
+      },
+      {
+        answer: "Thranduil",
+        correct: false
+      },
+      {
+        answer: "Glorfindel",
+        correct: false
+      },
+      {
+        answer: "Celeborn",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 4,
+    difficulty: 2,
+    question: "Qual membro da Sociedade do Anel é um elfo e possui uma forte ligação com Lothlórien?",
+    explanation: "Legolas é um elfo da Floresta das Trevas, parente distante dos elfos de Lórien.",
+    answers: [
+      {
+        answer: "Aragorn",
+        correct: false
+      },
+      {
+        answer: "Gimli",
+        correct: false
+      },
+      {
+        answer: "Boromir",
+        correct: false
+      },
+      {
+        answer: "Legolas",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 4,
+    difficulty: 2,
+    question: "Qual presente Galadriel dá a Frodo?",
+    explanation: "O Frasco contém a luz da estrela de Eärendil — luz para lugares escuros.",
+    answers: [
+      {
+        answer: "Espada élfica",
+        correct: false
+      },
+      {
+        answer: "Frasco de Eärendil",
+        correct: true
+      },
+      {
+        answer: "Arco de prata",
+        correct: false
+      },
+      {
+        answer: "Armadura de mithril",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 4,
+    difficulty: 2,
+    question: "Qual presente Galadriel entrega a Gimli?",
+    explanation: "Gimli pede apenas um fio de cabelo; Galadriel lhe dá três.",
+    answers: [
+      {
+        answer: "Três fios de seu cabelo",
+        correct: true
+      },
+      {
+        answer: "Uma pedra de mithril",
+        correct: false
+      },
+      {
+        answer: "Um anel élfico",
+        correct: false
+      },
+      {
+        answer: "Uma espada élfica",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 4,
+    difficulty: 2,
+    question: "Como Galadriel mostra a Frodo visões do passado e do futuro?",
+    explanation: "O Espelho de Galadriel é uma bacia de água que revela o que foi, o que é e o que pode ser.",
+    answers: [
+      {
+        answer: "Com um palantír",
+        correct: false
+      },
+      {
+        answer: "Com uma canção élfica",
+        correct: false
+      },
+      {
+        answer: "Com seu Espelho",
+        correct: true
+      },
+      {
+        answer: "Com o Anel Nenya",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 4,
+    difficulty: 2,
+    question: "Que pão élfico a Sociedade recebe em Lothlórien?",
+    explanation: "Um pedaço de lembas sustenta um viajante por um dia inteiro de marcha.",
+    answers: [
+      {
+        answer: "Cram",
+        correct: false
+      },
+      {
+        answer: "Lembas",
+        correct: true
+      },
+      {
+        answer: "Pão de mel",
+        correct: false
+      },
+      {
+        answer: "Broa dos Beornings",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 5,
+    difficulty: 3,
+    question: "O que são os Argonath?",
+    explanation: "Os Argonath, os Pilares dos Reis, guardam a fronteira norte de Gondor no rio Anduin.",
+    answers: [
+      {
+        answer: "Torres de Mordor",
+        correct: false
+      },
+      {
+        answer: "Estátuas élficas",
+        correct: false
+      },
+      {
+        answer: "Estátuas de reis",
+        correct: true
+      },
+      {
+        answer: "Entradas de Moria",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 5,
+    difficulty: 3,
+    question: "Quais reis de Gondor são representados pelas estátuas dos Argonath?",
+    explanation: "As estátuas representam Isildur e Anárion, filhos de Elendil.",
+    answers: [
+      {
+        answer: "Aragorn e Boromir",
+        correct: false
+      },
+      {
+        answer: "Elendil e Aragorn",
+        correct: false
+      },
+      {
+        answer: "Isildur e Anárion",
+        correct: true
+      },
+      {
+        answer: "Denethor e Boromir",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 5,
+    difficulty: 3,
+    question: "Por qual rio a Sociedade do Anel passa ao atravessar os Argonath?",
+    explanation: "O Anduin é o Grande Rio que a Sociedade desce em barcos élficos.",
+    answers: [
+      {
+        answer: "Isen",
+        correct: false
+      },
+      {
+        answer: "Anduin",
+        correct: true
+      },
+      {
+        answer: "Brandevin",
+        correct: false
+      },
+      {
+        answer: "Lhûn",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 5,
+    difficulty: 3,
+    question: "Qual membro da Sociedade é herdeiro dos reis representados nos Argonath?",
+    explanation: "Aragorn é herdeiro de Isildur e se emociona ao passar pelos seus antepassados.",
+    answers: [
+      {
+        answer: "Boromir",
+        correct: false
+      },
+      {
+        answer: "Legolas",
+        correct: false
+      },
+      {
+        answer: "Aragorn",
+        correct: true
+      },
+      {
+        answer: "Gimli",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 5,
+    difficulty: 3,
+    question: "Em qual região a Sociedade do Anel chega após passar pelos Argonath?",
+    explanation: "Em Parth Galen a Sociedade se divide após o ataque dos Uruk-hai.",
+    answers: [
+      {
+        answer: "Parth Galen",
+        correct: true
+      },
+      {
+        answer: "Bree",
+        correct: false
+      },
+      {
+        answer: "Fangorn",
+        correct: false
+      },
+      {
+        answer: "Erebor",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 5,
+    difficulty: 3,
+    question: "Quem tenta tomar o Anel de Frodo em Amon Hen?",
+    explanation: "Boromir cede à tentação do Anel, mas se redime defendendo Merry e Pippin.",
+    answers: [
+      {
+        answer: "Boromir",
+        correct: true
+      },
+      {
+        answer: "Aragorn",
+        correct: false
+      },
+      {
+        answer: "Gimli",
+        correct: false
+      },
+      {
+        answer: "Merry",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 5,
+    difficulty: 3,
+    question: "Em que tipo de embarcação a Sociedade desce o Anduin?",
+    explanation: "Os barcos cinzentos de Lórien são leves o bastante para serem carregados nas margens.",
+    answers: [
+      {
+        answer: "Barcos élficos",
+        correct: true
+      },
+      {
+        answer: "Uma galé de Gondor",
+        correct: false
+      },
+      {
+        answer: "Jangadas de troncos",
+        correct: false
+      },
+      {
+        answer: "Barris de vinho",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 6,
+    difficulty: 3,
+    question: "Qual é o nome do enorme portão que serve como uma das principais entradas de Mordor?",
+    explanation: "O Morannon, o Portão Negro, fecha a passagem principal para Mordor.",
+    answers: [
+      {
+        answer: "Portão de Durin",
+        correct: false
+      },
+      {
+        answer: "Portão Negro",
+        correct: true
+      },
+      {
+        answer: "Portão de Minas Tirith",
+        correct: false
+      },
+      {
+        answer: "Portão de Isengard",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 6,
+    difficulty: 3,
+    question: "Qual personagem guia Frodo e Sam em direção à entrada de Mordor?",
+    explanation: "Gollum, domado por Frodo, guia os Hobbits pelas Emyn Muil até Mordor.",
+    answers: [
+      {
+        answer: "Aragorn",
+        correct: false
+      },
+      {
+        answer: "Gandalf",
+        correct: false
+      },
+      {
+        answer: "Gollum",
+        correct: true
+      },
+      {
+        answer: "Legolas",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 6,
+    difficulty: 3,
+    question: "O que Frodo e Sam fazem diante do Portão Negro?",
+    explanation: "O Portão Negro é guardado demais; Gollum sugere outro caminho.",
+    answers: [
+      {
+        answer: "Entram pelo portão",
+        correct: false
+      },
+      {
+        answer: "Enfrentam Sauron",
+        correct: false
+      },
+      {
+        answer: "Voltam a Gondor",
+        correct: false
+      },
+      {
+        answer: "Buscam outra entrada",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 6,
+    difficulty: 3,
+    question: "Qual capitão de Gondor encontra Frodo e Sam em Ithilien?",
+    explanation: "Faramir, irmão de Boromir, captura Frodo e Sam em Ithilien e depois os liberta.",
+    answers: [
+      {
+        answer: "Faramir",
+        correct: true
+      },
+      {
+        answer: "Boromir",
+        correct: false
+      },
+      {
+        answer: "Denethor",
+        correct: false
+      },
+      {
+        answer: "Imrahil",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 6,
+    difficulty: 3,
+    question: "Qual é o nome da passagem por onde Gollum conduz Frodo e Sam para entrar em Mordor?",
+    explanation: "Cirith Ungol é a passagem secreta guardada pela aranha Laracna.",
+    answers: [
+      {
+        answer: "Passagem de Caradhras",
+        correct: false
+      },
+      {
+        answer: "Porta de Durin",
+        correct: false
+      },
+      {
+        answer: "Desfiladeiro de Helm",
+        correct: false
+      },
+      {
+        answer: "Cirith Ungol",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 6,
+    difficulty: 3,
+    question: "Como Gollum chama o Um Anel?",
+    explanation: "“Meu precioso” revela a obsessão que consumiu Sméagol por séculos.",
+    answers: [
+      {
+        answer: "Minha joia",
+        correct: false
+      },
+      {
+        answer: "Meu senhor",
+        correct: false
+      },
+      {
+        answer: "Meu tesouro",
+        correct: false
+      },
+      {
+        answer: "Meu precioso",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 6,
+    difficulty: 3,
+    question: "Qual é o nome da fortaleza de Sauron em Mordor?",
+    explanation: "Barad-dûr, a Torre Escura, é onde o Olho de Sauron vigia a Terra-média.",
+    answers: [
+      {
+        answer: "Minas Tirith",
+        correct: false
+      },
+      {
+        answer: "Orthanc",
+        correct: false
+      },
+      {
+        answer: "Dol Guldur",
+        correct: false
+      },
+      {
+        answer: "Barad-dûr",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 7,
+    difficulty: 3,
+    question: "Qual é o outro nome da Montanha da Perdição?",
+    explanation: "Orodruin é o nome élfico da Montanha da Perdição.",
+    answers: [
+      {
+        answer: "Orodruin",
+        correct: true
+      },
+      {
+        answer: "Caradhras",
+        correct: false
+      },
+      {
+        answer: "Amon Sûl",
+        correct: false
+      },
+      {
+        answer: "Erebor",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 7,
+    difficulty: 3,
+    question: "Em qual região da Terra-média está localizada a Montanha da Perdição?",
+    explanation: "A Montanha da Perdição fica no planalto de Gorgoroth, em Mordor.",
+    answers: [
+      {
+        answer: "Gondor",
+        correct: false
+      },
+      {
+        answer: "Mordor",
+        correct: true
+      },
+      {
+        answer: "Rohan",
+        correct: false
+      },
+      {
+        answer: "Lothlórien",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 7,
+    difficulty: 3,
+    question: "Por que Frodo e Sam vão à Montanha da Perdição?",
+    explanation: "O Anel só pode ser destruído nas chamas onde foi forjado.",
+    answers: [
+      {
+        answer: "Derrotar Saruman",
+        correct: false
+      },
+      {
+        answer: "Encontrar Gandalf",
+        correct: false
+      },
+      {
+        answer: "Destruir o Anel",
+        correct: true
+      },
+      {
+        answer: "Salvar Gondor",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 7,
+    difficulty: 3,
+    question: "Onde o Um Anel foi forjado?",
+    explanation: "Sauron forjou o Um Anel nas Sammath Naur, as Câmaras do Fogo.",
+    answers: [
+      {
+        answer: "Rivendel",
+        correct: false
+      },
+      {
+        answer: "Montanha da Perdição",
+        correct: true
+      },
+      {
+        answer: "Moria",
+        correct: false
+      },
+      {
+        answer: "Isengard",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 7,
+    difficulty: 3,
+    question: "Quem acaba destruindo o Um Anel na Montanha da Perdição?",
+    explanation: "Gollum arranca o Anel de Frodo e cai com ele na lava.",
+    answers: [
+      {
+        answer: "Frodo",
+        correct: false
+      },
+      {
+        answer: "Gollum",
+        correct: true
+      },
+      {
+        answer: "Sam",
+        correct: false
+      },
+      {
+        answer: "Aragorn",
+        correct: false
+      }
+    ]
+  },
+  {
+    region: 7,
+    difficulty: 3,
+    question: "Quem carrega Frodo nas costas na subida da Montanha da Perdição?",
+    explanation: "“Não posso carregar o Anel, mas posso carregar você!”, diz Sam.",
+    answers: [
+      {
+        answer: "Gollum",
+        correct: false
+      },
+      {
+        answer: "Merry",
+        correct: false
+      },
+      {
+        answer: "Pippin",
+        correct: false
+      },
+      {
+        answer: "Sam",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 7,
+    difficulty: 3,
+    question: "O que Gollum arranca de Frodo para tomar o Anel?",
+    explanation: "Na beira do abismo, Gollum morde o dedo de Frodo e cai com o Anel.",
+    answers: [
+      {
+        answer: "O Frasco de Galadriel",
+        correct: false
+      },
+      {
+        answer: "A capa élfica",
+        correct: false
+      },
+      {
+        answer: "A espada Ferroada",
+        correct: false
+      },
+      {
+        answer: "O dedo com o Anel",
+        correct: true
+      }
+    ]
+  },
+  {
+    region: 7,
+    difficulty: 3,
+    question: "Quem resgata Frodo e Sam após a destruição do Anel?",
+    explanation: "Gwaihir e as Águias levam os dois Hobbits das encostas em chamas.",
+    answers: [
+      {
+        answer: "Os Elfos de Valfenda",
+        correct: false
+      },
+      {
+        answer: "Os Ents",
+        correct: false
+      },
+      {
+        answer: "Os Rohirrim",
+        correct: false
+      },
+      {
+        answer: "As Águias",
+        correct: true
+      }
+    ]
+  }
+]

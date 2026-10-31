@@ -1,33 +1,44 @@
 // src/middlewares/validateDTO.ts
 
 // Importa funções para transformar objetos e validar classes
-import { plainToInstance } from "class-transformer"; // Converte objetos comuns (JSON) em instâncias de classes
-import { validate } from "class-validator";         // Função que valida uma instância usando decorators
-import { Request, Response, NextFunction } from "express"; // Tipos do Express
+import { plainToInstance } from 'class-transformer' // Converte objetos comuns (JSON) em instâncias de classes
+import { validate, ValidationError } from 'class-validator' // Função que valida uma instância usando decorators
+import { Request, Response, NextFunction } from 'express' // Tipos do Express
+import { BadRequestError } from '../errors/HttpError'
 
-// Função que cria um middleware de validação para qualquer DTO
-export function validateDTO(dtoClass: any) {
-    // Retorna uma função compatível com Express (middleware)
-    return async (req: Request, res: Response, next: NextFunction) => {
-        // Converte o corpo da requisição (req.body) em uma instância da classe DTO
-        // Isso é necessário para que o class-validator consiga ler os decorators (@IsEmail, @IsNotEmpty, etc.)
-        const dtoObj = plainToInstance(dtoClass, req.body);
+type Source = 'body' | 'params' | 'query'
 
-        // Valida a instância do DTO, é uma função do class-validator que verifica se está tudo como definimos
-        // Retorna um array de erros, se houver algum campo inválido
-        const errors = await validate(dtoObj);
+// Achata os erros do class-validator em uma lista simples de mensagens por campo
+function formatErrors(errors: ValidationError[]) {
+  return errors.map(err => {
+    const constraints = { ...(err.constraints || {}) }
+    if (constraints.whitelistValidation) constraints.whitelistValidation = `O campo "${err.property}" não é permitido`
+    return { field: err.property, messages: Object.values(constraints) }
+  })
+}
 
-        // Se houver erros, retorna resposta 400 (Bad Request) com mensagens
-        if (errors.length > 0) {
-            // O validate retorna um array de objetos, um para cada campo que falhou na validação.
+// Cria um middleware de validação para qualquer DTO.
+// whitelist + forbidNonWhitelisted: campos fora do DTO (ex.: id, score) geram 400,
+// o que impede mass assignment em cadastro e atualização de perfil.
+export function validateDTO(dtoClass: any, source: Source = 'body') {
+  return async (req: Request, _res: Response, next: NextFunction) => {
+    const dtoObj = plainToInstance(dtoClass, req[source] ?? {})
 
-            // errors.map(err => err.constraints) serve para extrair apenas as mensagens de erro, ignorando outras informações
-            // 'constraints' contém mensagens de erro geradas pelos decorators do DTO
-            // Exemplo: { name: "O nome é obrigatório", email: "E-mail inválido" }
-            return res.status(400).json(errors.map(err => err.constraints));
-        }
+    const errors = await validate(dtoObj, {
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      forbidUnknownValues: true,
+    })
 
-        // Se não houver erros, passa para o próximo middleware ou controller
-        next();
-    };
+    if (errors.length > 0) {
+      const details = formatErrors(errors)
+      const message = details.flatMap(d => d.messages).join('. ')
+      return next(new BadRequestError(message, details))
+    }
+
+    // Só os campos validados seguem para o controller
+    if (source === 'body') req.body = dtoObj
+    else Object.assign(req, { validated: { ...(req as any).validated, [source]: dtoObj } })
+    next()
+  }
 }

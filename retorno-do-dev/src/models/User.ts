@@ -1,57 +1,48 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm'
 import bcrypt from 'bcrypt'
 import { Achievement } from './Achievement'
 import { Round } from './Round'
+import { env } from '../config/env'
 
 @Entity('users')
 export class User {
-    @PrimaryGeneratedColumn()
-    id: number
+  @PrimaryGeneratedColumn()
+  id: number
 
-    @Column({ length: 120 })
-    name: string
+  @Column({ type: 'varchar', length: 120 })
+  name: string
 
-    @Column({ unique: true, length: 160 })
-    email: string
+  @Column({ type: 'varchar', unique: true, length: 160 })
+  email: string
 
-    @Column()
-    password: string
+  // select: false — a senha nunca vem em consultas comuns, só quando pedida explicitamente
+  @Column({ type: 'varchar', length: 100, select: false })
+  password: string
 
-    @CreateDateColumn()
-    createdAt: Date
+  @CreateDateColumn()
+  createdAt: Date
 
-    @UpdateDateColumn()
-    updatedAt: Date
+  @UpdateDateColumn()
+  updatedAt: Date
 
-    @Column({ type: 'int', default: 0 })
-    score: number;
+  // Melhor pontuação do jogador em uma partida concluída
+  @Column({ type: 'int', default: 0 })
+  bestScore: number
 
-    @OneToMany(() => Round, (round) => round.user)
-    rounds: Round[];
+  @OneToMany(() => Round, round => round.user)
+  rounds: Round[]
 
-    @OneToMany(() => Achievement, (achievement) => achievement.user)
-    achievements: Achievement[];
+  @OneToMany(() => Achievement, achievement => achievement.user)
+  achievements: Achievement[]
 
-    // Antes de salvar ou atualizar, criptografa a senha
-    @BeforeInsert()
-    @BeforeUpdate()
-    async hashPassword() {
-        // Evita re-hash se a senha já estiver hasheada
-        // this.password é a senha do usuário que será salva ou atualizada no banco
-        // O bcrypt gera hashes que sempre começam com $2
-        // se ela já começa com isso, significa que já foi criptografada e não precisamos criptografar de novo
-        if (!this.password.startsWith('$2')) {
-            // convertemos usando paseINT pois o tudo que vem do .env sempre é lido como string
-            const rounds = Number(process.env.BCRYPT_SALT_ROUNDS)
-            // bcrypt.hash é uma função assíncrona
-            // usamos await pois o cálculo pode levar algum tempo dependendo do saltRounds
-            this.password = await bcrypt.hash(this.password, rounds)
-        }
-    }
+  // O hash é feito explicitamente pelo service: assim nenhuma senha
+  // (nem uma que comece com "$2") é gravada em texto puro por engano
+  static hashPassword(plain: string) {
+    return bcrypt.hash(plain, env.bcryptRounds)
+  }
 
-    // Método para comparar senha com hash
-    // primeiro retorna a promise, que depois será resolvida como boolean true ou false
-    async validatePassword(plain: string): Promise<boolean> {
-        return bcrypt.compare(plain, this.password)
-    }
+  // Compara a senha digitada com o hash salvo (exige o campo password carregado)
+  validatePassword(plain: string): Promise<boolean> {
+    return bcrypt.compare(plain, this.password)
+  }
 }

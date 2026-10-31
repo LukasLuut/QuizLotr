@@ -1,64 +1,57 @@
-import { AppDataSource } from "../data-source";
-import { Answer } from "../models/Answer";
-import { Question } from "../models/Question";
+import { EntityManager } from 'typeorm'
+import { AppDataSource } from '../data-source'
+import { Question } from '../models/Question'
+import { NotFoundError } from '../errors/HttpError'
+import { QUESTIONS_PER_REGION, REGIONS, shuffle } from '../game/rules'
+
+export interface PublicQuestion {
+  id: number
+  question: string
+  region: number
+  difficulty: number
+  // sem o campo "correct": o gabarito só sai depois da resposta
+  answers: { id: number; answer: string }[]
+}
+
+export function toPublicQuestion(q: Question): PublicQuestion {
+  return {
+    id: q.id,
+    question: q.question,
+    region: q.region,
+    difficulty: q.difficulty,
+    answers: shuffle(q.answers).map(a => ({ id: a.id, answer: a.answer })),
+  }
+}
 
 export class QuestionService {
-    // Repositório pra acessar o banco de dados de perguntas
-    private questionRepository = AppDataSource.getRepository(Question)
-    // Repositório pra acessar o banco de dados de respostas
-    private answerRepository = AppDataSource.getRepository(Answer)
+  private get repo() {
+    return AppDataSource.getRepository(Question)
+  }
 
-    // Método para criar uma nova pergunta
-    async findById(id: number) {
-        // Verifica se a pergunta existe
-        const question = await this.questionRepository.findOne({ where: { id } })
-        if (!question) throw new Error('Pergunta não encontrada');
-
-        // Busca as respostas relacionadas à pergunta
-        const answers = await this.answerRepository.find({ where: { question: { id: question.id } } });
-
-        // Retorna a pergunta junto com as respostas
-        const result = { ...question, answers };
-
-        return result;
+  // Sorteia as perguntas de uma partida: N por região, regiões na ordem da jornada
+  async drawForRound(perRegion = QUESTIONS_PER_REGION): Promise<number[]> {
+    const rows = await this.repo.find({ select: { id: true, region: true } })
+    const ids: number[] = []
+    for (let region = 0; region < REGIONS.length; region++) {
+      const pool = rows.filter(r => r.region === region).map(r => r.id)
+      ids.push(...shuffle(pool).slice(0, perRegion))
     }
+    if (ids.length === 0) throw new NotFoundError('Nenhuma pergunta cadastrada. Rode "npm run seed".')
+    return ids
+  }
 
-    // Método para buscar todas as perguntas
-    async findAll() {
-        // Verifica se a pergunta existe
-        const questions = await this.questionRepository.find({ select: { id: true, question: true }, relations: ['answers'] });
-        if (!questions) throw new Error('Pergunta não encontrada');
+  async findWithAnswers(id: number, manager?: EntityManager): Promise<Question> {
+    const repo = manager ? manager.getRepository(Question) : this.repo
+    const question = await repo.findOne({ where: { id }, relations: { answers: true } })
+    if (!question) throw new NotFoundError('Pergunta não encontrada')
+    return question
+  }
 
-        return questions;
-
-    }
-
-    // Método para validar se a resposta está correta
-    async validateQuestion(data: { questionId: number; answerId: number }) {
-        // Verifica se a pergunta existe
-        const question = await this.questionRepository.find({ where: { id: data.questionId } });
-        if (question.length === 0) return { message: 'Pergunta não encontrada.', isCorrect: false };
-
-        // Verifica se a pergunta existe e trás junto as alternativas
-        // para verificar se a alternativa pertence a pergunta
-        const searchQuestion = await this.questionRepository.findOne({ where: { id: data.questionId }, relations: ['answers'] });
-        if (!searchQuestion) return { message: 'Pergunta não encontrada.', isCorrect: false };
-
-        // Verifica se a resposta existe
-        const answer = await this.answerRepository.find({ where: { id: data.answerId } });
-        if (answer.length === 0) return { message: 'Resposta não encontrada.', isCorrect: false };
-
-        // Verifica se a resposta pertence a pergunta
-        const searchAnswer = searchQuestion.answers.find(a => a.id === data.answerId);
-        if (!searchAnswer) return { message: 'Resposta incorreta.', isCorrect: false };
-
-        // Retorna se a resposta está correta, com a pergunta, resposta e a mensagem
-        const result = {
-            question, answer,
-            message: searchAnswer.correct ? 'Resposta correta!' : 'Resposta incorreta.', isCorrect: searchAnswer.correct
-        };
-
-        return result;
-    }
-
+  // Região de cada pergunta (para o cliente saber onde a jornada muda de região)
+  async regionsOf(ids: number[]): Promise<number[]> {
+    if (ids.length === 0) return []
+    const rows = await this.repo.find({ select: { id: true, region: true }, where: ids.map(id => ({ id })) })
+    const byId = new Map(rows.map(r => [r.id, r.region]))
+    return ids.map(id => byId.get(id) ?? 0)
+  }
 }

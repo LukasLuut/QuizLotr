@@ -1,32 +1,22 @@
 import jwt from 'jsonwebtoken'
+import { env } from '../config/env'
 
-interface Payload {
-  id: number
-  name: string
-  email: string
-  score: number
-}
-
-// payload são as informações que enviamos do nosso usuário
-export const generateToken = (payload: Payload) => {
-
-    // o método sign de JWT que retorna o toker JWT
-    // enviamos as informaçãoes do usuário (payload)
-    // o nosso secret
-    // e a informação de quando expira
-  return jwt.sign(payload, process.env.JWT_SECRET!, {
-    expiresIn: Number(process.env.JWT_EXPIRES_IN)
+// O token carrega só o id do usuário (sub). Nome, e-mail e pontuação
+// são buscados no banco quando necessário, para nunca ficarem desatualizados no token.
+export const generateToken = (userId: number) => {
+  return jwt.sign({ sub: String(userId) }, env.jwtSecret, {
+    algorithm: 'HS256',
+    expiresIn: env.jwtExpiresIn,
   })
 }
 
-export const verifyToken = (token: string) => {
-    try {
-        // valida o token que estamos passando
-        // se for válido, retorna as informações decodificadas do payload (no nosso caso, id e email)
-        return jwt.verify(token, process.env.JWT_SECRET!)
-    }
-    catch (err: any) {
-        // se for válido, retorna null
-        return null;
-    }
+// Retorna o id do usuário se o token for válido, ou null se inválido/expirado
+export const verifyToken = (token: string): number | null => {
+  try {
+    const payload = jwt.verify(token, env.jwtSecret, { algorithms: ['HS256'] })
+    const id = typeof payload === 'object' ? Number(payload.sub) : NaN
+    return Number.isInteger(id) && id > 0 ? id : null
+  } catch {
+    return null
+  }
 }

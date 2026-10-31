@@ -1,12 +1,18 @@
 // src/server.ts
 import app from './app'
+import { env } from './config/env'
 import { AppDataSource } from './data-source'
+import { seedQuestions } from './seeds/seed'
 
-const PORT = process.env.PORT || 3000
+async function bootstrap() {
+  await AppDataSource.initialize()
+  // Aplica migrations pendentes e garante o banco de perguntas
+  await AppDataSource.runMigrations()
+  await seedQuestions(AppDataSource)
+  app.listen(env.port, () => console.log(`Servidor rodando na porta ${env.port}`))
+}
 
-AppDataSource.initialize()
-  .then(async () => {
-    await AppDataSource.runMigrations();
-    app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`))
-  })
-  .catch(err => console.error('Erro ao conectar no banco:', err))
+bootstrap().catch(err => {
+  console.error('Falha ao iniciar o servidor:', err)
+  process.exit(1)
+})
