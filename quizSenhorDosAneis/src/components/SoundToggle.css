@@ -1,6 +1,7 @@
 .sound-toggle {
   position: fixed;
-  right: calc(12px + env(safe-area-inset-right, 0px));
+  /* canto inferior esquerdo */
+  left: calc(12px + env(safe-area-inset-left, 0px));
   bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   z-index: var(--z-hud);
   display: flex;
@@ -40,7 +41,6 @@
 @media (max-width: 640px) {
   .sound-toggle {
     bottom: auto;
-    right: auto;
     top: calc(14px + env(safe-area-inset-top, 0px));
     left: calc(14px + env(safe-area-inset-left, 0px));
   }

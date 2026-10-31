@@ -26,10 +26,11 @@
   padding: max(24px, 4dvh) max(16px, 2vw);
 }
 
-/* as três colunas com a mesma altura do quadro central */
+/* as três colunas com a mesma altura do quadro central; sobra espaço embaixo
+   para o botão de som no canto inferior esquerdo */
 .box-lateral,
 .box-lateral-r {
-  height: min(86dvh, 820px);
+  height: min(86dvh, 820px, calc(100dvh - 130px));
 }
 
 .box-lateral,
