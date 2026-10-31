@@ -20,7 +20,7 @@ function answerStatus(answerId, { phase, selectedId, result }) {
  * Quadro central: mapa da jornada, pergunta e alternativas.
  * Não guarda estado do jogo; tudo vem do useGameSession.
  */
-function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, onArrive }) {
+function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, onArrive, onDebugSkip }) {
   const { phase, question, region, targetRegion, fresh } = game;
   const payload = question?.question;
   const showQuestion = SHOWS_QUESTION.has(phase) && payload;
@@ -87,6 +87,13 @@ function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, o
                 );
               })}
             </div>
+
+            {/* SÓ PARA TESTES: aparece apenas no npm run dev, não vai para o build de produção */}
+            {import.meta.env.DEV && onDebugSkip && phase === "answering" && (
+              <button type="button" className="debug-skip" onClick={onDebugSkip}>
+                Avançar (teste)
+              </button>
+            )}
           </>
         )}
       </div>

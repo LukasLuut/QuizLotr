@@ -199,6 +199,32 @@ export function useGameSession({ mode = "normal", resume = false, paused = false
     [state.phase, paused, roundId, questionId]
   );
 
+  // SÓ PARA TESTES (desenvolvimento): responde no servidor o resto da região atual
+  // (sempre a 1ª alternativa) e vai direto para a viagem do mapa
+  const debugSkipRegion = useCallback(async () => {
+    if (state.phase !== "answering" || busy.current || !roundId) return;
+    busy.current = true;
+    dispatch({ type: "answer-sent", answerId: null });
+    try {
+      let result = null;
+      let answered = state.round.answered;
+      while (answered < state.round.total && regionOf(state.round, answered) === state.region) {
+        const q = await api.question(roundId);
+        result = await api.answer(roundId, q.question.id, q.question.answers[0].id);
+        answered = result.answered;
+        if (result.status !== "active") break;
+      }
+      if (result) {
+        dispatch({ type: "answer-result", result });
+        dispatch({ type: "feedback-done" });
+      }
+    } catch (err) {
+      dispatch({ type: "error", message: err.message, retryPhase: "question-loading" });
+    } finally {
+      busy.current = false;
+    }
+  }, [state.phase, state.round, state.region, roundId]);
+
   const restart = useCallback(async () => {
     try {
       if (roundId && state.round?.status === "active") await api.abandon(roundId);
@@ -219,5 +245,6 @@ export function useGameSession({ mode = "normal", resume = false, paused = false
     achievementShown: useCallback((code) => dispatch({ type: "achievement-shown", code }), []),
     retry: useCallback(() => dispatch({ type: "retry" }), []),
     restart,
+    debugSkipRegion,
   };
 }

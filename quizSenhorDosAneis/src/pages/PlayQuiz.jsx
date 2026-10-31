@@ -175,7 +175,7 @@ function PlayQuiz() {
         </div>
 
         <div className="box-question-center">
-          <QuizContainer game={state} paused={menuOpen} onAnswer={game.answer} onTimeout={game.timeout} onAdvance={game.startTravel} onArrive={game.arrived} />
+          <QuizContainer game={state} paused={menuOpen} onAnswer={game.answer} onTimeout={game.timeout} onAdvance={game.startTravel} onArrive={game.arrived} onDebugSkip={game.debugSkipRegion} />
         </div>
 
         <div className="box-lateral-r">
