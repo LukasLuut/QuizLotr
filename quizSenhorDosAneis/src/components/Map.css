@@ -19,6 +19,13 @@
   animation: advance-in 0.5s ease both;
 }
 
+/* sempre dourado (mesmo visual do hover), para chamar atenção para a viagem */
+.btn-menu.btn-next-map,
+.btn-menu.btn-next-map:hover:not(:disabled) {
+  background-image: url("../assets/images/button/btn-dourado.png");
+  color: rgb(187, 139, 17);
+}
+
 @keyframes advance-in {
   from {
     opacity: 0;
