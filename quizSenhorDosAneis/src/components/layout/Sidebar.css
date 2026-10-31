@@ -19,8 +19,10 @@
   padding: 6% 9%;
 }
 
+/* foto com o aro: 20% menor que antes (34% -> 27,2%), centralizada na altura da placa */
 .player-avatar {
-  width: 34%;
+  width: 27.2%;
+  align-self: center;
 }
 
 .player-text {
@@ -165,7 +167,7 @@
   }
 
   .player-avatar {
-    width: 64px;
+    width: 51px;
   }
 
   .match-card {
