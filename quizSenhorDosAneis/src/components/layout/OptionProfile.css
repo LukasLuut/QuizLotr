@@ -3,12 +3,13 @@
   position: relative;
   --w: min(900px, calc(100vw - 32px));
   width: var(--w);
-  aspect-ratio: 1956 / 1287;
+  /* um pouco mais alta que a moldura original, para os botões não encostarem na base */
+  aspect-ratio: 1956 / 1400;
   max-height: calc(100dvh - 32px);
   background-image: url("../../assets/images/box/box-lateral-girado.webp");
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  padding: calc(var(--w) * 0.07) calc(var(--w) * 0.16) calc(var(--w) * 0.06);
+  padding: calc(var(--w) * 0.07) calc(var(--w) * 0.16) calc(var(--w) * 0.095);
   color: aliceblue;
   display: flex;
   flex-direction: column;
