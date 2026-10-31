@@ -50,13 +50,13 @@
   overflow: hidden;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 1);
   flex: 0 1 auto;
-  transition: height 0.4s ease;
+  /* crescimento animado pelo flex-grow (numérico); height: auto não anima */
+  transition: flex-grow 0.8s cubic-bezier(0.22, 1, 0.36, 1), height 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Sem pergunta na tela (carregando, entre regiões, viagem): o mapa ocupa o espaço */
+/* Sem pergunta na tela (entre regiões, viagem): o mapa se estende até ocupar o espaço livre */
 .quiz-image--full {
-  flex: 1 1 auto;
-  height: auto;
+  flex-grow: 1;
 }
 
 .quiz-body {
