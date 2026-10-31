@@ -2,6 +2,8 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator'
 import { NAME_PATTERN, PASSWORD_RULES } from './CreateUserDTO'
 
+export const AVATAR_MAX_LENGTH = 400_000
+
 // Mesmas regras do cadastro, mas todos os campos são opcionais.
 // Qualquer outro campo (id, score...) é rejeitado pelo validateDTO.
 export class UpdateUserDTO {
@@ -26,4 +28,11 @@ export class UpdateUserDTO {
   @Matches(PASSWORD_RULES[2][0], { message: PASSWORD_RULES[2][1] })
   @Matches(PASSWORD_RULES[3][0], { message: PASSWORD_RULES[3][1] })
   password?: string
+
+  // Foto de perfil reduzida no navegador (até ~300 KB). null remove a foto.
+  @IsOptional()
+  @IsString({ message: 'Imagem inválida' })
+  @MaxLength(AVATAR_MAX_LENGTH, { message: 'A imagem é grande demais (máx. 300 KB)' })
+  @Matches(/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/, { message: 'A imagem deve ser PNG, JPEG ou WebP' })
+  avatar?: string | null
 }

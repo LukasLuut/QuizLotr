@@ -130,3 +130,28 @@ describe('partida', () => {
     expect((await api().get(`/rounds/${round.body.id}/question`).set(auth(p.token))).status).toBe(409)
   })
 })
+
+describe('pausa (menu aberto)', () => {
+  it('o tempo pausado não esgota o limite do modo desafio', async () => {
+    const { AppDataSource } = await import('../src/data-source')
+    const { Round } = await import('../src/models/Round')
+    const p = await createPlayer()
+    const round = await api().post('/rounds').set(auth(p.token)).send({ mode: 'desafio' })
+    const q = await api().get(`/rounds/${round.body.id}/question`).set(auth(p.token))
+    await api().post(`/rounds/${round.body.id}/pause`).set(auth(p.token)).expect(200)
+
+    // simula 5 minutos de menu aberto
+    const repo = AppDataSource.getRepository(Round)
+    const r = await repo.findOneByOrFail({ id: round.body.id })
+    const shift = 5 * 60 * 1000
+    await repo.update(r.id, { pausedAt: new Date(r.pausedAt!.getTime() - shift), currentServedAt: new Date(r.currentServedAt!.getTime() - shift) })
+
+    await api().post(`/rounds/${round.body.id}/resume`).set(auth(p.token)).expect(200)
+    const res = await api()
+      .post(`/rounds/${round.body.id}/answer`)
+      .set(auth(p.token))
+      .send({ questionId: q.body.question.id, answerId: await correctAnswerId(q.body.question.id) })
+    expect(res.body.timeExpired).toBe(false)
+    expect(res.body.isCorrect).toBe(true)
+  })
+})

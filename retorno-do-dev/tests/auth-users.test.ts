@@ -104,3 +104,23 @@ describe('conta do jogador', () => {
     expect((await api().get('/users/me').set(auth(p.token))).status).toBe(404)
   })
 })
+
+describe('foto de perfil', () => {
+  const tinyPng =
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+
+  it('salva, devolve e remove a foto', async () => {
+    const p = await createPlayer()
+    const saved = await api().put('/users/me').set(auth(p.token)).send({ avatar: tinyPng })
+    expect(saved.status).toBe(200)
+    expect(saved.body.avatar).toBe(tinyPng)
+    const removed = await api().put('/users/me').set(auth(p.token)).send({ avatar: null })
+    expect(removed.body.avatar).toBeNull()
+  })
+
+  it('rejeita o que não é imagem', async () => {
+    const p = await createPlayer()
+    const res = await api().put('/users/me').set(auth(p.token)).send({ avatar: 'data:text/html;base64,PHNjcmlwdD4=' })
+    expect(res.status).toBe(400)
+  })
+})

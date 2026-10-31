@@ -25,11 +25,11 @@ function PlayQuiz() {
   const { user, refreshUser } = useAuth();
   const { playMusic, playSfx } = useAudio();
   const { mode = "normal", resume = false } = location.state || {};
-  const game = useGameSession({ mode, resume });
+  const [menuOpen, setMenuOpen] = useState(false);
+  const game = useGameSession({ mode, resume, paused: menuOpen });
   const { state } = game;
   const { phase, round, region, result } = state;
 
-  const [menuOpen, setMenuOpen] = useState(false);
   const [peek, setPeek] = useState(false); // esconde a UI para ver a paisagem
   const peekTimer = useRef(null);
 
@@ -116,22 +116,18 @@ function PlayQuiz() {
       <button type="button" className={`toggle-overlay-btn ${uiHidden ? "hidden-ui" : "visible-ui"}`} onClick={handlePeek} disabled={uiHidden}>
         <span aria-hidden="true">👁</span> Ver paisagem
       </button>
-      <button type="button" className={`menu-open-btn ${uiHidden ? "hidden-ui" : "visible-ui"}`} onClick={() => setMenuOpen(true)}>
-        Menu <kbd>Esc</kbd>
-      </button>
 
       <Menu
         isOpen={menuOpen}
         onClose={() => setMenuOpen(false)}
         onRestart={handleRestart}
         onLeave={goProfile}
-        timedMode={round?.timeLimitSeconds != null}
       />
 
       <div className={`quiz-page ${uiHidden ? "hidden-ui" : "visible-ui"}`} aria-hidden={uiHidden}>
         <div className="box-lateral">
           <Sidebar
-            playerName={user?.name}
+            player={user}
             round={round}
             region={region}
             lastCorrect={result ? result.isCorrect : null}
@@ -140,7 +136,7 @@ function PlayQuiz() {
         </div>
 
         <div className="box-question-center">
-          <QuizContainer game={state} onAnswer={game.answer} onTimeout={game.timeout} onAdvance={game.startTravel} onArrive={game.arrived} />
+          <QuizContainer game={state} paused={menuOpen} onAnswer={game.answer} onTimeout={game.timeout} onAdvance={game.startTravel} onArrive={game.arrived} />
         </div>
 
         <div className="box-lateral-r">

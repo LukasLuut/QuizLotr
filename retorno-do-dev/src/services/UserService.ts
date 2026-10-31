@@ -10,6 +10,7 @@ export interface PublicUser {
   name: string
   email: string
   bestScore: number
+  avatar: string | null
   createdAt: Date
 }
 
@@ -20,6 +21,7 @@ export function toPublicUser(user: User): PublicUser {
     name: user.name,
     email: user.email,
     bestScore: user.bestScore,
+    avatar: user.avatar ?? null,
     createdAt: user.createdAt,
   }
 }
@@ -79,6 +81,7 @@ export class UserService {
       }
     }
     if (data.password !== undefined) user.password = await User.hashPassword(data.password)
+    if (data.avatar !== undefined) user.avatar = data.avatar
 
     await this.userRepository.save(user)
     return this.findById(id)

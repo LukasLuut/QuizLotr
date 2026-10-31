@@ -28,6 +28,14 @@ export class RoundController {
     res.json(await service.answer(req.user!.id, roundId(req), questionId, answerId ?? null))
   }
 
+  async pause(req: Request, res: Response) {
+    res.json(await service.pause(req.user!.id, roundId(req)))
+  }
+
+  async resume(req: Request, res: Response) {
+    res.json(await service.resume(req.user!.id, roundId(req)))
+  }
+
   async abandon(req: Request, res: Response) {
     res.json(await service.abandon(req.user!.id, roundId(req)))
   }

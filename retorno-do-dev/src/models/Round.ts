@@ -37,6 +37,10 @@ export class Round {
   @Column({ type: 'datetime', precision: 3, nullable: true })
   currentServedAt: Date | null
 
+  // Menu aberto (Esc): o relógio da pergunta fica parado desde este momento
+  @Column({ type: 'datetime', precision: 3, nullable: true })
+  pausedAt: Date | null
+
   @Column({ type: 'int', default: 0 })
   scoreRound: number
 

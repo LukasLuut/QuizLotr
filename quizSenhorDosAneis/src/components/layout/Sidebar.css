@@ -1,76 +1,113 @@
-/* Painel do jogador: moldura de madeira em pé no desktop, faixa compacta no celular */
+/* Coluna do jogador: placa de identidade em cima, painel da partida embaixo */
 .sidebar {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1287 / 1956;
-  max-height: calc(100dvh - 48px);
-  background-image: url("../../assets/images/box/box-lateral.webp");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  color: aliceblue;
   display: flex;
   flex-direction: column;
-  padding: 18% 14% 14%;
-  gap: 4%;
-  filter: drop-shadow(0px 0px 15px rgb(0, 0, 0));
+  gap: 12px;
+  width: 100%;
+  max-height: calc(100dvh - 48px);
+  color: aliceblue;
+  filter: drop-shadow(0 0 15px rgb(0, 0, 0));
 }
 
-.player-info {
+/* 1) Placa de metal e madeira (box-aviso, 1000x449) */
+.player-card {
+  aspect-ratio: 1000 / 449;
+  background: url("../../assets/images/box/box-aviso.webp") center / 100% 100% no-repeat;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-family: var(--font-title);
-  color: goldenrod;
+  gap: 6%;
+  padding: 6% 9%;
 }
 
-.border-profile-side {
-  width: 32%;
-  flex: none;
-  filter: drop-shadow(5px 2px 5px rgb(0, 0, 0));
+.player-avatar {
+  width: 34%;
 }
 
-.player-name {
+.player-text {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-weight: 100;
-  font-size: clamp(16px, 1.5vw, 22px);
+}
+
+.player-name {
+  font-family: var(--font-title);
+  font-weight: 400;
+  color: goldenrod;
+  font-size: clamp(15px, 1.3vw, 21px);
   line-height: 1.1;
-  min-width: 0;
   overflow-wrap: anywhere;
 }
 
 .span-title {
-  color: aliceblue;
-  font-family: var(--font-body);
-  font-size: clamp(11px, 0.9vw, 14px);
+  color: var(--color-text-main);
+  font-size: clamp(11px, 0.85vw, 14px);
+  line-height: 1.2;
 }
 
-.box-state-atual {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* 2) Painel da partida (box-lateral, 1287x1956) */
+.match-card {
   flex: 1;
   min-height: 0;
+  aspect-ratio: 1287 / 1956;
+  max-height: 100%;
+  background: url("../../assets/images/box/box-lateral.webp") center / 100% 100% no-repeat;
+  padding: 16% 15% 13%;
+  display: flex;
+}
+
+.match-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 16px);
   font-family: var(--font-title);
-  font-size: clamp(14px, 1.2vw, 18px);
-  filter: drop-shadow(0px 2px 5px rgb(0, 0, 0));
+  font-size: clamp(13px, 1.05vw, 17px);
+  filter: drop-shadow(0 2px 5px rgb(0, 0, 0));
 }
 
 .region-now {
   font-family: var(--font-display);
   color: var(--color-gold);
   font-size: clamp(18px, 1.6vw, 26px);
+  line-height: 1.1;
+  text-align: center;
+}
+
+.match-stats {
+  display: grid;
+  gap: 6px;
+}
+
+.match-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.match-stat dt {
+  color: var(--color-text-muted);
+}
+
+.match-stat dd {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .lives {
   color: #e2463c;
-  font-size: 22px;
-  letter-spacing: 4px;
+  letter-spacing: 3px;
 }
 
 .lives-lost {
   color: rgba(255, 255, 255, 0.25);
+}
+
+.progress p {
+  display: flex;
+  justify-content: space-between;
 }
 
 .progress-bar {
@@ -92,11 +129,12 @@
 .message {
   font-size: 0.9em;
   color: var(--color-text-main);
+  text-align: center;
 }
 
 .cronometro-sidebar {
   flex: 1;
-  min-height: 0;
+  min-height: 70px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -105,35 +143,38 @@
 .cronometro-sidebar .conometro-box {
   width: auto;
   height: 100%;
-  max-height: 180px;
+  max-height: 170px;
 }
 
+/* Tablet e celular: as duas caixas lado a lado, em faixa */
 @media (max-width: 1023px) {
   .sidebar {
-    aspect-ratio: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
     max-height: none;
+  }
+
+  .player-card {
+    flex: 1 1 260px;
+    max-width: 420px;
+  }
+
+  .match-card {
+    flex: 2 1 320px;
+    aspect-ratio: auto;
     background-image: url("../../assets/images/box/box-lateral-girado.webp");
-    padding: 18px 8%;
+    padding: 22px 8%;
+  }
+
+  .match-content {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px 16px;
+    gap: 8px 18px;
   }
 
-  .player-info {
-    flex: 1 1 200px;
-  }
-
-  .border-profile-side {
-    width: 54px;
-  }
-
-  .box-state-atual {
-    flex: 2 1 260px;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 16px;
+  .match-stats {
+    flex: 1 1 140px;
   }
 
   .progress {
@@ -146,6 +187,7 @@
 
   .cronometro-sidebar {
     flex: none;
-    height: 70px;
+    height: 72px;
+    min-height: 0;
   }
 }

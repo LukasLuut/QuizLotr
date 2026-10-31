@@ -9,7 +9,7 @@ import TemCerteza from "../TemCerteza";
  * Menu de pausa (Esc). "Salvar e sair" mantém a partida para continuar depois;
  * "Reiniciar" encerra a atual e começa outra, sem recarregar a página.
  */
-function Menu({ isOpen, onClose, onRestart, onLeave, timedMode }) {
+function Menu({ isOpen, onClose, onRestart, onLeave }) {
   const titleId = useId();
   const [confirmRestart, setConfirmRestart] = useState(false);
 
@@ -19,7 +19,7 @@ function Menu({ isOpen, onClose, onRestart, onLeave, timedMode }) {
         <img className="img-box-menu" src={bgMenu} alt="" />
         <div className="box-menu-content">
           <h1 id={titleId}>Menu</h1>
-          {timedMode && <p className="menu-note">No modo Desafio o tempo da pergunta não para.</p>}
+          <p className="menu-note">Jogo pausado</p>
           <div className="box-btn">
             <Button onClick={onClose}>Continuar</Button>
             <Button onClick={() => setConfirmRestart(true)}>Reiniciar</Button>

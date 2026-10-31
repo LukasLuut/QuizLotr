@@ -102,11 +102,15 @@
   text-shadow: 1px 1px 2px #000;
 }
 
-html,
-body {
-  margin: 0;
+/* O fundo fica só no html: com fundo no body, os vídeos de fundo (z-index negativo)
+   ficavam escondidos atrás dele assim que o fade-in da página terminava. */
+html {
   min-height: 100%;
   background: var(--color-bg-body);
+  overflow-x: hidden;
+}
+body {
+  min-height: 100%;
   color: var(--color-text-main);
   font-family: var(--font-body);
   overflow-x: hidden;
@@ -122,53 +126,39 @@ button {
   color: inherit;
 }
 
-/* Cursor temático: uma regra só, com fallback nativo. Inputs mantêm o cursor de texto. */
+/* Cursor temático em toda a janela: a mão do Sauron, com a versão de clique enquanto
+   o botão do mouse está pressionado. Todo elemento herda o cursor do html (inclusive
+   botões desabilitados, campos de texto e o mapa do Leaflet, que define o próprio cursor). */
 html {
   cursor: url("./assets/cursor/sauron-hand-icon-cursor-normal-final.png") 8 8, auto;
 }
 html:active {
   cursor: url("./assets/cursor/sauron-hand-icon-cursor-click-final.png") 8 8, auto;
 }
-button,
-a,
-[role="button"],
-label,
-select,
-.leaflet-interactive,
-.leaflet-marker-icon {
-  cursor: url("./assets/cursor/sauron-hand-icon-cursor-normal-final.png") 8 8, pointer;
-}
-button:active,
-a:active,
-[role="button"]:active {
-  cursor: url("./assets/cursor/sauron-hand-icon-cursor-click-final.png") 8 8, pointer;
-}
-input,
-textarea {
-  cursor: text;
-}
-button:disabled {
-  cursor: not-allowed;
-}
+*,
+*::before,
+*::after,
+*:disabled,
 .leaflet-container,
-.leaflet-grab {
-  cursor: url("./assets/cursor/sauron-hand-icon-cursor-normal-final.png") 8 8, grab;
-}
+.leaflet-grab,
 .leaflet-grabbing,
-.leaflet-dragging .leaflet-grab {
-  cursor: url("./assets/cursor/sauron-hand-icon-cursor-click-final.png") 8 8, grabbing;
+.leaflet-interactive {
+  cursor: inherit !important;
 }
 
-/* Telas de toque: cursor nativo */
-@media (pointer: coarse) {
-  html,
-  html:active,
-  button,
-  a,
-  [role="button"],
-  .leaflet-container {
-    cursor: auto;
-  }
+/* Botão com aparência de link (login, edição de perfil) */
+.link {
+  margin-top: 12px;
+  border: none;
+  background: none;
+  font-size: 16px;
+  color: var(--color-text-link);
+  text-decoration: underline;
+  text-shadow: 1px 1px 2px var(--shadow-strong);
+}
+
+.link:hover {
+  color: var(--color-text-link-hover);
 }
 
 /* Foco visível para teclado em todos os controles */

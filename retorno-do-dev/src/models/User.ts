@@ -25,6 +25,10 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date
 
+  // Foto de perfil como data URL (image/png|jpeg|webp em base64), já reduzida no cliente
+  @Column({ type: 'mediumtext', nullable: true })
+  avatar: string | null
+
   // Melhor pontuação do jogador em uma partida concluída
   @Column({ type: 'int', default: 0 })
   bestScore: number

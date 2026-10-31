@@ -2,8 +2,6 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import flag from "../assets/images/scroll.webp";
-import borderProfile from "../assets/images/perfil-border.webp";
-import gandalf from "../assets/images/Gandalf.jpg";
 import prologue from "../assets/videos/Prologue.mp4";
 import bgVideo from "../assets/videos/boromir.mp4";
 import bgPoster from "../assets/images/posters/boromir.jpg";
@@ -11,6 +9,9 @@ import Button from "../components/buttons/Button";
 import Modal from "../components/Modal";
 import OptionProfile from "../components/layout/OptionProfile";
 import AchievementsModal from "../components/AchievementsModal";
+import Avatar from "../components/Avatar";
+import PopUpDTO from "../components/PopUpDTO";
+import { resizeImageToDataUrl } from "../utils/image";
 import { useAuth } from "../context/AuthContext";
 import { useAudio } from "../context/AudioContext";
 import { api } from "../services/api";
@@ -20,7 +21,7 @@ import { clearStoredRound } from "../hooks/useGameSession";
 const shireMusic = REGIONS[0].ambience;
 
 function Profile() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUser } = useAuth();
   const { playMusic } = useAudio();
   const navigate = useNavigate();
   const modeTitleId = useId();
@@ -32,6 +33,9 @@ function Profile() {
   const [showSkip, setShowSkip] = useState(false);
   const [modal, setModal] = useState(null); // null | "edit" | "achievements" | "mode"
   const [currentRound, setCurrentRound] = useState(null);
+  const [popup, setPopup] = useState(null); // { message, variant }
+  const [savingPhoto, setSavingPhoto] = useState(false);
+  const fileRef = useRef(null);
   const pendingNav = useRef(null);
   const videoRef = useRef(null);
   const timers = useRef([]);
@@ -52,6 +56,29 @@ function Profile() {
   }, []);
 
   const later = (fn, ms) => timers.current.push(setTimeout(fn, ms));
+
+  useEffect(() => {
+    if (!popup) return;
+    const t = setTimeout(() => setPopup(null), 3500);
+    return () => clearTimeout(t);
+  }, [popup]);
+
+  // Troca da foto: a imagem é recortada e reduzida no navegador antes de salvar
+  const handlePhoto = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setSavingPhoto(true);
+    try {
+      const avatar = await resizeImageToDataUrl(file);
+      await updateUser({ avatar });
+      setPopup({ message: "Foto de perfil atualizada.", variant: "success" });
+    } catch (err) {
+      setPopup({ message: err.message, variant: "error" });
+    } finally {
+      setSavingPhoto(false);
+    }
+  };
 
   const goToQuiz = () => {
     playMusic(shireMusic);
@@ -105,14 +132,25 @@ function Profile() {
 
   return (
     <div className="bg-black-profile">
+      <PopUpDTO message={popup?.message} variant={popup?.variant} isOpen={!!popup} />
       <div className={`body-container-profile ${fadeIn ? "fade-in-profile" : ""}`}>
         <main className="profile-container">
           <div className="flag-profile">
             <img className="flagg" src={flag} alt="" />
-            <div className="profile-avatar">
-              <img className="img-profile" src={gandalf} alt="" />
-              <img className="border-profile" src={borderProfile} alt="" />
-            </div>
+            <button
+              type="button"
+              className="profile-avatar"
+              onClick={() => fileRef.current?.click()}
+              disabled={savingPhoto}
+              aria-label="Trocar foto de perfil"
+              title="Trocar foto de perfil"
+            >
+              <Avatar src={user?.avatar} name={user?.name} />
+              <span className="profile-avatar-hint" aria-hidden="true">
+                {savingPhoto ? "Salvando..." : "Trocar foto"}
+              </span>
+            </button>
+            <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" className="visually-hidden" tabIndex={-1} onChange={handlePhoto} />
             <div className="profile-info">
               <h1 className="profile-name">{user?.name}</h1>
               <p className="profile-best">Melhor pontuação: {user?.bestScore ?? 0}</p>

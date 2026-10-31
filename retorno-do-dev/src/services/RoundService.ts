@@ -120,7 +120,7 @@ export class RoundService {
       }
       const question = await this.questions.findWithAnswers(questionId, manager)
       const limit = MODE_RULES[round.mode].timeLimitSeconds
-      const elapsed = secondsBetween(round.currentServedAt, new Date())
+      const elapsed = secondsBetween(round.currentServedAt, round.pausedAt ?? new Date())
 
       return {
         index: round.currentIndex,
@@ -147,7 +147,12 @@ export class RoundService {
       const chosen = answerId === null ? null : question.answers.find(a => a.id === answerId)
       if (answerId !== null && !chosen) throw new BadRequestError('Alternativa não pertence a esta pergunta')
 
+      // Responder com o menu aberto retoma o relógio antes de calcular o tempo
       const now = new Date()
+      if (round.pausedAt) {
+        round.currentServedAt = new Date(round.currentServedAt.getTime() + (now.getTime() - round.pausedAt.getTime()))
+        round.pausedAt = null
+      }
       const elapsed = secondsBetween(round.currentServedAt, now)
       const timeExpired = answerId === null || isTimeExpired(round.mode, elapsed)
       const isCorrect = !timeExpired && !!chosen?.correct
@@ -239,6 +244,32 @@ export class RoundService {
 
     const ended = result.round.status !== 'active'
     return { ...result.response, summary: ended ? await this.summary(userId, roundId) : null }
+  }
+
+  // Menu aberto (Esc): congela o relógio da pergunta atual
+  async pause(userId: number, roundId: number) {
+    return AppDataSource.transaction(async manager => {
+      const round = await this.findOwned(userId, roundId, manager, true)
+      if (round.status === 'active' && !round.pausedAt) {
+        await manager.getRepository(Round).update(round.id, { pausedAt: new Date() })
+      }
+      return { paused: round.status === 'active' }
+    })
+  }
+
+  // Menu fechado: o tempo parado não conta para o bônus nem para o limite do modo Desafio
+  async resume(userId: number, roundId: number) {
+    return AppDataSource.transaction(async manager => {
+      const round = await this.findOwned(userId, roundId, manager, true)
+      if (round.pausedAt) {
+        const now = new Date()
+        const servedAt = round.currentServedAt
+          ? new Date(round.currentServedAt.getTime() + (now.getTime() - round.pausedAt.getTime()))
+          : null
+        await manager.getRepository(Round).update(round.id, { pausedAt: null, currentServedAt: servedAt })
+      }
+      return { paused: false }
+    })
   }
 
   // Abandona a partida (Reiniciar / Sair): ela deixa de valer para o ranking

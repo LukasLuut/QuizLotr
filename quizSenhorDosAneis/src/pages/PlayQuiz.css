@@ -142,8 +142,7 @@
 }
 
 /* Botões fixos no topo */
-.toggle-overlay-btn,
-.menu-open-btn {
+.toggle-overlay-btn {
   position: fixed;
   top: calc(14px + env(safe-area-inset-top, 0px));
   z-index: var(--z-hud);
@@ -160,21 +159,7 @@
   right: calc(14px + env(safe-area-inset-right, 0px));
 }
 
-.menu-open-btn {
-  left: calc(14px + env(safe-area-inset-left, 0px));
-}
-
-.menu-open-btn kbd {
-  font-family: var(--font-body);
-  font-size: 11px;
-  padding: 1px 5px;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  margin-left: 4px;
-}
-
-.toggle-overlay-btn:hover,
-.menu-open-btn:hover {
+.toggle-overlay-btn:hover {
   transform: scale(1.05);
   background: rgba(0, 0, 0, 0.8);
 }
@@ -214,10 +199,8 @@
     order: 3;
     aspect-ratio: auto;
     max-height: none;
-    border-radius: 16px;
-    background: rgba(20, 12, 5, 0.85);
-    border: 2px solid rgba(201, 162, 39, 0.5);
-    padding: 16px;
+    background: url("../assets/images/box/box-lateral-girado.webp") center / 100% 100% no-repeat;
+    padding: 28px 9%;
   }
 
   .box-lateral-img {

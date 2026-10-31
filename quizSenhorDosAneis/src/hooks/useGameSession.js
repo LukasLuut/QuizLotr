@@ -110,7 +110,7 @@ export function gameReducer(state, action) {
  * Sessão de jogo ligada à API de partidas.
  * mode: "normal" | "desafio" (só para partida nova); resume: tenta continuar a partida ativa.
  */
-export function useGameSession({ mode = "normal", resume = false } = {}) {
+export function useGameSession({ mode = "normal", resume = false, paused = false } = {}) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
   const init = useRef(null);
   const busy = useRef(false); // trava síncrona contra clique duplo
@@ -158,8 +158,16 @@ export function useGameSession({ mode = "normal", resume = false } = {}) {
     return () => controller.abort();
   }, [state.phase, roundId]);
 
-  // Tempo de mostrar o resultado da resposta e o título da região
+  // Menu aberto (Esc): o servidor congela o relógio da pergunta
+  const roundActive = state.round?.status === "active";
   useEffect(() => {
+    if (!roundId || !roundActive) return;
+    (paused ? api.pause(roundId) : api.resume(roundId)).catch(() => {});
+  }, [paused, roundId, roundActive]);
+
+  // Tempo de mostrar o resultado da resposta e o título da região (parado enquanto pausado)
+  useEffect(() => {
+    if (paused) return;
     if (state.phase === "feedback") {
       const ms = state.result?.isCorrect ? FEEDBACK_MS.correct : FEEDBACK_MS.wrong;
       const t = setTimeout(() => dispatch({ type: "feedback-done" }), ms);
@@ -169,14 +177,14 @@ export function useGameSession({ mode = "normal", resume = false } = {}) {
       const t = setTimeout(() => dispatch({ type: "scene-done" }), SCENE_MS);
       return () => clearTimeout(t);
     }
-  }, [state.phase, state.result]);
+  }, [state.phase, state.result, paused]);
 
   const questionId = state.question?.question?.id;
 
   // answerId null = tempo esgotado
   const answer = useCallback(
     async (answerId) => {
-      if (state.phase !== "answering" || busy.current || !questionId) return;
+      if (state.phase !== "answering" || paused || busy.current || !questionId) return;
       busy.current = true;
       dispatch({ type: "answer-sent", answerId });
       try {
@@ -188,7 +196,7 @@ export function useGameSession({ mode = "normal", resume = false } = {}) {
         busy.current = false;
       }
     },
-    [state.phase, roundId, questionId]
+    [state.phase, paused, roundId, questionId]
   );
 
   const restart = useCallback(async () => {

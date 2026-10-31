@@ -22,87 +22,106 @@
   z-index: -1;
 }
 
-/* Card central com o resumo da partida */
+/* Resumo da partida dentro do escudo (box-conquista); o título fica na faixa vermelha do topo */
+.victory-overlay {
+  flex-direction: column;
+  gap: 4px;
+}
+
 .victory-card {
   position: relative;
-  width: min(560px, 100%);
-  margin: auto;
-  padding: clamp(20px, 4vw, 32px);
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(42, 28, 14, 0.94), rgba(20, 12, 5, 0.94));
-  border: 2px solid rgba(201, 162, 39, 0.7);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+  width: min(440px, 100%, calc((100dvh - 150px) * 1287 / 1956));
+  aspect-ratio: 1287 / 1956;
+  flex: none;
+  background: url("../../assets/images/box/box-conquista.webp") center / 100% 100% no-repeat;
+  padding: 1.2% 12% 18%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4%;
   color: goldenrod;
   text-align: center;
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.9));
   animation: final-scale 0.4s ease forwards;
 }
 
 .victory-img {
-  width: min(220px, 50%);
+  width: min(170px, 34vw);
   height: auto;
-  margin: -70px auto 4px;
-  display: block;
+  margin-bottom: -28px;
+  position: relative;
+  z-index: 1;
   filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.9));
 }
 
 .victory-title {
-  font-size: clamp(26px, 6vw, 40px);
+  min-height: 5.6%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(15px, 2.6vw, 22px);
   font-family: var(--font-display);
   font-weight: 100;
+  color: #ffe9b0;
+  text-shadow: 1px 2px 2px #000;
   outline: none;
+  margin-top: 1.6%;
 }
 
 .victory-sub {
-  margin-top: 4px;
-  font-size: 14px;
-  color: var(--color-text-muted);
+  margin-top: 4%;
+  font-size: 13px;
+  color: var(--color-text-main);
+  text-shadow: 1px 1px 2px #000;
 }
 
 .victory-stats {
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 8px;
-  margin: 18px 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 12px;
 }
 
 .victory-stat {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 10px;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(245, 230, 196, 0.15);
 }
 
 .victory-stat .label {
-  font-size: 0.8rem;
-  color: #ccc;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  text-shadow: 1px 1px 2px #000;
 }
 
 .victory-stat .value {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-top: 4px;
+  font-size: clamp(14px, 2.2vw, 18px);
+  font-weight: 700;
   color: var(--color-text-main);
   font-variant-numeric: tabular-nums;
+  text-shadow: 1px 1px 2px #000;
 }
 
 .victory-regions {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 18px;
-  font-size: 14px;
+  font-size: 12px;
   color: var(--color-text-main);
+  text-shadow: 1px 1px 2px #000;
 }
 
 .victory-regions caption {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 16px;
   color: var(--color-gold);
-  margin-bottom: 6px;
+  margin-bottom: 2px;
 }
 
 .victory-regions th,
 .victory-regions td {
-  padding: 4px 8px;
-  border-bottom: 1px solid rgba(245, 230, 196, 0.12);
+  padding: 2px 4px;
   text-align: left;
   font-weight: 400;
 }
@@ -119,8 +138,7 @@
 }
 
 .victory-actions .btn-menu {
-  width: clamp(200px, 40vw, 250px);
-  font-size: clamp(16px, 3.5vw, 22px);
+  width: clamp(220px, 40vw, 280px);
 }
 
 .btn-final {

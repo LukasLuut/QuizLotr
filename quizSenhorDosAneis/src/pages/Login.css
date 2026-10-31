@@ -59,20 +59,6 @@
   max-width: 100%;
 }
 
-.link {
-  margin-top: 12px;
-  border: none;
-  background: none;
-  font-size: 16px;
-  color: var(--color-text-link);
-  text-decoration: underline;
-  text-shadow: 1px 1px 2px var(--shadow-strong);
-}
-
-.link:hover {
-  color: var(--color-text-link-hover);
-}
-
 .bg-video-login {
   position: fixed;
   inset: 0;

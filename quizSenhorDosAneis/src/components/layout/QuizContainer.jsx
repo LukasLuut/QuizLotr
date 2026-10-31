@@ -20,7 +20,7 @@ function answerStatus(answerId, { phase, selectedId, result }) {
  * Quadro central: mapa da jornada, pergunta e alternativas.
  * Não guarda estado do jogo; tudo vem do useGameSession.
  */
-function QuizContainer({ game, onAnswer, onTimeout, onAdvance, onArrive }) {
+function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, onArrive }) {
   const { phase, question, result, region, targetRegion, fresh } = game;
   const payload = question?.question;
   const showQuestion = SHOWS_QUESTION.has(phase) && payload;
@@ -59,16 +59,13 @@ function QuizContainer({ game, onAnswer, onTimeout, onAdvance, onArrive }) {
           <>
             <div className="quiz-question-row">
               <h2 className="quiz-question" id="pergunta-atual">
-                <span className="quiz-counter">
-                  {question.index + 1}/{question.total}
-                </span>{" "}
                 {payload.question}
               </h2>
               {question.timeLimitSeconds && (
                 <QuestionTimer
                   key={payload.id}
                   seconds={question.remainingSeconds ?? question.timeLimitSeconds}
-                  running={phase === "answering"}
+                  running={phase === "answering" && !paused}
                   onExpire={onTimeout}
                 />
               )}

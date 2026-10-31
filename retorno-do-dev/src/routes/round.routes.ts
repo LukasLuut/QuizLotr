@@ -17,6 +17,8 @@ router.get('/current', controller.current.bind(controller))
 router.get('/:id', withId, controller.state.bind(controller))
 router.get('/:id/question', withId, controller.question.bind(controller))
 router.post('/:id/answer', withId, validateDTO(AnswerDTO), controller.answer.bind(controller))
+router.post('/:id/pause', withId, controller.pause.bind(controller))
+router.post('/:id/resume', withId, controller.resume.bind(controller))
 router.post('/:id/abandon', withId, controller.abandon.bind(controller))
 router.get('/:id/summary', withId, controller.summary.bind(controller))
 

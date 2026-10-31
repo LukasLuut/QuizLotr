@@ -1,20 +1,20 @@
+/* Botão menor (btn-marrom-dourado): confirmações, pular intro, fechar */
 .btn {
-  width: 200px;
-  height: 72px;
-  padding: 12px;
+  min-width: 150px;
+  height: 64px;
+  padding: 0 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-display);
   font-weight: 500;
-  background-image: url("../../assets/images/button/btn-marrom-dourado.png");
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-color: transparent;
+  font-size: 17px;
+  line-height: 1;
+  background: url("../../assets/images/button/btn-marrom-dourado.png") center / 100% 100% no-repeat transparent;
   color: var(--color-text-main);
   border: none;
-  border-radius: 5px;
-  font-size: 20px;
   text-shadow: 0 1px 1px var(--shadow-soft);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .btn:hover:not(:disabled),

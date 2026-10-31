@@ -1,18 +1,29 @@
+/* Botão de madeira (btn-marrom 487x120): o texto fica dentro da área lisa do centro,
+   longe das pontas ornamentadas */
 .btn-menu {
-  width: clamp(240px, 80vw, 330px);
-  aspect-ratio: 400 / 105;
-  background-image: url(../../assets/images/button/btn-marrom.png);
-  background-repeat: no-repeat;
-  background-color: transparent;
-  background-size: contain;
-  background-position: center;
+  width: clamp(240px, 80vw, 320px);
+  aspect-ratio: 487 / 120;
+  padding: 0 19%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: url(../../assets/images/button/btn-marrom.png) center / contain no-repeat transparent;
   border: none;
   transition: transform 0.2s ease, filter 0.2s ease, color 0.2s ease;
   font-family: var(--font-display);
-  font-size: clamp(22px, 5vw, 26px);
-  filter: drop-shadow(10px 15px 21px rgba(0, 0, 0, 1));
-  color: rgb(200, 200, 200);
+  font-size: clamp(15px, 3.6vw, 19px);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  filter: drop-shadow(8px 12px 16px rgba(0, 0, 0, 0.95));
+  color: rgb(214, 214, 214);
   text-align: center;
+}
+
+.btn-menu .txt-btn {
+  display: block;
+  max-width: 100%;
+  translate: 0 4%; /* centro óptico da madeira fica um pouco abaixo do centro da imagem */
+  text-wrap: balance;
 }
 
 .btn-menu:hover:not(:disabled),
@@ -20,7 +31,7 @@
   background-image: url(../../assets/images/button/btn-dourado.png);
   transform: translateY(-2px) scale(1.02);
   color: rgb(187, 139, 17);
-  filter: drop-shadow(4px 20px 15px rgba(0, 0, 0, 1));
+  filter: drop-shadow(4px 18px 14px rgba(0, 0, 0, 1));
 }
 
 .btn-menu:disabled {

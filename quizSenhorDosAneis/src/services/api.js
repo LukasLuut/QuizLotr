@@ -121,6 +121,8 @@ export const api = {
   roundState: (id) => request(`/rounds/${id}`),
   question: (id, signal) => request(`/rounds/${id}/question`, { signal }),
   answer: (id, questionId, answerId) => request(`/rounds/${id}/answer`, { method: "POST", body: { questionId, answerId } }),
+  pause: (id) => request(`/rounds/${id}/pause`, { method: "POST" }),
+  resume: (id) => request(`/rounds/${id}/resume`, { method: "POST" }),
   abandon: (id) => request(`/rounds/${id}/abandon`, { method: "POST" }),
   summary: (id) => request(`/rounds/${id}/summary`),
   ranking: (mode = "normal", period = "all", signal) =>
