@@ -1,10 +1,9 @@
-import { MapContainer, ImageOverlay, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, ImageOverlay, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useEffect, useRef } from "react";
 import mapImage from "../assets/images/map.webp";
 import movingMarker from "../lib/leaflet/MovingMarker";
-import shireIconUrl from "../assets/icons/Map Icons/House.png";
 import frodoIconUrl from "../assets/icons/frodo-icon.png";
 import Button from "./buttons/Button";
 import "./Map.css";
@@ -20,13 +19,6 @@ const characterIcon = new L.Icon({
   className: "character-marker",
   iconSize: [48, 48],
   iconAnchor: [24, 44],
-});
-
-const shireIcon = new L.Icon({
-  iconUrl: shireIconUrl,
-  iconSize: [48, 48],
-  iconAnchor: [24, 48],
-  popupAnchor: [0, -40],
 });
 
 // Rotas entre as regiões. paths[r] termina na região r (0 = Condado ... 7 = Montanha da Perdição).
@@ -72,9 +64,6 @@ export default function MapaTerraMedia({ region = 0, targetRegion = null, travel
         {intro && <IntroZoom target={endOf(0)} />}
         <MovingCharacter region={region} targetRegion={targetRegion} travelling={travelling} intro={intro} onArrive={onArrive} />
 
-        <Marker position={[3210, 1520]} icon={shireIcon}>
-          <Popup>Hobbington: “Lar dos Hobbits...”</Popup>
-        </Marker>
       </MapContainer>
 
       {showAdvance && (

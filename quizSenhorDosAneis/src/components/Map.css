@@ -8,11 +8,6 @@
   background: #1b140b;
 }
 
-/* Personagem (Frodo): contorno escuro para destacar sobre o mapa claro */
-.character-marker {
-  filter: drop-shadow(0 0 2px #fff) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
-}
-
 /* "Avançar": mesmo botão de madeira do resto do jogo; aqui só a posição sobre o mapa */
 .btn-menu.btn-next-map {
   position: absolute;

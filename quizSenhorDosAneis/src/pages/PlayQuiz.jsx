@@ -30,8 +30,23 @@ function PlayQuiz() {
   const { state } = game;
   const { phase, round, region, result } = state;
 
-  const [peek, setPeek] = useState(false); // esconde a UI para ver a paisagem
-  const peekTimer = useRef(null);
+  // "Ver paisagem": esconde a UI e mostra o nome do lugar (null | "title" | "fading")
+  const [peek, setPeek] = useState(null);
+  const peekTimers = useRef([]);
+  // Resultado da última resposta (mensagem da caixa da partida): só muda na próxima resposta
+  const [outcome, setOutcome] = useState(null);
+  const roundId = round?.id;
+
+  useEffect(() => {
+    if (phase === "feedback" && result) {
+      setOutcome({ isCorrect: result.isCorrect, timeExpired: result.timeExpired, streak: result.streak, answered: result.answered });
+    }
+  }, [phase, result]);
+
+  // Partida nova (Reiniciar / Jogar novamente) começa sem mensagem
+  useEffect(() => {
+    setOutcome(null);
+  }, [roundId]);
 
   // Ambiência da região atual
   useEffect(() => {
@@ -52,7 +67,7 @@ function PlayQuiz() {
     }
   }, [phase, refreshUser]);
 
-  useEffect(() => () => clearTimeout(peekTimer.current), []);
+  useEffect(() => () => peekTimers.current.forEach(clearTimeout), []);
 
   // Teclado: Esc abre/fecha o menu; 1-4 escolhem a alternativa
   useEffect(() => {
@@ -71,10 +86,16 @@ function PlayQuiz() {
     return () => window.removeEventListener("keydown", onKey);
   }, [phase, menuOpen, state.question, game]);
 
+  // Mesma sequência da versão original: some a UI, o nome do lugar aparece letra a letra,
+  // desaparece e a UI volta
   const handlePeek = () => {
-    setPeek(true);
-    clearTimeout(peekTimer.current);
-    peekTimer.current = setTimeout(() => setPeek(false), 3500);
+    peekTimers.current.forEach(clearTimeout);
+    setPeek("hidden");
+    peekTimers.current = [
+      setTimeout(() => setPeek("title"), 600),
+      setTimeout(() => setPeek("fading"), 2100),
+      setTimeout(() => setPeek(null), 2800),
+    ];
   };
 
   const handleRestart = useCallback(() => {
@@ -103,14 +124,15 @@ function PlayQuiz() {
 
   const inScene = phase === "scene";
   // no fim, o quadro some e o botão "Destruir o Anel" fica sozinho sobre o vídeo
-  const uiHidden = inScene || peek || phase === "finished";
+  const uiHidden = inScene || !!peek || phase === "finished";
+  const showTitle = inScene || peek === "title" || peek === "fading";
 
   return (
     <div className="bg-black-quiz">
       {/* Título da região (narrador) */}
-      {inScene && (
+      {showTitle && (
         <div className="title-scene">
-          <Narrator text={regionAt(region).title} active />
+          <Narrator text={regionAt(region).title} active={peek !== "fading"} />
         </div>
       )}
 
@@ -131,7 +153,7 @@ function PlayQuiz() {
             player={user}
             round={round}
             region={region}
-            lastCorrect={result ? result.isCorrect : null}
+            outcome={outcome}
             timerRunning={!menuOpen && phase !== "finished"}
           />
         </div>

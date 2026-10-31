@@ -14,19 +14,38 @@ function playerTitle(correct, answered) {
   return "Hobbit perdido";
 }
 
-function message(streak, lastCorrect, answered) {
-  if (answered === 0) return "A jornada começa com um passo.";
-  if (streak >= 5) return `${streak} acertos seguidos!`;
-  if (lastCorrect === false) return "Até os sábios erram. Siga em frente.";
-  return "Você está mandando bem!";
+const ACERTOS = [
+  "Muito bem! Gandalf ficaria orgulhoso.",
+  "Resposta digna de um sábio de Valfenda.",
+  "Certeiro como a flecha de Legolas!",
+  "A Sociedade avança com você.",
+  "Bilbo anotaria isso no Livro Vermelho.",
+];
+const ERROS = [
+  "Até os sábios erram. Siga em frente.",
+  "Nem todos os que vagueiam estão perdidos.",
+  "Um tropeço no caminho. Levante-se, hobbit!",
+  "A sombra passou. A próxima é sua.",
+];
+
+// Mensagem da última resposta: só muda quando outra pergunta é respondida
+function message(outcome) {
+  if (!outcome) return "A jornada começa com um passo.";
+  if (outcome.timeExpired) return "O tempo acabou! Mais atenção na próxima.";
+  if (outcome.isCorrect) {
+    if (outcome.streak >= 5) return `${outcome.streak} acertos seguidos!`;
+    return ACERTOS[outcome.answered % ACERTOS.length];
+  }
+  return ERROS[outcome.answered % ERROS.length];
 }
 
 /**
  * Coluna do jogador em duas caixas:
  * 1) placa com a identidade (foto, nome e título);
- * 2) painel da partida (região, pontuação, vidas, progresso, tempo).
+ * 2) painel da partida: região e pontuação no topo, mensagem da última resposta,
+ *    cronômetro e, embaixo, a barra de progresso.
  */
-export default function Sidebar({ player, round, region, lastCorrect, timerRunning }) {
+export default function Sidebar({ player, round, region, outcome, timerRunning }) {
   const answered = round?.answered ?? 0;
   const total = round?.total ?? 0;
   const percent = total > 0 ? Math.round((answered / total) * 100) : 0;
@@ -63,6 +82,14 @@ export default function Sidebar({ player, round, region, lastCorrect, timerRunni
             )}
           </dl>
 
+          <p className={`message ${outcome ? (outcome.isCorrect ? "message-correct" : "message-wrong") : ""}`} aria-live="polite">
+            {message(outcome)}
+          </p>
+
+          <div className="cronometro-sidebar">
+            <Cronometro running={timerRunning} />
+          </div>
+
           <div className="progress">
             <p id="progress-label">
               Progresso <strong>{answered}/{total}</strong>
@@ -70,14 +97,6 @@ export default function Sidebar({ player, round, region, lastCorrect, timerRunni
             <div className="progress-bar" role="progressbar" aria-labelledby="progress-label" aria-valuemin={0} aria-valuemax={total} aria-valuenow={answered}>
               <div className="progress-fill" style={{ width: `${percent}%` }}></div>
             </div>
-          </div>
-
-          <p className="message" aria-live="polite">
-            {message(round?.streak ?? 0, lastCorrect, answered)}
-          </p>
-
-          <div className="cronometro-sidebar">
-            <Cronometro running={timerRunning} />
           </div>
         </div>
       </section>
