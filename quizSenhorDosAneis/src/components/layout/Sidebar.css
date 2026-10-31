@@ -16,7 +16,7 @@
   aspect-ratio: 1000 / 449;
   background: url("../../assets/images/box/box-aviso.webp") center / 100% 100% no-repeat;
   display: grid;
-  grid-template-columns: 23.94% minmax(0, 1fr); /* foto: 21,76% + 10% */
+  grid-template-columns: 28.73% minmax(0, 1fr); /* foto: 23,94% + 20% */
   grid-template-rows: 1fr auto;
   column-gap: 6%;
   row-gap: 4px;
