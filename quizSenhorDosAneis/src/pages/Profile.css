@@ -18,49 +18,48 @@
   opacity: 1;
 }
 
+/* Pergaminho do menu com as medidas da versão original: 30% da largura e a altura
+   inteira da tela (no celular, a tela toda) */
 .profile-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px max(16px, 3vw);
-  width: 100%;
+  width: max(30vw, 360px);
+  height: 100vh;
+  height: 100dvh;
+  padding: 0;
+  flex: none;
 }
 
-@media (min-width: 900px) {
-  .profile-container {
-    width: auto;
-    padding-left: 4vw;
-  }
-}
-
-/* Pergaminho: proporção da imagem (2:3), limitado pela altura da tela */
 .flag-profile {
   position: relative;
-  width: min(460px, 92vw, calc((100dvh - 24px) * 2 / 3));
-  aspect-ratio: 2 / 3;
+  width: 100%;
+  height: 99.6%;
 }
 
 .flagg {
   position: absolute;
-  inset: 0;
+  top: 2%;
+  left: 0;
   width: 100%;
-  height: 100%;
+  height: 96%;
 }
 
-/* Conteúdo do pergaminho em coluna: foto, nome e botões nunca se sobrepõem.
-   inset em % é relativo ao próprio pergaminho; a franja rasgada de baixo fica livre. */
+/* Conteúdo em coluna (foto, nome, botões): nada se sobrepõe */
 .profile-content {
   position: absolute;
-  inset: 9% 12% 19%;
+  inset: 13% 0 8%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2%;
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    width: 100vw;
+  }
 }
 
 .profile-avatar {
   position: relative;
-  width: 36%;
+  width: 40%;
   aspect-ratio: 1;
   flex: none;
   border: none;
@@ -105,7 +104,8 @@
   text-align: center;
   color: #2b1a0b;
   flex: none;
-  width: 100%;
+  width: 76%;
+  margin: 1% 0 2%;
 }
 
 .profile-name {
@@ -125,23 +125,46 @@
   font-size: clamp(13px, 2.2vw, 15px);
 }
 
-/* Botões repartem a altura que sobra; cada um mantém a proporção da madeira */
+/* Botões do menu com as dimensões originais: 400x105 em escala 0,82, fonte de 30 px */
 .btn-box {
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  display: grid;
-  grid-auto-rows: minmax(0, 1fr);
-  justify-items: center;
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
 .btn-box .btn-menu {
-  height: 100%;
-  max-height: 72px;
-  width: auto;
-  max-width: 100%;
-  font-size: clamp(15px, 3vw, 20px);
+  width: 400px;
+  height: 105px;
+  aspect-ratio: auto;
+  scale: 0.82;
+  font-size: 30px;
+  flex: none;
+}
+
+/* Com "Continuar jornada" são 5 botões: um pouco menores para caber no pergaminho */
+.btn-box:has(> :nth-child(5)) .btn-menu {
+  scale: 0.74;
+  margin-block: -5px;
+}
+
+@media (max-height: 820px) {
+  .btn-box .btn-menu {
+    scale: 0.7;
+    margin-block: -12px;
+  }
+
+  .btn-box:has(> :nth-child(5)) .btn-menu {
+    scale: 0.6;
+    margin-block: -19px;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-box .btn-menu,
+  .btn-box:has(> :nth-child(5)) .btn-menu {
+    scale: 0.64;
+    margin-block: -10px;
+  }
 }
 
 /* vídeos de fundo */
