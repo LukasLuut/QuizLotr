@@ -23,7 +23,7 @@ function OptionProfile({ isOpen, onClose }) {
   const [form, setForm] = useState({ name: "", email: "", password: "", titleCode: "" });
   const [titles, setTitles] = useState([]); // conquistas desbloqueadas
   const fileRef = useRef(null);
-  const [acao, setAcao] = useState(null); // null | "update" | "delete" | "photo"
+  const [acao, setAcao] = useState(null); // null | "update" | "delete"
   const [busy, setBusy] = useState(false);
   const [popup, setPopup] = useState(null); // { message, variant }
 
@@ -95,9 +95,6 @@ function OptionProfile({ isOpen, onClose }) {
         await updateUser(changes());
         setForm((prev) => ({ ...prev, password: "" }));
         setPopup({ message: "Cadastro atualizado.", variant: "success" });
-      } else if (current === "photo") {
-        await updateUser({ avatar: null });
-        setPopup({ message: "Foto removida.", variant: "success" });
       } else if (current === "delete") {
         await deleteAccount();
         navigate("/login", { replace: true });
@@ -180,27 +177,12 @@ function OptionProfile({ isOpen, onClose }) {
               Excluir conta
             </Button>
           </div>
-          {user?.avatar && (
-            <button type="button" className="link" onClick={() => setAcao("photo")} disabled={busy}>
-              Remover foto de perfil
-            </button>
-          )}
         </form>
-
-        <button type="button" className="option-profile-close" onClick={onClose} aria-label="Fechar">
-          ✕
-        </button>
       </Modal>
 
       <TemCerteza
         isOpen={acao !== null}
-        mensagem={
-          acao === "delete"
-            ? "Excluir sua conta e todo o seu progresso?"
-            : acao === "photo"
-              ? "Remover sua foto de perfil?"
-              : "Salvar as alterações no cadastro?"
-        }
+        mensagem={acao === "delete" ? "Excluir sua conta e todo o seu progresso?" : "Salvar as alterações no cadastro?"}
         onConfirm={handleConfirm}
         onCancel={() => setAcao(null)}
       />

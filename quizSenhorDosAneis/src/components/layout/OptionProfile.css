@@ -52,29 +52,12 @@
   font-size: clamp(15px, 1.8vw, 19px);
 }
 
-.option-profile-close {
-  position: absolute;
-  top: 8%;
-  right: 9%;
-  width: 44px;
-  height: 44px;
-  border: none;
-  background: url("../../assets/images/button/btn-marrom-dourado.png") center / 100% 100% no-repeat;
-  color: var(--color-text-main);
-  font-size: 18px;
-}
-
 @media (max-width: 760px) {
   .option-profile-bg {
     --w: min(460px, calc(100vw - 32px));
     aspect-ratio: 1287 / 1956;
     background-image: url("../../assets/images/box/box-lateral.webp");
     padding: calc(var(--w) * 0.22) calc(var(--w) * 0.12) calc(var(--w) * 0.18);
-  }
-
-  .option-profile-close {
-    top: 9%;
-    right: 9%;
   }
 }
 
