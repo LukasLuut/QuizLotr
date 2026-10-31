@@ -157,7 +157,7 @@ function PlayQuiz() {
   const corruption = Math.min(1, (round?.corruption ?? 0) / 100);
 
   return (
-    <div className={`bg-black-quiz ${corruption >= 0.4 ? "is-corrupted" : ""}`} style={{ "--corruption": corruption }}>
+    <div className={`bg-black-quiz ${corruption > 0 ? "has-corruption" : ""}`} style={{ "--corruption": corruption }}>
       {/* Título da região (narrador) e a regra própria do lugar */}
       {showTitle && (
         <div className="title-scene">
@@ -171,7 +171,10 @@ function PlayQuiz() {
         </div>
       )}
 
-      <div className="corruption-haze" aria-hidden="true"></div>
+      {/* camadas do Anel só existem com corrupção (sem custo em partida limpa) */}
+      {corruption > 0 && (
+        <div className="corruption-haze" aria-hidden="true"></div>
+      )}
 
       <button type="button" className={`toggle-overlay-btn ${uiHidden ? "hidden-ui" : "visible-ui"}`} onClick={handlePeek} disabled={uiHidden}>
         <span aria-hidden="true">👁</span> Ver paisagem

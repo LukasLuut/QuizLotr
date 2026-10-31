@@ -131,12 +131,5 @@
   color: #cfe0ff;
   font-family: var(--font-title);
   font-size: 0.62em;
-  box-shadow: 0 0 10px rgba(110, 160, 255, 0.55);
-  animation: palantir-glow 1.6s ease-in-out infinite alternate;
-}
-
-@keyframes palantir-glow {
-  to {
-    box-shadow: 0 0 16px rgba(140, 180, 255, 0.85);
-  }
+  box-shadow: 0 0 12px rgba(120, 170, 255, 0.7);
 }
