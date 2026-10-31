@@ -1,38 +1,36 @@
-import React from 'react'
-import BtnQuestion from './buttons/btnQuestion'
-import imgTemCerteza from '../assets/images/box/box-lateral-girado.png'
-import './TemCerteza.css'
+import { useId } from "react";
+import Button from "./buttons/Button";
+import Modal from "./Modal";
+import imgTemCerteza from "../assets/images/box/box-lateral-girado.webp";
+import "./TemCerteza.css";
 
 /**
- * Componente de confirmação genérico
- * Pode ser usado em qualquer lugar do app para confirmar ações críticas.
+ * Componente de confirmação genérico para ações críticas.
  *
  * Props:
  * - isOpen: controla se o modal aparece ou não
  * - mensagem: texto de aviso (default = "Você tem certeza?")
  * - onConfirm: callback quando o usuário clicar em "Sim"
- * - onCancel: callback quando o usuário clicar em "Não"
+ * - onCancel: callback quando o usuário clicar em "Não" ou apertar Esc
  */
-function Confirmacao({ isOpen, mensagem = "Você tem certeza?", onConfirm, onCancel }) {
-  if (!isOpen) return null
+function Confirmacao({ isOpen, mensagem = "Você tem certeza?", confirmLabel = "Sim", cancelLabel = "Não", onConfirm, onCancel }) {
+  const titleId = useId();
 
   return (
-    <div className="confirm-overlay">
-      <div className="confirm-box">
-        {/* Caixa de fundo decorativa */}
-        <img src={imgTemCerteza} alt="Confirmação" />
-
-        {/* Texto de aviso */}
-        <h1>{mensagem}</h1>
-
-        {/* Botões */}
-        <div className="box-btn-tem-certeza">
-          <BtnQuestion className="sim" w={150} h={60} texto="Sim" resposta={true} onClick={onConfirm} />
-          <BtnQuestion className="nao"  w={150} h={60} texto="Não" resposta={false} onClick={onCancel} />
-        </div>
+    <Modal isOpen={isOpen} onClose={onCancel} labelledBy={titleId} overlayClassName="confirm-overlay" className="confirm-box">
+      {/* Caixa de fundo decorativa */}
+      <img src={imgTemCerteza} alt="" />
+      <h2 id={titleId}>{mensagem}</h2>
+      <div className="box-btn-tem-certeza">
+        <Button variant="plain" onClick={onConfirm}>
+          {confirmLabel}
+        </Button>
+        <Button variant="plain" onClick={onCancel}>
+          {cancelLabel}
+        </Button>
       </div>
-    </div>
-  )
+    </Modal>
+  );
 }
 
-export default Confirmacao
+export default Confirmacao;

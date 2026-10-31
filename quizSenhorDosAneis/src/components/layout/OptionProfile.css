@@ -1,99 +1,79 @@
-.option-profile-bg{
-    background-image: url('../../assets/images/box/box-lateral-girado.png');
-    width: 900px;
-    height:600px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    margin-left: 25%;
-    padding: 6%;
-    color: aliceblue;
-    padding-top: 7%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-
-}
-
-.option-profile-bg label{
-    font-family: Ringbearer;
-    margin-bottom: -5%;
-    margin-top: 7%;
-    font-weight: 100;
-    width: 50%;
-    text-shadow: 1px 3px 2px rgba(0,0,0,1);
-}
-
-.option-profile-bg input{
-    width: 300px;
-}
-
-.option-profile-bg h2{
-    font-family: Ringbearer;
-    font-weight: 100;
-    color: goldenrod;
-    font-size: 50px;
-    text-shadow: 1px 3px 2px rgba(0,0,0,1);
-}
-
-.option-profile-bg form{
-   padding:0;
-    position: relative;
-}
-
-.btn-menu-update-profile{
-    transform: scale(0.7);
-    display: flex;
-   
-}
-
-
-.modal-overlay {
-  position: fixed;
-  inset: 0; /* top:0; right:0; bottom:0; left:0 */
-  background: rgba(0, 0, 0, 0.7);
+/* Moldura deitada no desktop, em pé no celular; o tamanho acompanha a tela */
+.option-profile-bg {
+  position: relative;
+  width: min(900px, 100%);
+  aspect-ratio: 1956 / 1287;
+  max-height: calc(100dvh - 32px);
+  background-image: url("../../assets/images/box/box-lateral-girado.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding: 7% 16% 6%;
+  color: aliceblue;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  z-index: 2000;
- 
+  justify-content: center;
+  gap: 2%;
+  outline: none;
 }
 
-@media (max-width: 768px) {
-    .option-profile-bg{
-        background-image: url('../../assets/images/box/box-lateral.png');
-        margin-left: 11%;
-    }
-
-    .modal-overlay form{
-        
-        left: -4%;
-        width: 90vw;
-    }
-
-    .option-profile-bg input{
-        width: 250px;
-        
-    }
-
-     .option-profile-bg label{
-        font-size: 15px;
-        
-    }
-        
-    .option-profile-bg h2{
-        width: 90vw;
-        margin-top:-20%;
-        margin-left: 25%;
-        
-        text-justify: center;
-    }
-    .btn-menu-update-profile{
-        transform: scale(0.4);
-        position: absolute;
-        bottom: -90px;
-        right: -200px;
-        
-    }
+.option-profile-bg h2 {
+  font-family: var(--font-display);
+  font-weight: 100;
+  color: goldenrod;
+  font-size: clamp(26px, 5vw, 46px);
+  text-shadow: 1px 3px 2px rgba(0, 0, 0, 1);
+  text-align: center;
 }
 
+.option-profile-form {
+  width: min(420px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.option-profile-form .field label {
+  font-family: var(--font-display);
+  font-weight: 100;
+}
+
+.btn-menu-update-profile {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 8px;
+}
+
+.btn-menu-update-profile .btn-menu {
+  width: clamp(170px, 22vw, 230px);
+  font-size: clamp(16px, 2.2vw, 22px);
+}
+
+.option-profile-close {
+  position: absolute;
+  top: 6%;
+  right: 7%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(245, 230, 196, 0.4);
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--color-text-main);
+  font-size: 18px;
+}
+
+@media (max-width: 760px) {
+  .option-profile-bg {
+    width: min(460px, 100%);
+    aspect-ratio: 1287 / 1956;
+    background-image: url("../../assets/images/box/box-lateral.webp");
+    padding: 22% 12% 18%;
+  }
+
+  .option-profile-close {
+    top: 9%;
+    right: 9%;
+  }
+}

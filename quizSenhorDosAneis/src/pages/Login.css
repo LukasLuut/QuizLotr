@@ -1,105 +1,69 @@
-/* Fonte do título*/
-@font-face {
-  font-family: 'Ringbearer';
-  src: url('../assets/fonts/Ringbearer.ttf') format('truetype');
-}
-
-/* as cores foram separadas em variáveis */
-:root {
- 
-  --color-bg-body: #ffffff;
-  --color-bg-form: rgba(18,18,18,0.4);
-  --color-bg-button-top: #C9A227;
-  --color-bg-button-bottom: #5C3B1E;
-
-  --color-text-main: #F5E6C4;
-  --color-text-heading: #C9A227;
-  --color-text-label: #ffffff;
-  --color-text-placeholder: #ffffffb7;
-  --color-text-link: #0099ff;
-  --color-text-link-hover: #C9A227;
-  --color-text-input:#ffc400;
-
-  --color-border-input: rgba(245,230,196,0.25);
-  --color-border-focus: #C9A227;
-
-  --shadow-strong: rgba(0,0,0,1);
-  --shadow-soft: rgba(0,0,0,0.4);
-  --shadow-hover: rgba(0,0,0,0.5);
-  --shadow-glow: rgba(201,162,39,0.4);
-}
-
 .login-body {
-  font-family: 'Inter', sans-serif;
-
+  font-family: var(--font-body);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: 100dvh;
   color: var(--color-text-main);
-  margin: 0;
+  opacity: 0;
+  transition: opacity 2s ease;
+  padding: 16px;
 }
 
-/* Fonte do título*/
+.fade-in-login {
+  opacity: 1;
+}
+
+.login-page {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(420px, 100%);
+}
+
+/* Fonte do título */
 .title-login {
-  font-family: 'Ringbearer', serif;
-  font-size: 100px;
+  font-family: var(--font-display);
+  font-size: clamp(52px, 12vw, 100px);
   color: var(--color-text-heading);
   text-align: center;
   margin-bottom: 20px;
   text-shadow: 1px 1px 2px var(--shadow-strong);
   font-weight: 200;
-  text-wrap: wrap;
-  margin-top: -20px;
+  line-height: 1;
+  text-wrap: balance;
 }
 
-.title-container{
-    
-    width: 70%;
-}
-
-.form-group {
-  margin-bottom: 30px;  
-  
-  width: 400px;
-}
-
-label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-  font-size: 20px;
-  color: var(--color-text-label);
-  text-shadow: 1px 1px 2px var(--shadow-strong);
-}
-
-input {
+.login-form {
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--color-border-input);
-  background: var(--color-bg-form);
-  color: var(--color-text-input);
-  font-size: 14px;
-  font-family: 'Uncial Antiqua', cursive;
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
 }
 
-input:focus {
-  border-color: var(--color-border-focus);
-  box-shadow: 0 0 8px var(--shadow-glow);
+.field-hint {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  text-shadow: 1px 1px 2px #000;
 }
 
-input::placeholder{
-    color: var(--color-text-placeholder);
+.login-form .btn-menu {
+  max-width: 100%;
 }
-
-
 
 .link {
-  display: block;
-  text-align: center;
   margin-top: 12px;
+  border: none;
+  background: none;
+  font-size: 16px;
   color: var(--color-text-link);
   text-decoration: underline;
   text-shadow: 1px 1px 2px var(--shadow-strong);
@@ -110,63 +74,10 @@ input::placeholder{
 }
 
 .bg-video-login {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: auto;
-  height: 100%;
-  min-width: 100%;
-  min-height: 100%;
-  transform: translate(-50%, -50%);
-  z-index: -1;
-  object-fit: fill;
-}
-
-form{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-.form-container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.login-body {
-  opacity: 0;
-  transition: opacity 2s ease;
-}
-
-.fade-in-login {
-  opacity: 1;
-  transition: opacity 2s ease;
-}
-
-/* overlay preta */
-.fade-overlay-black {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  background: black;
-  opacity: 0;
-  transition: opacity 3s ease;
-  z-index: 9998;
-  pointer-events: none;
+  z-index: var(--z-background);
+  object-fit: cover;
 }
-
-.active {
-  opacity: 1;
-}
-
-@media (max-width: 768px) {
-  .title-login{
-    font-size: 78px;
-  }
-}
-
-

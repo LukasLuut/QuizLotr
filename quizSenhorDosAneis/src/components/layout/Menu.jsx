@@ -1,86 +1,44 @@
-import React, { useState } from 'react'
-import './Menu.css'
-import bgMenu from '../../assets/images/box/box-lateral.png'
-import BtnMenu from '../buttons/BtnMenu'
-import { useNavigate } from 'react-router-dom';
+import { useId, useState } from "react";
+import "./Menu.css";
+import bgMenu from "../../assets/images/box/box-lateral.webp";
+import Button from "../buttons/Button";
+import Modal from "../Modal";
+import TemCerteza from "../TemCerteza";
 
-
-function Menu(data, setIsMenuOpen) {
-  const [modal, setModal] = useState(true);
-  const token = localStorage.getItem("token");
-
-  const scoreZero = async () => {
-    try {
-      const res = await fetch(`http://localhost:3000/users/me/score/zero`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + token,
-        },
-        body: JSON.stringify({
-          id: data.data.user.id,
-        }),
-      });
-
-      if (!res.ok) throw new Error("Erro ao atualizar pontuação");
-      const resData = await res.json();
-      setScore(resData.score);
-    } catch (err) {
-      console.error("Erro:", err);
-    }
-  }
-
-  const navigate = useNavigate();
-
-  const handleSair = async () => {
-    console.log("ESSE É O HANDLE SAIR: ", data.data.user)
-
-    scoreZero();
-
-    navigate("/Profile", {
-      state: {
-        user: {
-          id: data.data.user.id,
-          name: data.data.user.name,
-          score: data.data.user.score,
-          email: data.data.user.email
-        }
-      }
-    });
-  }
-
-  const handleReiniciar = () => {
-    scoreZero();
-
-    window.location.reload()
-  }
-
-  const handleFecharModal = () => {
-    setModal(false);
-  }
-
-  const handleSaveProgress = () => {
-
-  }
+/**
+ * Menu de pausa (Esc). "Salvar e sair" mantém a partida para continuar depois;
+ * "Reiniciar" encerra a atual e começa outra, sem recarregar a página.
+ */
+function Menu({ isOpen, onClose, onRestart, onLeave, timedMode }) {
+  const titleId = useId();
+  const [confirmRestart, setConfirmRestart] = useState(false);
 
   return (
-    <div>
-      {modal && (
-      <div className='box-menu'>
-      <img className='img-box-menu' src={bgMenu} alt="" />
-      <h1>Menu</h1>
-      <div className='box-btn'>
-        <BtnMenu handleFecharModal={handleFecharModal} texto='Continuar'></BtnMenu>
-        <BtnMenu handleReiniciar={handleReiniciar} texto='Reiniciar'></BtnMenu>
-        <BtnMenu handleSair={handleSair} texto='Sair'></BtnMenu>
-      </div>
+    <>
+      <Modal isOpen={isOpen && !confirmRestart} onClose={onClose} labelledBy={titleId} overlayClassName="box-menu" className="box-menu-dialog">
+        <img className="img-box-menu" src={bgMenu} alt="" />
+        <div className="box-menu-content">
+          <h1 id={titleId}>Menu</h1>
+          {timedMode && <p className="menu-note">No modo Desafio o tempo da pergunta não para.</p>}
+          <div className="box-btn">
+            <Button onClick={onClose}>Continuar</Button>
+            <Button onClick={() => setConfirmRestart(true)}>Reiniciar</Button>
+            <Button onClick={onLeave}>Salvar e sair</Button>
+          </div>
+        </div>
+      </Modal>
 
-    </div>
-    )}
-    </div>
-    
-    
-  )
+      <TemCerteza
+        isOpen={isOpen && confirmRestart}
+        mensagem="Começar uma nova jornada? O progresso desta partida será perdido."
+        onConfirm={() => {
+          setConfirmRestart(false);
+          onRestart();
+        }}
+        onCancel={() => setConfirmRestart(false)}
+      />
+    </>
+  );
 }
 
-export default Menu
+export default Menu;

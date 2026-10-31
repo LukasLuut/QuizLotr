@@ -2,26 +2,23 @@
   width: 200px;
   height: 72px;
   padding: 12px;
-  font-family: 'Ringbearer', serif;
+  font-family: var(--font-display);
   font-weight: 500;
-  background-image: url('../../assets/images/button/btn-marrom-dourado.png');
+  background-image: url("../../assets/images/button/btn-marrom-dourado.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
+  background-color: transparent;
   color: var(--color-text-main);
   border: none;
   border-radius: 5px;
-  cursor: pointer;
   font-size: 20px;
   text-shadow: 0 1px 1px var(--shadow-soft);
-  transition: transform 0.2s, box-shadow 0.3s;
-  transition: all 0.3s ease;
-  
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.btn:hover {
-    
+.btn:hover:not(:disabled),
+.btn:focus-visible {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 15px var(--shadow-hover);
-  background-image: url('../../assets/images/button/btn-dourado-2.png');
+  background-image: url("../../assets/images/button/btn-dourado-2.png");
 }

@@ -1,204 +1,155 @@
 import "./Login.css";
-import bgVideo from "../assets/videos/The-Argonath-Animated-Wallpaper.mp4.mp4";
+import bgVideo from "../assets/videos/The-Argonath-Animated-Wallpaper.mp4";
+import bgPoster from "../assets/images/posters/login.jpg";
 
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-import BtnMenu from "../components/buttons/BtnMenu";
+import { useEffect, useRef, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import Button from "../components/buttons/Button";
 import PopUpDTO from "../components/PopUpDTO";
 
+const EMPTY = { name: "", email: "", password: "" };
+
 function Login() {
-  const [mostrarEmail, setMostrarEmail] = useState(false);
-  const [fadeIn, setFadeIn] = useState(false); // para o efeito de fadeIN quando a página abre
-  const [fadeToBlack, setFadeToBlack] = useState(false); //para efeito de fadeOUT quando consegue logar
+  const { login, register, status, notice, clearNotice } = useAuth();
   const navigate = useNavigate();
 
+  const [mode, setMode] = useState("login"); // "login" | "register"
+  const [form, setForm] = useState(EMPTY);
+  const [submitting, setSubmitting] = useState(false);
+  const [popup, setPopup] = useState(null); // { message, variant }
+  const [fadeIn, setFadeIn] = useState(false);
+  const [fadeToBlack, setFadeToBlack] = useState(false);
+  const timers = useRef([]);
+
   useEffect(() => {
-    setFadeIn(true); // ativa fade in ao entrar
+    setFadeIn(true); // fade in ao entrar
+    const list = timers.current;
+    return () => list.forEach(clearTimeout);
   }, []);
 
-  const handleStartQuiz = () => {};
+  // Aviso vindo da sessão (ex.: token expirado)
+  useEffect(() => {
+    if (notice) {
+      setPopup({ message: notice, variant: "info" });
+      clearNotice();
+    }
+  }, [notice, clearNotice]);
 
-  const [mostrarBtnEntrar, setMostrarBtnEntrar] = useState(false);
-  const [mostrarBtnRegistrar, setMostrarBtnRegistrar] = useState(true);
-  const [mostrarPopup, setMostrarPopup] = useState(false);
-  const [erroMessage, setErroMessage] = useState("Erro ao criar personagem");
+  // O popup some sozinho depois de 4 s
+  useEffect(() => {
+    if (!popup) return;
+    const t = setTimeout(() => setPopup(null), 4000);
+    return () => clearTimeout(t);
+  }, [popup]);
 
-  let btnTitle = "Entrar";
+  if (status === "authenticated" && !fadeToBlack) return <Navigate to="/profile" replace />;
 
-  const handleEntrarClick = async () => {
-    let name = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
+  const isRegister = mode === "register";
+  const update = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
+  const switchMode = (next) => {
+    setMode(next);
+    setForm((prev) => ({ ...EMPTY, email: prev.email }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
     try {
-      const res = await fetch(`http://localhost:3000/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", 
-        },
-        body: JSON.stringify({
-          name: name, 
-          password: password,
-        }),
-      });
-
-      const data = await res.json();
-
-      const token = data.token;
-      localStorage.setItem("token", token);
-      
-
-      if (data.token) {
-        setFadeToBlack(true); // ativa overlay preta
-        setTimeout(() => navigate("/Profile", {state: data}), 3500); // depois do fade, toca vídeo
-
+      if (isRegister) {
+        await register({ name: form.name.trim(), email: form.email.trim(), password: form.password });
+        setPopup({ message: "Personagem criado! Agora é só entrar.", variant: "success" });
+        switchMode("login");
       } else {
-        setErroMessage("Usuário não encontrado")
-        setMostrarPopup(true);
+        await login(form.email.trim(), form.password);
+        setFadeToBlack(true); // overlay preta e depois o perfil
+        // Sempre pelo perfil: é lá que o jogador escolhe o modo ou continua a jornada
+        timers.current.push(setTimeout(() => navigate("/profile", { replace: true }), 2500));
       }
     } catch (err) {
-      console.error("Erro:", err);
+      setPopup({ message: err.message || "Não foi possível continuar.", variant: "error" });
+    } finally {
+      setSubmitting(false);
     }
   };
-
-  const handleRegistrarClick = async () => {
-    let name = document.getElementById("username").value;
-    let email = document.getElementById("email").value;
-    let password = document.getElementById("password").value;
-
-    try {
-      const res = await fetch(`http://localhost:3000/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Corrigido: "Content-Type", não "content-Type"
-        },
-        body: JSON.stringify({
-          name: name,
-          email: email, // Substitua com o valor real, se necessário
-          password: password,
-        }),
-      });
-
-      if (!res.ok) {
-        const erro = await res.text();
-        const mensagens = erro.map((err) => Object.values(err.constraints));
-
-        throw new Error(mensagens);
-      }
-
-      const data = await res.json();
-
-      if (data.name) {
-        setMostrarBtnEntrar(false);
-        setMostrarBtnRegistrar(true);
-        setMostrarEmail(false);
-      }
-    } catch (err) {
-      console.log("Entrou no Catch");
-      console.log(err);
-      setMostrarPopup(true);
-    }
-  };
-
-  if (mostrarPopup) {
-    setTimeout(() => {
-      setMostrarPopup(false);
-    }, 3000);
-  }
-
-  if (!mostrarEmail) {
-    const bt = document.getElementById("btnEntrar");
-  }
-
-  if (mostrarBtnEntrar) {
-  }
-
-  if (mostrarBtnEntrar) {
-    btnTitle = "Registrar";
-  }
 
   return (
     <div className={`login-body ${fadeIn ? "fade-in-login" : ""}`}>
-      <PopUpDTO erro={erroMessage} isOpen={mostrarPopup} />
-      <div className="login-page">
-        {/* Aqui o Formulário */}
-        <div className="form-container ">
-          <div className="title-container ">
-            <h2 className="title-login">Quiz da Terra-médiA</h2>
-          </div>
+      <PopUpDTO message={popup?.message} variant={popup?.variant} isOpen={!!popup} />
+      <main className="login-page">
+        <div className="form-container">
+          <h1 className="title-login">Quiz da Terra-médiA</h1>
 
-          <form>
-            {/* Input de User*/}
-            <div className="form-group">
-              <label htmlFor="username">Nome de usuário</label>
-              <input autoComplete="off" type="text" id="username" placeholder="Ex: Frodo" />
-            </div>
-
-            {/* Input de Email*/}
-            {mostrarEmail && (
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input autoComplete="off" type="email" id="email" placeholder="Ex: frodo@shire.me" />
+          <form className="login-form" onSubmit={handleSubmit} noValidate>
+            {isRegister && (
+              <div className="field">
+                <label htmlFor="username">Nome do personagem</label>
+                <input
+                  autoComplete="nickname"
+                  type="text"
+                  id="username"
+                  name="name"
+                  placeholder="Ex: Frodo"
+                  value={form.name}
+                  onChange={update}
+                  required
+                />
               </div>
             )}
 
-            {/* Input de senha*/}
-            <div className="form-group">
-              <label htmlFor="password">Senha</label>
-              <input autoComplete="off" type="password" id="password" placeholder="••••••••" />
+            <div className="field">
+              <label htmlFor="email">E-mail</label>
+              <input
+                autoComplete="email"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Ex: frodo@condado.me"
+                value={form.email}
+                onChange={update}
+                required
+              />
             </div>
 
-            <BtnMenu
-              type="button"
-              handleStartQuiz={handleStartQuiz}
-              handleEntrarClick={handleEntrarClick}
-              handleRegistrarClick={handleRegistrarClick}
-              texto={btnTitle}
-            ></BtnMenu>
+            <div className="field">
+              <label htmlFor="password">Senha</label>
+              <input
+                autoComplete={isRegister ? "new-password" : "current-password"}
+                type="password"
+                id="password"
+                name="password"
+                placeholder="••••••••"
+                value={form.password}
+                onChange={update}
+                aria-describedby={isRegister ? "password-hint" : undefined}
+                required
+              />
+              {isRegister && (
+                <span id="password-hint" className="field-hint">
+                  Mínimo de 6 caracteres, com maiúscula, minúscula, número e símbolo (@$!%*?&#).
+                </span>
+              )}
+            </div>
+
+            <Button type="submit" disabled={submitting}>
+              {submitting ? "Aguarde..." : isRegister ? "Registrar" : "Entrar"}
+            </Button>
           </form>
 
-          {mostrarBtnRegistrar && (
-            <a
-              href="#"
-              type="button"
-              className="link"
-              id="btnRegistrar"
-              onClick={() => {
-                setMostrarBtnEntrar(true);
-                setMostrarBtnRegistrar(false);
-                setMostrarEmail(true);
-              }}
-            >
-              Criar nova conta
-            </a>
-          )}
-
-          {mostrarBtnEntrar && (
-            <a
-              href="#"
-              className="link"
-              id="btnEntrar"
-              onClick={() => {
-                setMostrarBtnEntrar(false);
-                setMostrarBtnRegistrar(true);
-                setMostrarEmail(false);
-                btnTitle = "Registrar";
-              }}
-            >
-              Entrar
-            </a>
-          )}
+          <button type="button" className="link" onClick={() => switchMode(isRegister ? "login" : "register")}>
+            {isRegister ? "Já tenho conta: entrar" : "Criar nova conta"}
+          </button>
         </div>
 
-        <div
-          className={`fade-overlay-black ${fadeToBlack ? "active" : ""}`}
-        ></div>
+        <div className={`fade-overlay-black ${fadeToBlack ? "active" : ""}`} aria-hidden="true"></div>
 
         {/* vídeo de plano de fundo */}
-        <video className="bg-video-login" autoPlay muted loop playsInline>
+        <video className="bg-video-login" autoPlay muted loop playsInline preload="auto" poster={bgPoster} aria-hidden="true">
           <source src={bgVideo} type="video/mp4" />
         </video>
-      </div>
+      </main>
     </div>
   );
 }

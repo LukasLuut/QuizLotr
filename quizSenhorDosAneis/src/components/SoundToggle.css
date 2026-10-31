@@ -1,0 +1,39 @@
+.sound-toggle {
+  position: fixed;
+  right: calc(12px + env(safe-area-inset-right, 0px));
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  z-index: var(--z-hud);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(18, 12, 6, 0.72);
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.sound-toggle-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.sound-toggle-volume input {
+  width: 90px;
+  accent-color: var(--color-gold);
+}
+
+.sound-toggle:not(:hover):not(:focus-within) .sound-toggle-volume {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .sound-toggle-volume {
+    display: none;
+  }
+}

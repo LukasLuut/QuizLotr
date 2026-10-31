@@ -3,89 +3,45 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 120px;
-  background: transparent;
-  border-radius: 12px;
   padding: 16px;
-  font-family: 'Ringbearer', serif;
+  font-family: var(--font-display);
   color: #e6d8b0;
-  overflow: hidden;
-  position: relative;
-  opacity: 0;
-  transition: opacity 0.6s ease-in-out;
-  text-wrap: wrap;
   text-align: center;
-  text-justify: center;
-  height: 100%;
+  transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
 }
 
 .narrator-box.fade-in {
   opacity: 1;
-}
-
-.narrator-text {
-  font-size: 160px;
-  line-height: 1.5;
-  text-shadow: 10px 8px 2px #000;
-  white-space: pre-wrap; /* mantém quebras de linha */
-  text-wrap: wrap;
-  text-align: center;
-  text-justify: center;
-  height: 100%;
-}
-
-.fade-in {
-  opacity: 1;
-  transition: all 0.4s ease;
   transform: translateY(0);
 }
 
-.fade-out {
+.narrator-box.fade-out {
   opacity: 0;
-  transition: all 0.4s ease;
   transform: translateY(10px);
 }
 
+.narrator-text {
+  font-size: clamp(48px, 11vw, 160px);
+  line-height: 1.1;
+  text-shadow: 6px 6px 2px #000;
+  white-space: pre-wrap;
+  text-wrap: balance;
+}
 
 .fade-letter {
   opacity: 0;
   display: inline-block;
-  animation: fadeIn 0.4s forwards;
+  white-space: pre;
+  animation: narrator-letter 0.4s forwards;
 }
 
-@keyframes fadeIn {
+@keyframes narrator-letter {
   from {
     opacity: 0;
-    transform: translateY(5px); /* levinho "subindo" */
+    transform: translateY(5px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-
-
-@media (max-width: 768px) {
-
-  .narrator-text  {
-    font-size: 50px;
-    text-shadow: 10px 8px 2px #0000006e;
-  }
-
-  .fade-letter{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .narrator-box{
-    height: 100%;
-    width: 100%;
-    top: -250px;
-  }
-
-}
-
-
-

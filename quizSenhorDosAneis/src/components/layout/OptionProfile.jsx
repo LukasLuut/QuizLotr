@@ -1,280 +1,128 @@
-import './OptionProfile.css'
-import React, { useEffect, useState } from "react";
-import BtnMenu from '../buttons/BtnMenu'
-import { useNavigate } from 'react-router-dom';
-import TemCerteza from '../TemCerteza'
-import PopUpDTO from '../PopUpDTO';
+import "./OptionProfile.css";
+import { useEffect, useId, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Button from "../buttons/Button";
+import Modal from "../Modal";
+import TemCerteza from "../TemCerteza";
+import PopUpDTO from "../PopUpDTO";
+import { useAuth } from "../../context/AuthContext";
 
-function OptionProfile({ isOpen, onClose, onSubmit, id }) {
-  //  Se o modal não estiver aberto, não renderiza nada
-  if (!isOpen) return null;
-
-  // ---------------------------
-  //  Estados locais
-  // ---------------------------
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const [submitted, setSubmitted] = useState(false);
-  const [popUpActive, setPopUpActive]=useState(false); // Controlador da apresentação do popUp de confirmação
-  const [confirmationMsg, setConfirmationMsg]=useState('')// Controla a mensagem que aparece no popUp
-  const idUser = id;
+/**
+ * Modal de edição do cadastro. Só os campos alterados são enviados;
+ * a senha só muda se for preenchida.
+ */
+function OptionProfile({ isOpen, onClose }) {
+  const { user, updateUser, deleteAccount } = useAuth();
   const navigate = useNavigate();
+  const titleId = useId();
+
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [acao, setAcao] = useState(null); // null | "update" | "delete"
+  const [busy, setBusy] = useState(false);
+  const [popup, setPopup] = useState(null); // { message, variant }
+
+  // Ao abrir, preenche com os dados atuais da sessão
+  useEffect(() => {
+    if (isOpen && user) setForm({ name: user.name, email: user.email, password: "" });
+  }, [isOpen, user]);
 
   useEffect(() => {
-  const buscarUsuario = async () => {
+    if (!popup) return;
+    const t = setTimeout(() => setPopup(null), 3000);
+    return () => clearTimeout(t);
+  }, [popup]);
 
-    const token = localStorage.getItem("token");
+  const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-    try {
-      const res = await fetch("http://localhost:3000/users/me", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) {
-        console.log("componente OptionProfile", res);
-        throw new Error("Erro ao buscar usuário");
-      }
-
-      const data = await res.json();
-
-      console.log(data);
-
-      setForm((prev) => ({
-        ...prev,
-        name: data.name,
-        email: data.email,
-      }));
-
-    } catch (err) {
-      console.error("Erro:", err);
-    }
-  };
-
-  buscarUsuario();
-}, []);
-
-  // ---------------------------
-  //  Funções auxiliares
-  // ---------------------------
-
-  // Atualiza estado do form sempre que o usuário digitar
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  }
-
-  // ---------------------------
-  //  PopUp de aviso
-  // ---------------------------
-  const popUpMsg = (mensagem)=>{
-    // Apresentação do popUp de confirmação
-      setConfirmationMsg(mensagem);
-      setPopUpActive(true);
-      setTimeout(()=>{
-        setPopUpActive(false);
-      },2500)
-  }
-
-
-  // ---------------------------
-  //  Atualizar Usuário (PUT)
-  // ---------------------------
-  const handleAtualizarClick = async () => {
-    let name = document.getElementById("name").value;
-    let email = document.getElementById("email").value;
-    let password = document.getElementById("password").value;
-    const token = localStorage.getItem("token");
-
+  const changes = () => {
     const body = {};
-    if (name) body.name = name;
-    if (email) body.email = email;
-    if (password) body.password = password;
-
-    try {
-      const res = await fetch(`http://localhost:3000/users/me`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + token,
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (!res.ok) {
-        console.log("componente OptionProfile"+res);
-        throw new Error();
-      }
-
-      await res.json();
-
-        popUpMsg("Usuário atualizado com sucesso")
-
-    } catch (err) {
-      console.error("Erro:", err);
-    }
+    if (form.name.trim() && form.name.trim() !== user?.name) body.name = form.name.trim();
+    if (form.email.trim() && form.email.trim().toLowerCase() !== user?.email) body.email = form.email.trim();
+    if (form.password) body.password = form.password;
+    return body;
   };
 
-  // ---------------------------
-  //  Deletar Usuário (DELETE)
-  // ---------------------------
-  const handleDeletarClick = async () => {
-    const token = localStorage.getItem("token");
-    const confirm = window.confirm("Tem certeza que deseja excluir?");
-
-    if (!confirm) return;
-
-    try {
-      const res = await fetch(`http://localhost:3000/users/me`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + token,
-        },
-        body: JSON.stringify({ id: idUser }),
-      });
-
-      if (!res.ok) {
-        console.log("componente OptionProfile"+res);
-        throw new Error();
-      }
-
-      await res.json();
-      popUpMsg("Usuário deletado com sucesso")
-
-      // Remove token e redireciona pro login
-      localStorage.removeItem("token");
-      setTimeout(() => navigate("/Login", { replace: true }), 2800);
-    } catch (err) {
-      console.error("Erro:", err);
-    }
-  };
-
-  // ---------------------------
-  //  Submit do Formulário
-  // ---------------------------
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitted(true);
-
-    if (onSubmit) {
-      onSubmit(form); // envia dados pro pai
+    if (Object.keys(changes()).length === 0) {
+      setPopup({ message: "Nenhuma alteração para salvar.", variant: "info" });
+      return;
     }
+    setAcao("update");
+  };
 
-    onClose(); // fecha o modal
-  }
-
-   // ---------------------------
-   // Decide qual ação executar na confirmação do usuário
-   // ---------------------------
-  const [acao, setAcao] = useState(null); // null | "update" | "delete"
-  function handleConfirm() {
-    if (acao === "update") {
-      handleAtualizarClick();
-    } else if (acao === "delete") {
-      handleDeletarClick();
+  const handleConfirm = async () => {
+    const current = acao;
+    setAcao(null);
+    setBusy(true);
+    try {
+      if (current === "update") {
+        await updateUser(changes());
+        setForm((prev) => ({ ...prev, password: "" }));
+        setPopup({ message: "Cadastro atualizado.", variant: "success" });
+      } else if (current === "delete") {
+        await deleteAccount();
+        navigate("/login", { replace: true });
+      }
+    } catch (err) {
+      setPopup({ message: err.message, variant: "error" });
+    } finally {
+      setBusy(false);
     }
-    setAcao(null); // fecha modal
-  }  
+  };
 
-  // ---------------------------
-  //  Renderização
-  // ---------------------------
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      {/* PopUp de confirmação de ação */}
-      <PopUpDTO erro={confirmationMsg} isOpen={popUpActive}></PopUpDTO>
+    <>
+      <PopUpDTO message={popup?.message} variant={popup?.variant} isOpen={!!popup} />
+      <Modal isOpen={isOpen} onClose={onClose} labelledBy={titleId} className="option-profile-bg">
+        <h2 id={titleId}>Atualizar Cadastro</h2>
 
-      <div className="option-profile-bg" onClick={(e) => e.stopPropagation()}>
-        <h2>Atualizar Cadastro</h2>
-
-        {/* Formulário */}
-        <form onSubmit={handleSubmit} noValidate>
-          {/* Nome */}
-          <div>
-            <label htmlFor="name">Nome</label>
-            <br />
-            <input
-              autoComplete="off"
-              id="name"
-              name="name"
-              type="text"
-              placeholder="Ex: Frodo"
-              value={form.name}
-              onChange={handleChange}
-              required
-            />
+        <form className="option-profile-form" onSubmit={handleSubmit} noValidate>
+          <div className="field">
+            <label htmlFor="perfil-nome">Nome</label>
+            <input id="perfil-nome" name="name" type="text" autoComplete="nickname" value={form.name} onChange={handleChange} />
           </div>
 
-          {/* Email */}
-          <div>
-            <label htmlFor="email">Email</label>
-            <br />
-            <input
-              autoComplete="off"
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Ex: frodo@gmail.com"
-              value={form.email}
-              onChange={handleChange}
-              required
-            />
+          <div className="field">
+            <label htmlFor="perfil-email">E-mail</label>
+            <input id="perfil-email" name="email" type="email" autoComplete="email" value={form.email} onChange={handleChange} />
           </div>
 
-          {/* Senha */}
-          <div>
-            <label htmlFor="password">Senha</label>
-            <br />
+          <div className="field">
+            <label htmlFor="perfil-senha">Nova senha</label>
             <input
-              autoComplete="off"
-              id="password"
+              id="perfil-senha"
               name="password"
               type="password"
-              placeholder="•••••••••"
+              autoComplete="new-password"
+              placeholder="Deixe em branco para manter"
               value={form.password}
               onChange={handleChange}
-              minLength={6}
-              required
             />
           </div>
 
-          {/* Botões */}
-          <div className="btn-menu-update-profile" style={{ marginTop: 12 }}>
-            <BtnMenu
-              type="submit"
-              texto="Atualizar"
-              handleAtualizarClick={() => setAcao("update")}
-            />
-            <BtnMenu
-              type="button"
-              texto="Deletar"
-              handleDeletarClick={() => setAcao("delete")}
-            />
+          <div className="btn-menu-update-profile">
+            <Button type="submit" disabled={busy}>
+              Atualizar
+            </Button>
+            <Button onClick={() => setAcao("delete")} disabled={busy}>
+              Excluir conta
+            </Button>
           </div>
-             {/* componente de confirmação */}
-          <TemCerteza
-            isOpen={acao !== null}
-            mensagem={
-              acao === "update"? "Tem certeza que deseja atualizar seus dados?": 
-              acao === "delete" ? "Tem certeza que deseja excluir sua conta?": ""
-              }
-            onConfirm={handleConfirm}
-            onCancel={() => setAcao(null)}
-          />
         </form>
 
-        {/* Debug: mostra dados atuais do form */}
-        {submitted && (
-          <div style={{ marginTop: 12 }}>
-            <strong>Dados atuais:</strong>
-            <pre>{JSON.stringify(form, null, 2)}</pre>
-          </div>
-        )}
-      </div>
-    </div>
+        <button type="button" className="option-profile-close" onClick={onClose} aria-label="Fechar">
+          ✕
+        </button>
+      </Modal>
+
+      <TemCerteza
+        isOpen={acao !== null}
+        mensagem={acao === "delete" ? "Excluir sua conta e todo o seu progresso?" : "Salvar as alterações no cadastro?"}
+        onConfirm={handleConfirm}
+        onCancel={() => setAcao(null)}
+      />
+    </>
   );
 }
 

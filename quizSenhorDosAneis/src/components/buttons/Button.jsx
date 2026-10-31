@@ -1,39 +1,31 @@
-import React, { useRef } from "react";
-import hoverSound from '../../assets/audio/click-song.mp3'
-import './Button.css'
+import { useAudio } from "../../context/AudioContext";
+import "./Button.css";
+import "./ButtonMenu.css";
 
-function Button({ onClick, texto }) {
-  const audioRef = useRef(new Audio(hoverSound));
-
-  const handleHover = () => {
-    const audio = audioRef.current;
-    audio.volume = 0.2
-    audio.currentTime = 0.18; // reinicia o som toda vez
-    audio.play().catch(err => {
-      console.log("Som bloqueado pelo navegador até interação do usuário:", err);
-
-    });
-  };
-  const handleClick = () => {
-    const audio = audioRef.current;
-    audio.volume = 0.8
-    audio.currentTime = 0.16; // reinicia o som toda vez
-    audio.play().catch(err => {
-      console.log("Som bloqueado pelo navegador até interação do usuário:", err);
-    });
-    if (onClick) {
-      onClick(); // chama a função que veio como prop
-    }
-  };
-  // let handle = props.handleEntrarClick();
-
+/**
+ * Botão único do jogo.
+ * - variant "menu": botão grande de madeira (menus, perfil, login)
+ * - variant "plain": botão menor (pular intro, confirmações)
+ * A ação vem sempre por onClick/type, nunca pelo texto do rótulo.
+ */
+function Button({ texto, children, onClick, type = "button", variant = "menu", disabled = false, className = "", ...rest }) {
+  const { playSfx } = useAudio();
 
   return (
-    <button onMouseEnter={handleHover} className="btn" onClick={handleClick} >
-      <p>{texto}</p>
-
+    <button
+      type={type}
+      disabled={disabled}
+      className={`${variant === "menu" ? "btn-menu" : "btn"} ${className}`.trim()}
+      onMouseEnter={() => !disabled && playSfx("click", { volume: 0.2, offset: 0.18 })}
+      onClick={(e) => {
+        playSfx("click", { volume: 0.8, offset: 0.16 });
+        onClick?.(e);
+      }}
+      {...rest}
+    >
+      <span className={variant === "menu" ? "txt-btn" : undefined}>{children ?? texto}</span>
     </button>
-  )
+  );
 }
 
-export default Button
+export default Button;

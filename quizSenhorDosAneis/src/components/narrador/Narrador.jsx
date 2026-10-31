@@ -1,39 +1,14 @@
-import React, { useState, useEffect } from "react";
 import "./Narrator.css";
 
-function Narrator({ index, active, typingSpeed = 30 }) {
-  const [letters, setLetters] = useState([]);
-
-  const narrations = [
-    "The Shire",
-    "Bri",
-    "Rivendell.",
-    "Moria.",
-    "Lorien.",
-    "Argonath",
-    "Mordor",
-    "Mordor"  
-];
-
-  useEffect(() => {
-    if (index == null || !narrations[index]) {
-      setLetters([]);
-      return;
-    }
-
-    const fullText = narrations[index].split("");
-    setLetters(fullText);
-  }, [index]);
+// Título da região com as letras surgindo uma a uma
+function Narrator({ text, active, typingSpeed = 110 }) {
+  const letters = (text || "").split("");
 
   return (
     <div className={`narrator-box ${active ? "fade-in" : "fade-out"}`}>
-      <p className="narrator-text">
+      <p className="narrator-text" aria-label={text}>
         {letters.map((char, i) => (
-          <span
-            key={i}
-            className="fade-letter"
-            style={{ animationDelay: `${i * typingSpeed}ms` }}
-          >
+          <span key={`${text}-${i}`} className="fade-letter" style={{ animationDelay: `${i * typingSpeed}ms` }} aria-hidden="true">
             {char}
           </span>
         ))}

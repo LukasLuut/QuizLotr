@@ -1,42 +1,58 @@
-import { Profiler, useEffect, useState } from 'react'
+import { lazy, Suspense } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import "./App.css";
+import { AuthProvider } from "./context/AuthContext";
+import { AudioProvider } from "./context/AudioContext";
+import ProtectedRoute from "./components/routing/ProtectedRoute";
+import ErrorBoundary from "./components/ErrorBoundary";
+import LoadingScreen from "./components/LoadingScreen";
+import SoundToggle from "./components/SoundToggle";
+import Start from "./pages/Start";
+import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
 
-import './App.css'
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Start from './pages/Start'
-import PlayQuiz from './pages/PlayQuiz'
-import Login from './pages/Login'
-import Profile from './pages/Profile'
-import Map from './components/Map'
-import BtnQuestion from './components/buttons/btnQuestion'
-import MapBox from './components/MapBox'
-import QuizContainer from './components/layout/QuizContainer'
-import Menu from './components/layout/Menu'
-import Archivement from './components/Archivement'
-import PopUpDTO from './components/PopUpDTO'
-import MusicaArgonath from "./assets/audio/the-argonath-song.mp3";
-import MusicaTheShire from "./assets/audio/the-shire-song.mp3";
-import PlayerMusica from "./components/playerMusica/PlayerMusica";
-import OptionProfile from './components/layout/OptionProfile';
-import Final from './components/layout/Final';
-
+// Perfil e jogo carregam sob demanda: Leaflet e os vídeos não entram no carregamento inicial
+const Profile = lazy(() => import("./pages/Profile"));
+const PlayQuiz = lazy(() => import("./pages/PlayQuiz"));
 
 function App() {
-  const [musicaAtual, setMusicaAtual] = useState(null);
   return (
-    <>  {/* Player sempre montado */}
-      <PlayerMusica className="player-musica" musica={musicaAtual}></PlayerMusica>
-
-    <Router>
-      <Routes>
-        <Route path="/" element={<Start setMusicaAtual={setMusicaAtual}/>} />
-        <Route path="/login" element={<Login setMusicaAtual={setMusicaAtual}/>} />
-        <Route path="/profile" element={<Profile  setMusicaAtual={setMusicaAtual}/>} />
-        <Route path="/playquiz" element={<PlayQuiz setMusicaAtual={setMusicaAtual}/>} />
-      </Routes>
-    </Router>
-    </>
-  )
+    <ErrorBoundary>
+      <AudioProvider>
+        <AuthProvider>
+          <Router>
+            <Suspense fallback={<LoadingScreen />}>
+              <Routes>
+                <Route path="/" element={<Start />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/playquiz"
+                  element={
+                    <ProtectedRoute>
+                      <PlayQuiz />
+                    </ProtectedRoute>
+                  }
+                />
+                {/* rotas antigas com maiúscula */}
+                <Route path="/Profile" element={<Navigate to="/profile" replace />} />
+                <Route path="/Login" element={<Navigate to="/login" replace />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </Router>
+          <SoundToggle />
+        </AuthProvider>
+      </AudioProvider>
+    </ErrorBoundary>
+  );
 }
 
-export default App
+export default App;

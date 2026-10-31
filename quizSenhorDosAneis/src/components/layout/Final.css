@@ -1,183 +1,176 @@
-
-/* Fundo preto translúcido cobrindo a tela */
+/* Fundo cobrindo a tela */
 .victory-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0); /* camada escura */
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
-  animation: fadeIn 0.6s ease forwards;
+  z-index: var(--z-overlay);
+  padding: 16px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.55);
+  animation: final-fade 0.6s ease forwards;
 }
 
 /* Vídeo de fundo */
 .video-final {
-  position: absolute;
-  width: 100vw;   /* agora baseado na altura da tela */
+  position: fixed;
+  inset: 0;
+  width: 100vw;
   height: 100vh;
-  object-fit:cover;
+  object-fit: cover;
   z-index: -1;
-
-  
 }
 
-/* Card central onde ficam as informações */
+/* Card central com o resumo da partida */
 .victory-card {
-  
+  position: relative;
+  width: min(560px, 100%);
+  margin: auto;
+  padding: clamp(20px, 4vw, 32px);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(42, 28, 14, 0.94), rgba(20, 12, 5, 0.94));
+  border: 2px solid rgba(201, 162, 39, 0.7);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
   color: goldenrod;
-  padding: 2rem;
-  top: 15%;
-  padding-top: 15%;
   text-align: center;
-  width: 70%;
-  max-width: 400px;
-  animation: scaleIn 0.4s ease forwards;
-  position: fixed;
-  z-index: 2;
-  
+  animation: final-scale 0.4s ease forwards;
 }
 
-/* Título principal */
-.victory-title {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  font-family: Ringbearer;
-  font-weight: 100;
-}
-.victory-img{
-  width: 150%;
+.victory-img {
+  width: min(220px, 50%);
   height: auto;
-  position: fixed;
-  top: -35%;
-  left: -22%;
+  margin: -70px auto 4px;
+  display: block;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.9));
 }
 
-.img-box-conquista-final{
-  width: 110%;
-  top: -14%;  
-  left: -5%;
-  position: fixed;
-  z-index: -1;
-  filter: drop-shadow(10px 15px 21px rgba(0,0,0,1)); 
-
+.victory-title {
+  font-size: clamp(26px, 6vw, 40px);
+  font-family: var(--font-display);
+  font-weight: 100;
+  outline: none;
 }
-/* Container das estatísticas */
+
+.victory-sub {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
 .victory-stats {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  margin: 18px 0;
 }
 
-/* Bloco individual de estatística */
 .victory-stat {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 10px;
   border-radius: 8px;
-  min-width: 100px;
 }
 
-.label {
-  font-size: 0.9rem;
+.victory-stat .label {
+  font-size: 0.8rem;
   color: #ccc;
 }
 
-.value {
+.victory-stat .value {
   font-size: 1.2rem;
   font-weight: bold;
-  margin-top: 0.5rem;
+  margin-top: 4px;
+  color: var(--color-text-main);
+  font-variant-numeric: tabular-nums;
 }
 
-
-
-.btn-final:active {
-  transform: scale(0.95);
+.victory-regions {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  font-size: 14px;
+  color: var(--color-text-main);
 }
 
-/* Texto pequeno de instrução */
-.victory-note {
-  margin-top: 1rem;
-  font-size: 0.8rem;
-  color: #bbb;
+.victory-regions caption {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--color-gold);
+  margin-bottom: 6px;
 }
 
-/* Animações */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.victory-regions th,
+.victory-regions td {
+  padding: 4px 8px;
+  border-bottom: 1px solid rgba(245, 230, 196, 0.12);
+  text-align: left;
+  font-weight: 400;
 }
 
-@keyframes scaleIn {
-  from { transform: scale(0.5); opacity: 0; }
-  to { transform: scale(0.8); opacity: 1; }
+.victory-regions td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
+.victory-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-
+.victory-actions .btn-menu {
+  width: clamp(200px, 40vw, 250px);
+  font-size: clamp(16px, 3.5vw, 22px);
+}
 
 .btn-final {
   position: fixed;
-  bottom: 15%;
-  left: 34.5%;
-  z-index: 1000;
+  left: 50%;
+  bottom: 12%;
+  translate: -50% 0;
+  z-index: var(--z-overlay);
   border: none;
-  width:600px;
-  height: 150px;
-  transition: transform 0.2s ease, background 0.2s ease;
-  background-image: url('../../assets/images/button/btn-vermelho-off-db.png');
+  width: min(600px, 90vw);
+  aspect-ratio: 355 / 71;
+  background-image: url("../../assets/images/button/btn-vermelho-off-db.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
   color: goldenrod;
-  font-family: Ringbearer;
-  font-size: 25px;
-  z-index: 10000;
-  filter: drop-shadow(10px 15px 21px rgba(0,0,0,1)); 
-  /* transições */
-  transition: all 0.3s ease;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 4vw, 28px);
+  filter: drop-shadow(10px 15px 21px rgba(0, 0, 0, 1));
+  transition: transform 0.3s ease, filter 0.3s ease;
+  animation: final-fade 0.8s ease both;
 }
 
-.btn-final:hover {
+.btn-final:hover,
+.btn-final:focus-visible {
   transform: translateY(-2px) scale(1.02);
-  filter: drop-shadow(4px 20px 15px rgba(0,0,0,2));
-  background-image: url('../../assets/images/button/btn-vermelho-on-db.png');
+  background-image: url("../../assets/images/button/btn-vermelho-on-db.png");
 }
 
+.btn-final:active {
+  transform: scale(0.95);
+}
 
-@media (max-width: 768px) {
-  .victory-card {
-      top: 17%;
+@keyframes final-fade {
+  from {
+    opacity: 0;
   }
-
-  .btn-final {
-    top: 40%;
-     transform: scale(0.7);
-     left: -9%;
-     width: 500px;
-  }
-
-  .victory-img{
-    top: -25%;
-  }
-
-  .img-box-conquista-final{
-    top: 0%;
-  }
-  .victory-title{
-    padding-top: 75%;
-  }
-
-  .img-box-conquista-final{
-    height: 550px;
-  }
-  .btn-position-final{
-     width: 390px;
-     left: 4.5%;
-     top: 70%;
+  to {
+    opacity: 1;
   }
 }
 
+@keyframes final-scale {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

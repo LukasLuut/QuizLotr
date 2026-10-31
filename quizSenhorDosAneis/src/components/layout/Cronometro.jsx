@@ -1,47 +1,22 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./Cronometro.css";
+import { formatarTempo } from "../../utils/format";
 
-export default function Cronometro({ handleGetHour, current }) {
-  const [tempo, setTempo] = useState(0); // tempo em segundos
-  const [ativo, setAtivo] = useState(true);
-
-  useEffect(() => {
-    handleGetHour(tempo);
-  },);
+// Cronômetro com estado próprio: re-renderiza só ele a cada segundo, não a página inteira
+export default function Cronometro({ running = true }) {
+  const [tempo, setTempo] = useState(0);
 
   useEffect(() => {
-    let intervalo;
-    if (ativo) {
-      intervalo = setInterval(() => {
-        setTempo((t) => t + 1);
-      }, 1000); // atualiza a cada 1s
-    } else {
-      clearInterval(intervalo);
-    }
-
+    if (!running) return;
+    const intervalo = setInterval(() => setTempo((t) => t + 1), 1000);
     return () => clearInterval(intervalo);
-  }, [ativo]);
-
-  const iniciar = () => setAtivo(true);
-  const pausar = () => setAtivo(false);
-  const resetar = () => {
-    setAtivo(false);
-    setTempo(0);
-  };
-
-  // Converter segundos em mm:ss
-  const formatarTempo = (segundos) => {
-    const m = String(Math.floor(segundos / 60)).padStart(2, "0");
-    const s = String(segundos % 60).padStart(2, "0");
-    return `${m}:${s}`;
-  };
+  }, [running]);
 
   return (
-    <div className="conometro-box">
-      <h1 className="contador">{formatarTempo(tempo)}</h1>
-      {/* <button onClick={iniciar}>Iniciar</button>
-      <button onClick={pausar}>Pausar</button>
-      <button onClick={resetar}>Resetar</button> */}
+    <div className="conometro-box" role="timer" aria-label={`Tempo de jogo ${formatarTempo(tempo)}`}>
+      <span className="contador" aria-hidden="true">
+        {formatarTempo(tempo)}
+      </span>
     </div>
   );
 }

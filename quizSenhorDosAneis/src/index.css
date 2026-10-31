@@ -1,19 +1,207 @@
-/* Cursor normal: cobre toda a aplicação */
-html, body, :root, video,
-div, section, article, header, footer, main, aside,
-span, p, h1, h2, h3, h4, h5, h6,
-button, a, input, textarea, select, label,
-img, video, audio, canvas,
-.leaflet-container, .leaflet-control, .leaflet-popup, .leaflet-marker-icon {
-  cursor: url('./assets/cursor/sauron-hand-icon-cursor-normal-final.png') 8 8, auto !important;
+/* ==========================================================================
+   Base global: fontes, tokens de cor, escala de camadas (z-index), cursor,
+   foco visível e movimento reduzido. Páginas e componentes usam estes tokens.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Ringbearer";
+  src: url("./assets/fonts/Ringbearer.woff2") format("woff2");
+  font-display: swap;
 }
 
-/* Cursor no clique */
-html:active, body:active, :root:active, video:active,
-div:active, section:active, article:active, header:active, footer:active, main:active, aside:active,
-span:active, p:active, h1:active, h2:active, h3:active, h4:active, h5:active, h6:active,
-button:active, a:active, input:active, textarea:active, select:active, label:active,
-img:active, video:active, audio:active, canvas:active,
-.leaflet-container:active, .leaflet-control:active, .leaflet-popup:active, .leaflet-marker-icon:active {
-  cursor: url('./assets/cursor/sauron-hand-icon-cursor-click-final.png') 8 8, auto !important;
+@font-face {
+  font-family: "Hobbington";
+  src: url("./assets/fonts/Hobbington.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  /* Tipografia: fontes decorativas só em títulos e botões; texto corrido em fonte legível */
+  --font-display: "Ringbearer", "Uncial Antiqua", Georgia, serif;
+  --font-title: "Uncial Antiqua", Georgia, serif;
+  --font-body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  /* Cores */
+  --color-bg-body: #050403;
+  --color-bg-form: rgba(18, 18, 18, 0.4);
+  --color-text-main: #f5e6c4;
+  --color-text-muted: #c9bfa8;
+  --color-text-heading: #c9a227;
+  --color-text-label: #ffffff;
+  --color-text-placeholder: #ffffffb7;
+  --color-text-link: #7cc4ff;
+  --color-text-link-hover: #c9a227;
+  --color-text-input: #ffc400;
+  --color-gold: #d4a62a;
+  --color-border-input: rgba(245, 230, 196, 0.25);
+  --color-border-focus: #c9a227;
+  --color-correct: #6fbf5a;
+  --color-wrong: #d9534f;
+
+  --shadow-strong: rgba(0, 0, 0, 1);
+  --shadow-soft: rgba(0, 0, 0, 0.4);
+  --shadow-hover: rgba(0, 0, 0, 0.5);
+  --shadow-glow: rgba(201, 162, 39, 0.4);
+
+  /* Escala de camadas: use só estes valores */
+  --z-background: -1;
+  --z-base: 1;
+  --z-ui: 10;
+  --z-hud: 50;
+  --z-menu: 100;
+  --z-modal: 200;
+  --z-confirm: 300;
+  --z-overlay: 400;
+  --z-toast: 500;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Campos de formulário temáticos (login e edição de perfil) */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.field label {
+  font-weight: 600;
+  font-size: clamp(16px, 2.6vw, 20px);
+  color: var(--color-text-label);
+  text-shadow: 1px 1px 2px var(--shadow-strong);
+}
+.field input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-input);
+  background: var(--color-bg-form);
+  color: var(--color-text-input);
+  font-size: 15px;
+  font-family: var(--font-title);
+}
+.field input:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 8px var(--shadow-glow);
+  outline: none;
+}
+.field input::placeholder {
+  color: var(--color-text-placeholder);
+}
+.field-error {
+  font-size: 13px;
+  color: #ffb4a8;
+  text-shadow: 1px 1px 2px #000;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--color-bg-body);
+  color: var(--color-text-main);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+img,
+video {
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* Cursor temático: uma regra só, com fallback nativo. Inputs mantêm o cursor de texto. */
+html {
+  cursor: url("./assets/cursor/sauron-hand-icon-cursor-normal-final.png") 8 8, auto;
+}
+html:active {
+  cursor: url("./assets/cursor/sauron-hand-icon-cursor-click-final.png") 8 8, auto;
+}
+button,
+a,
+[role="button"],
+label,
+select,
+.leaflet-interactive,
+.leaflet-marker-icon {
+  cursor: url("./assets/cursor/sauron-hand-icon-cursor-normal-final.png") 8 8, pointer;
+}
+button:active,
+a:active,
+[role="button"]:active {
+  cursor: url("./assets/cursor/sauron-hand-icon-cursor-click-final.png") 8 8, pointer;
+}
+input,
+textarea {
+  cursor: text;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+.leaflet-container,
+.leaflet-grab {
+  cursor: url("./assets/cursor/sauron-hand-icon-cursor-normal-final.png") 8 8, grab;
+}
+.leaflet-grabbing,
+.leaflet-dragging .leaflet-grab {
+  cursor: url("./assets/cursor/sauron-hand-icon-cursor-click-final.png") 8 8, grabbing;
+}
+
+/* Telas de toque: cursor nativo */
+@media (pointer: coarse) {
+  html,
+  html:active,
+  button,
+  a,
+  [role="button"],
+  .leaflet-container {
+    cursor: auto;
+  }
+}
+
+/* Foco visível para teclado em todos os controles */
+:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Movimento reduzido: animações e transições quase instantâneas */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

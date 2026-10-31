@@ -1,10 +1,9 @@
 .video-transition {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
   overflow: hidden;
   pointer-events: none;
+  background: #000;
 }
 
 .bg-video-transition-video {
@@ -12,19 +11,14 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: fill;
-  opacity: 0;
-  transition: opacity 1.5s ease-in-out;
-  z-index: -1;
-  
+  object-fit: cover;
+  transition: opacity var(--fade-duration, 1.5s) ease-in-out;
 }
 
 .fade-in-transition-video {
   opacity: 1;
-  z-index: 2;
 }
 
 .fade-out-transition-video {
   opacity: 0;
-  z-index: 1;
 }

@@ -1,79 +1,108 @@
-import { useState, useRef, use, useEffect } from "react";
-import imgFinal from "../../assets/images/box/map-box.png";
+import { useEffect, useRef, useState } from "react";
 import "./Final.css";
 import videoFinal from "../../assets/videos/finalLotr.mp4";
-import { useNavigate } from "react-router-dom";
-import victoryPNG from "../../assets/images/victory.png"
-import imgBoxVictory from "../../assets/images/box/box-conquista.png";
+import finalPoster from "../../assets/images/posters/finalLotr.jpg";
+import victoryPNG from "../../assets/images/victory.png";
+import Button from "../buttons/Button";
+import { formatarTempo } from "../../utils/format";
+import { GAME_MODES } from "../../config/regions";
+import { useAudio } from "../../context/AudioContext";
 
-function Final({ time = null, score = 0, data, setIsFinished }) {
-  const [showFinal, setShowFinal] = useState(false);
-  const [buttonText, setButtonText] = useState("Destruir o Anel");
+/**
+ * Tela final. Vitória: botão "Destruir o Anel" toca o vídeo e mostra o resumo.
+ * Derrota (sem vidas no modo Desafio): mostra o resumo direto.
+ */
+function Final({ summary, onRestart, onProfile }) {
+  const won = summary.status === "finished";
+  const [showFinal, setShowFinal] = useState(!won);
   const videoRef = useRef(null);
-  const navigate = useNavigate();
+  const { playSfx } = useAudio();
+  const headingRef = useRef(null);
 
-  // Função utilitária para formatar o tempo em mm:ss
-  function formatTime(time) {
-    if (time === undefined || time === null) return "--:--";
-    if (typeof time === "string") return time;
-    const totalSeconds = Math.max(0, Math.floor(Number(time) || 0));
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
-      2,
-      "0"
-    )}`;
-  }
+  useEffect(() => {
+    if (showFinal) headingRef.current?.focus();
+  }, [showFinal]);
 
-  const handleClick = () => {
-    if (!showFinal) {
-      // primeira vez: mostra o final e toca o vídeo
-      setShowFinal(true);
-      setButtonText("Jogar novamente");
-      setBtnPosition(true);
-      if (videoRef.current) {
-        videoRef.current.play();
-      }
-    } else {
-      // segunda vez: redireciona para /quiz
-      
-      setShowFinal(false);
-      setIsFinished(false);
-      navigate("/playquiz", {state: data});
-      window.location.reload();
-    }
+  const destroyRing = () => {
+    setShowFinal(true);
+    playSfx("win", { volume: 0.6 });
   };
 
-  const[btnPosition, setBtnPosition]=useState(false)
+  const accuracy = summary.answered > 0 ? Math.round((summary.correctCount / summary.answered) * 100) : 0;
 
   return (
     <div className="div-body-final">
-      {/* Botão principal */}
-      <button className={`btn-final ${btnPosition ? "btn-position-final" : ""}`} onClick={handleClick}>
-        {buttonText}
-      </button>
+      {!showFinal && (
+        <button type="button" className="btn-final" onClick={destroyRing}>
+          Destruir o Anel
+        </button>
+      )}
 
-      {/* Quando showFinal = true, mostra vídeo + tela de vitória */}
       {showFinal && (
-        <div className="victory-overlay">
-          <video ref={videoRef} src={videoFinal} className="video-final" muted autoPlay loop/>
+        <div className="victory-overlay" role="dialog" aria-modal="true" aria-labelledby="final-title">
+          {won && <video ref={videoRef} src={videoFinal} className="video-final" poster={finalPoster} muted autoPlay loop playsInline aria-hidden="true" />}
 
           <div className="victory-card">
-            <img className="victory-img" src={victoryPNG} alt="" />
-            <img className="victory-img img-box-conquista-final" src={imgBoxVictory} alt="" />
-            <h2 className="victory-title">Parabéns <br></br> Quiz Concluído!</h2>
+            {won && <img className="victory-img" src={victoryPNG} alt="" />}
+            <h2 id="final-title" className="victory-title" tabIndex={-1} ref={headingRef}>
+              {won ? "O Anel foi destruído!" : "A jornada terminou"}
+            </h2>
+            <p className="victory-sub">
+              {won
+                ? `Modo ${GAME_MODES[summary.mode]?.label ?? summary.mode}`
+                : `Você chegou até a pergunta ${summary.answered} de ${summary.total}.`}
+            </p>
 
-            <div className="victory-stats">
+            <dl className="victory-stats">
               <div className="victory-stat">
-                <span className="label">Tempo: </span>
-                <span className="value">{formatTime(time)}</span>
+                <dt className="label">Pontuação</dt>
+                <dd className="value">{summary.score}</dd>
               </div>
+              <div className="victory-stat">
+                <dt className="label">Acertos</dt>
+                <dd className="value">
+                  {summary.correctCount}/{summary.answered} ({accuracy}%)
+                </dd>
+              </div>
+              <div className="victory-stat">
+                <dt className="label">Maior sequência</dt>
+                <dd className="value">{summary.maxStreak}</dd>
+              </div>
+              <div className="victory-stat">
+                <dt className="label">Tempo de resposta</dt>
+                <dd className="value">{formatarTempo(summary.activeSeconds)}</dd>
+              </div>
+              {summary.rank && (
+                <div className="victory-stat">
+                  <dt className="label">Posição no ranking</dt>
+                  <dd className="value">{summary.rank}º</dd>
+                </div>
+              )}
+              {summary.completionBonus > 0 && (
+                <div className="victory-stat">
+                  <dt className="label">Bônus de conclusão</dt>
+                  <dd className="value">+{summary.completionBonus}</dd>
+                </div>
+              )}
+            </dl>
 
-              <div className="victory-stat">
-                <span className="label">Pontuação: </span>
-                <span className="value">{score}</span>
-              </div>
-              
+            <table className="victory-regions">
+              <caption>Acertos por região</caption>
+              <tbody>
+                {summary.perRegion.map((r) => (
+                  <tr key={r.region}>
+                    <th scope="row">{r.name}</th>
+                    <td>
+                      {r.correct}/{r.total}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div className="victory-actions">
+              <Button onClick={onRestart}>Jogar novamente</Button>
+              <Button onClick={onProfile}>Voltar ao perfil</Button>
             </div>
           </div>
         </div>

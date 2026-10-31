@@ -1,22 +1,20 @@
-.conometro-box{
-
-    text-align: center;
-    font-family: 'Ringbearer';
-    background-image: url('../../assets/images/cronometro-border.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    height: 100%;
-    background-position: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    
+.conometro-box {
+  text-align: center;
+  font-family: var(--font-display);
+  background-image: url("../../assets/images/cronometro-border.webp");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
+  aspect-ratio: 1217 / 1600;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.contador{
-
-    margin-top: 13%;
-    font-size: 35px;
-    filter: drop-shadow(0px 5px 5px rgb(0, 0, 0));
+.contador {
+  margin-top: 13%;
+  font-size: clamp(22px, 2.4vw, 35px);
+  filter: drop-shadow(0px 5px 5px rgb(0, 0, 0));
 }

@@ -1,132 +1,184 @@
-import React, { useEffect, useState, useRef } from 'react'
-import './Profile.css'
-import flag from "../assets/images/scroll.png"
-import BtnMenu from '../components/buttons/BtnMenu';
-import borderProfile from '../assets/images/perfil-border.png'
-import gandalf from '../assets/images/Gandalf.jpg'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useId, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Profile.css";
+import flag from "../assets/images/scroll.webp";
+import borderProfile from "../assets/images/perfil-border.webp";
+import gandalf from "../assets/images/Gandalf.jpg";
 import prologue from "../assets/videos/Prologue.mp4";
-import Musica1 from "../assets/audio/the-shire-song.mp3"
-import Button from '../components/buttons/Button';
-import bgVideo from '../assets/videos/boromir.mp4'
-import OptionProfile from '../components/layout/OptionProfile';
+import bgVideo from "../assets/videos/boromir.mp4";
+import bgPoster from "../assets/images/posters/boromir.jpg";
+import Button from "../components/buttons/Button";
+import Modal from "../components/Modal";
+import OptionProfile from "../components/layout/OptionProfile";
+import AchievementsModal from "../components/AchievementsModal";
+import { useAuth } from "../context/AuthContext";
+import { useAudio } from "../context/AudioContext";
+import { api } from "../services/api";
+import { GAME_MODES, REGIONS } from "../config/regions";
+import { clearStoredRound } from "../hooks/useGameSession";
 
-function Profile({ setMusicaAtual }) {
-  const [fadeIn, setFadeIn] = useState(false); //State usado na animação de quando carrega a página
-  const [fadeToBlack, setFadeToBlack] = useState(false); //State usado na animação de saída da página
-  const [playTransitionVideo, setPlayTransitionVideo] = useState(false);//state usado para definir quando o vídeo intro deve rodar
-  const [fadeOut, setFadeOut] = useState(false);
-  const [mostrarBotao, setMostrarBotao] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);//state usado para mostrar o modal
+const shireMusic = REGIONS[0].ambience;
 
-  const location = useLocation();
-  const dataUser = location.state;
-
-
-  //métodos do modal
- 
-
+function Profile() {
+  const { user, logout } = useAuth();
+  const { playMusic } = useAudio();
   const navigate = useNavigate();
+  const modeTitleId = useId();
+
+  const [fadeIn, setFadeIn] = useState(false);
+  const [fadeToBlack, setFadeToBlack] = useState(false);
+  const [playTransitionVideo, setPlayTransitionVideo] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
+  const [showSkip, setShowSkip] = useState(false);
+  const [modal, setModal] = useState(null); // null | "edit" | "achievements" | "mode"
+  const [currentRound, setCurrentRound] = useState(null);
+  const pendingNav = useRef(null);
   const videoRef = useRef(null);
+  const timers = useRef([]);
 
   useEffect(() => {
-    setFadeIn(true); // ativa fade in ao entrar
+    setFadeIn(true);
+    let alive = true;
+    // Partida em andamento: oferece "Continuar jornada"
+    api
+      .currentRound()
+      .then((round) => alive && setCurrentRound(round))
+      .catch(() => {});
+    const list = timers.current;
+    return () => {
+      alive = false;
+      list.forEach(clearTimeout);
+    };
   }, []);
 
-  const handleStartQuiz = () => {
-    setFadeToBlack(true); 
-    setMusicaAtual(null); // parar música
-    setTimeout(() => setPlayTransitionVideo(true), 3800); // depois do fade, toca vídeo
+  const later = (fn, ms) => timers.current.push(setTimeout(fn, ms));
+
+  const goToQuiz = () => {
+    playMusic(shireMusic);
+    navigate("/playquiz", { state: pendingNav.current });
   };
 
-  const handleVideoEnd = () => {
-    navigate("/playquiz", {state: dataUser}); // ao terminar o vídeo, vai para Quiz
-    setMusicaAtual(Musica1);
+  // Novo jogo: escolhe o modo, escurece a tela e toca o prólogo
+  const startNewGame = (mode) => {
+    setModal(null);
+    clearStoredRound();
+    pendingNav.current = { mode, resume: false };
+    setFadeToBlack(true);
+    playMusic(null);
+    later(() => setPlayTransitionVideo(true), 3000);
   };
 
-  const pularIntro = () => {
-    setFadeOut(true); 
-    setMusicaAtual(Musica1); // inicia música ao pular
-    setTimeout(() => {
-      if (videoRef.current) videoRef.current.pause();
-      navigate("/playquiz", {state: dataUser});
-    }, 2000); 
+  const continueGame = () => {
+    pendingNav.current = { resume: true };
+    setFadeToBlack(true);
+    later(goToQuiz, 1500);
   };
 
-  const handleSair = () => {
-    localStorage.clear();
-    navigate("/login", { replace: true });
-  }
+  const skipIntro = () => {
+    setFadeOut(true);
+    playMusic(shireMusic);
+    later(() => {
+      videoRef.current?.pause();
+      goToQuiz();
+    }, 1500);
+  };
 
-  //inicia a música 15s antes do vídeo acabar
+  // A música do Condado começa 15 s antes de o prólogo acabar
   useEffect(() => {
     const video = videoRef.current;
+    if (!video) return;
+    const onTime = () => {
+      if (video.duration && video.duration - video.currentTime <= 15) {
+        playMusic(shireMusic);
+        video.removeEventListener("timeupdate", onTime);
+      }
+    };
+    video.addEventListener("timeupdate", onTime);
+    return () => video.removeEventListener("timeupdate", onTime);
+  }, [playTransitionVideo, playMusic]);
 
-    if (video) {
-      const handleTimeUpdate = () => {
-        if (video.duration - video.currentTime <= 15) {
-          setMusicaAtual(Musica1);
-          video.removeEventListener("timeupdate", handleTimeUpdate);
-        }
-      };
-
-      video.addEventListener("timeupdate", handleTimeUpdate);
-
-      return () => {
-        video.removeEventListener("timeupdate", handleTimeUpdate);
-      };
-    }
-  }, [playTransitionVideo]);
+  const handleSair = () => {
+    clearStoredRound();
+    logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
-    <div className='bg-black-profile'>
-      <div className={`body-container-profile ${fadeIn ? 'fade-in-profile' : ''} `}>
-        <div className='profile-container'>
-          <div className='flag-profile'>
-            <img className='flagg' src={flag} alt=""/>
-            <img className='border-profile' src={borderProfile} alt="" />
-            <img className='img-profile' src={gandalf} alt="" />
-             <OptionProfile
-                isOpen={modalOpen}
-                onClose={() => setModalOpen(false)}
-                onSubmit={(data) => console.log("Dados enviados:", data)}
-                id={dataUser.id}
-              />
-            <div className='btn-box'> 
-              <BtnMenu onClick={handleStartQuiz} texto='Novo Jogo'></BtnMenu>            
-              <BtnMenu onClick={() => setModalOpen(true) } texto='Editar Perfil'></BtnMenu>
-              <BtnMenu onClick={handleSair} texto='Sair'></BtnMenu>
+    <div className="bg-black-profile">
+      <div className={`body-container-profile ${fadeIn ? "fade-in-profile" : ""}`}>
+        <main className="profile-container">
+          <div className="flag-profile">
+            <img className="flagg" src={flag} alt="" />
+            <div className="profile-avatar">
+              <img className="img-profile" src={gandalf} alt="" />
+              <img className="border-profile" src={borderProfile} alt="" />
             </div>
+            <div className="profile-info">
+              <h1 className="profile-name">{user?.name}</h1>
+              <p className="profile-best">Melhor pontuação: {user?.bestScore ?? 0}</p>
+            </div>
+            <nav className="btn-box" aria-label="Opções do jogador">
+              {currentRound && (
+                <Button onClick={continueGame}>Continuar jornada</Button>
+              )}
+              <Button onClick={() => setModal("mode")}>Novo Jogo</Button>
+              <Button onClick={() => setModal("achievements")}>Conquistas</Button>
+              <Button onClick={() => setModal("edit")}>Editar Perfil</Button>
+              <Button onClick={handleSair}>Sair</Button>
+            </nav>
           </div>
-        </div>
+        </main>
 
-        <div className={`fade-overlay-black ${fadeToBlack ? "active" : ""}`}></div>
+        <OptionProfile isOpen={modal === "edit"} onClose={() => setModal(null)} />
+        <AchievementsModal isOpen={modal === "achievements"} onClose={() => setModal(null)} />
 
-        {/* Vídeo de transição */}
+        <Modal isOpen={modal === "mode"} onClose={() => setModal(null)} labelledBy={modeTitleId} className="mode-modal">
+          <h2 id={modeTitleId}>Escolha sua jornada</h2>
+          {currentRound && <p className="mode-warning">Começar de novo encerra a partida em andamento.</p>}
+          <div className="mode-options">
+            {Object.entries(GAME_MODES).map(([key, m]) => (
+              <button key={key} type="button" className="mode-option" onClick={() => startNewGame(key)}>
+                <span className="mode-option-title">{m.label}</span>
+                <span className="mode-option-desc">{m.description}</span>
+              </button>
+            ))}
+          </div>
+          <Button variant="plain" onClick={() => setModal(null)}>
+            Voltar
+          </Button>
+        </Modal>
+
+        <div className={`fade-overlay-black ${fadeToBlack ? "active" : ""}`} aria-hidden="true"></div>
+
+        {/* Vídeo de transição (prólogo) */}
         {playTransitionVideo && (
-          <video 
+          <video
             ref={videoRef}
-            onPlay={() => setMostrarBotao(true)} 
-            className={`transition-video ${fadeOut ? "fade-out-profile" : ""}`} 
-            autoPlay 
-            onEnded={handleVideoEnd}
+            onPlay={() => setShowSkip(true)}
+            className={`transition-video ${fadeOut ? "fade-out-profile" : ""}`}
+            autoPlay
+            playsInline
+            onEnded={goToQuiz}
+            onError={goToQuiz}
           >
             <source src={prologue} type="video/mp4" />
-          </video>            
+          </video>
         )}
 
-        {mostrarBotao && (
+        {showSkip && (
           <div className={`pular-intro ${fadeOut ? "fade-out-profile" : ""}`}>
-            <Button onClick={pularIntro} texto='Pular intro'></Button>
+            <Button variant="plain" onClick={skipIntro}>
+              Pular intro
+            </Button>
           </div>
         )}
 
-        <video className="bg-video-profile" autoPlay muted loop playsInline>
-                  <source src={bgVideo} type="video/mp4" />
-                </video>
+        <video className="bg-video-profile" autoPlay muted loop playsInline poster={bgPoster} aria-hidden="true">
+          <source src={bgVideo} type="video/mp4" />
+        </video>
       </div>
     </div>
-  )
+  );
 }
 
-export default Profile
+export default Profile;

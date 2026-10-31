@@ -1,141 +1,151 @@
-.sidebar{
-    
-    background-image:url('../../assets/images/box/box-lateral.png') ;
-    background-size: 100% 70%;
-    background-repeat: no-repeat;
-    background-position: bottom;
-    height: 73vh;
-    margin-top: 30%;
-    color: aliceblue;
-    position: relative;
+/* Painel do jogador: moldura de madeira em pé no desktop, faixa compacta no celular */
+.sidebar {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1287 / 1956;
+  max-height: calc(100dvh - 48px);
+  background-image: url("../../assets/images/box/box-lateral.webp");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  color: aliceblue;
+  display: flex;
+  flex-direction: column;
+  padding: 18% 14% 14%;
+  gap: 4%;
+  filter: drop-shadow(0px 0px 15px rgb(0, 0, 0));
 }
-
-
 
 .player-info {
-    font-family: 'Uncial Antiqua', cursive;
-    font-weight: 100;
-    color: goldenrod;
-    font-size: 20px;
-    display: flex;  
-    line-height: 1; 
-    
-     
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-title);
+  color: goldenrod;
 }
 
-.span-title{
-    color: aliceblue;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 19px;    
-    text-wrap: noWrap;
-    line-height: 1;
+.border-profile-side {
+  width: 32%;
+  flex: none;
+  filter: drop-shadow(5px 2px 5px rgb(0, 0, 0));
 }
 
-.border-profile-side{
-    width: 25%;
-    margin-top: 13%;
-    margin-left: 11%;
-    filter: drop-shadow(5px 2px 5px rgb(0, 0, 0));
+.player-name {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 100;
+  font-size: clamp(16px, 1.5vw, 22px);
+  line-height: 1.1;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
-.player-info img {
-    position: fixed;
-    z-index: 1;
+.span-title {
+  color: aliceblue;
+  font-family: var(--font-body);
+  font-size: clamp(11px, 0.9vw, 14px);
 }
 
-.player-name, .score, 
-.progress, .progress-bar, 
-.progress-fill, .message {
-    position: relative;
-    z-index: 2;
-    
+.box-state-atual {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  font-family: var(--font-title);
+  font-size: clamp(14px, 1.2vw, 18px);
+  filter: drop-shadow(0px 2px 5px rgb(0, 0, 0));
 }
 
-.score, .progress, .message{
-    margin-left: 14%;
-    font-family: 'Uncial Antiqua', cursive;
-    font-weight: 100;
-    padding-bottom: 15px;
-    font-size: 18px;
-    filter: drop-shadow(0px 2px 5px rgb(0, 0, 0));
-
+.region-now {
+  font-family: var(--font-display);
+  color: var(--color-gold);
+  font-size: clamp(18px, 1.6vw, 26px);
 }
 
-.player-name{
-    padding: 20%;
-    margin-left: 21%;
-    padding-top: 17%;
-   
+.lives {
+  color: #e2463c;
+  font-size: 22px;
+  letter-spacing: 4px;
 }
 
-.player-info2{
-    width: 100%;
-    height: 200px;
-    position: fixed;
-    z-index: 1;
-    filter: drop-shadow(0px -2px 10px rgba(0, 0, 0, 0.541));
+.lives-lost {
+  color: rgba(255, 255, 255, 0.25);
 }
 
-.box-state-atual{
-    position: absolute;    
-    
-    height: 48vh;
-    display: flex;
-    flex-direction: column;    
-    justify-content: center;
-    top: 31%;
-    left: 14%;
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  margin-top: 6px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(245, 230, 196, 0.3);
+  overflow: hidden;
 }
 
-.cronometro-sidebar{
-    height: 60%;
-    bottom: 0;
-    margin-bottom: -25%;
-    margin-top: -5%;
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8c6a1c, var(--color-gold));
+  transition: width 0.6s ease;
 }
 
+.message {
+  font-size: 0.9em;
+  color: var(--color-text-main);
+}
 
-@media (max-width: 768px) {
-    .sidebar{
-    top: 55%;
-    position: absolute; 
-    background-image:url('../../assets/images/box/box-lateral-girado.png');
-    width: 90vw;
-    height: 40vh;
-    }
+.cronometro-sidebar {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
 
-    .player-info{
-        
-    }
-    .box-state-atual{
-        position: absolute; 
-        top: 90px;
-        left: 0;      
-        
-    }   
-    .cronometro-sidebar{
-    position: absolute;
-    width: 70%;
-    height: 70%;
-    top: 12px;
-    left: 190px;
-    } 
+.cronometro-sidebar .conometro-box {
+  width: auto;
+  height: 100%;
+  max-height: 180px;
+}
 
-    .span-title, .border-profile-side,
-    .player-info2
-    {
-        display: none;
-    } 
-    
-    .message{
-        opacity: 0;
-    }
+@media (max-width: 1023px) {
+  .sidebar {
+    aspect-ratio: auto;
+    max-height: none;
+    background-image: url("../../assets/images/box/box-lateral-girado.webp");
+    padding: 18px 8%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+  }
 
-    .player-name{
-        position: absolute;
-        bottom: 80px;
-        left: -120px;
-        filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.541));
-    }
+  .player-info {
+    flex: 1 1 200px;
+  }
 
+  .border-profile-side {
+    width: 54px;
+  }
+
+  .box-state-atual {
+    flex: 2 1 260px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 16px;
+  }
+
+  .progress {
+    flex: 1 1 160px;
+  }
+
+  .message {
+    display: none;
+  }
+
+  .cronometro-sidebar {
+    flex: none;
+    height: 70px;
+  }
 }

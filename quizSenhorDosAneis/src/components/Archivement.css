@@ -1,48 +1,72 @@
-
-.archivement-box{
-    height: 500px;
-    width: 350px;
-    position:relative;
+.archivement-box {
+  position: fixed;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  right: calc(16px + env(safe-area-inset-right, 0px));
+  width: min(260px, 60vw);
+  aspect-ratio: 350 / 500;
+  z-index: var(--z-toast);
+  animation: archivement-in 0.45s ease-out both;
+  pointer-events: none;
 }
 
-.archivement-box img{
-    height: 100%;
-    width: 100%;
-}
-.archivement-box h1{
-    position: absolute;
-    top: 9%;
-    left: 28%;
-    font-family: 'Ringbearer';
-    font-weight: 100;
-    font-size: 30px;
-    color: rgb(187, 139, 17);
-    filter: drop-shadow(4px 2px 5px rgba(0,0,0,1));
+.archivement-box.leaving {
+  animation: archivement-out 0.4s ease-in both;
 }
 
-.archivement-box h2{
-    text-align: center;
-    position: absolute;
-    top: 25%;
-    left: 15%;
-    font-family: 'Uncial Antiqua';
-    font-weight: 100;
-    font-size: 22.5px;
-    color: rgb(187, 139, 17);
-    filter: drop-shadow(4px 2px 5px rgba(0,0,0,1));
+@keyframes archivement-in {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
-.archivement-box span{
-    position: absolute;
-    font-family: 'Ringbearer';
-    text-align: center;
-    position: absolute;
-    top: 45%;
-    left: 13%;
-    padding-right: 19%;
-    font-weight: 100;
-    font-size: 45px;
-    text-wrap: wrap;
-    color: rgb(187, 139, 17);
-    filter: drop-shadow(4px 2px 5px rgba(0,0,0,1));
+@keyframes archivement-out {
+  to {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+.archivement-box img {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(4px 10px 12px rgba(0, 0, 0, 0.9));
+}
+
+.archivement-content {
+  position: absolute;
+  inset: 8% 14% 14%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8%;
+  text-align: center;
+  color: var(--color-gold);
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 1));
+}
+
+.archivement-content h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 100;
+  font-size: clamp(18px, 4vw, 24px);
+}
+
+.archivement-title {
+  margin: 18% 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 4.6vw, 28px);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.archivement-desc {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: clamp(12px, 3vw, 15px);
+  color: var(--color-text-main);
 }

@@ -1,52 +1,73 @@
-.btn-next-map {
-  position: fixed;
-  bottom: 150px;
-  left: 240px;
-  z-index: 1000;
-  border: none;
-  width:480px;
-  height: 150px;
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 
-  background-image: url('../assets/images/button/btn-marrom.png');
+.map-wrapper .leaflet-container {
+  background: #1b140b;
+}
+
+/* Personagem: um anel dourado com brilho pulsante */
+.character-marker {
+  background: none;
+  border: none;
+}
+
+.character-ring {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 6px solid #e8b84a;
+  box-shadow: 0 0 0 2px #5a3a08, 0 0 14px 4px rgba(255, 196, 64, 0.85), inset 0 0 6px rgba(0, 0, 0, 0.6);
+  animation: ring-glow 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes ring-glow {
+  from {
+    box-shadow: 0 0 0 2px #5a3a08, 0 0 8px 2px rgba(255, 196, 64, 0.6), inset 0 0 6px rgba(0, 0, 0, 0.6);
+  }
+  to {
+    box-shadow: 0 0 0 2px #5a3a08, 0 0 18px 6px rgba(255, 120, 30, 0.9), inset 0 0 6px rgba(0, 0, 0, 0.6);
+  }
+}
+
+.btn-next-map {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  translate: -50% 0;
+  z-index: 1000; /* acima das camadas do Leaflet */
+  border: none;
+  width: clamp(200px, 50%, 360px);
+  aspect-ratio: 487 / 120;
+  background-image: url("../assets/images/button/btn-marrom.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
-
   color: goldenrod;
-  font-family: Ringbearer;
-  font-size: 25px;
-
-  filter: drop-shadow(10px 15px 21px rgba(0,0,0,1));
-
-  /* começa invisível */
-  opacity: 0;
-  pointer-events: none;
-
-  /* transições */
-  transition: opacity 0.5s ease, transform 0.2s ease, filter 0.3s ease;
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2vw, 25px);
+  filter: drop-shadow(6px 10px 14px rgba(0, 0, 0, 1));
+  animation: advance-in 0.5s ease both;
+  transition: transform 0.2s ease, filter 0.3s ease;
 }
 
-.btn-next-map:hover {
+.btn-next-map:hover,
+.btn-next-map:focus-visible {
   transform: translateY(-2px) scale(1.02);
-  filter: drop-shadow(4px 20px 15px rgba(0,0,0,2));
-  background-image: url('../assets/images/button/btn-dourado.png');
+  background-image: url("../assets/images/button/btn-dourado.png");
 }
 
-.btn-next-map.mostrar {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-@media (max-width: 768px) {
-  .btn-next-map{
-    bottom: 90px;
-    left: 65px;
-    z-index: 1000;
-    width:250px;
-    height: 150px;
-    font-size: 20px;
+@keyframes advance-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-
-
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }

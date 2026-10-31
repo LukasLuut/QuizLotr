@@ -1,294 +1,230 @@
-/* Fonte temática */
-@import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap');
+/* Tela do jogo: três colunas no desktop (jogador | quadro | ranking);
+   abaixo de 1024 px o quadro vem primeiro e o painel do jogador vira uma faixa. */
+.bg-black-quiz {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #000;
+  overflow-x: hidden;
+}
 
+.bg-video2-play-quiz {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  animation: fadeOpacity 3s ease;
+}
 
 .quiz-page {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
+  position: relative;
+  z-index: var(--z-ui);
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) minmax(0, 2.6fr) minmax(200px, 1fr);
   align-items: center;
-  padding: 40px;
-  opacity: 0;
-  transition: opacity 2s ease;
-   
+  gap: clamp(12px, 2vw, 32px);
+  padding: 24px max(16px, 2vw);
 }
 
+.box-lateral,
+.box-lateral-r {
+  min-width: 0;
+}
 
-
-.the-map{
-  position: absolute;
+.box-question-center {
+  min-width: 0;
+  max-width: 1100px;
   width: 100%;
-  height: 100%;
-  
+  justify-self: center;
 }
 
-.bg-video2 {
-  position: fixed;
-  width: 100vw;   
-  height: 100vh;  
-  object-fit: fill;
-  z-index: -1; /* sempre no fundo */
-  opacity: 0;
-  
-}
-
-.box-lateral{
-  width: 20%; 
-  height: 90vh;
-  margin:0 2%;
-  filter: drop-shadow(0px 0px 15px rgb(0, 0, 0));
-  opacity: 0;
-  
-}
-
-.box-lateral-r{
-  width: 400px;
-  height: 870px;
-  margin-left: 2%;
-  margin-top: 2%;
+/* Ranking sobre a moldura de madeira */
+.box-lateral-r {
+  position: relative;
+  aspect-ratio: 664 / 1640;
+  max-height: calc(100dvh - 48px);
   filter: drop-shadow(0px 0px 15px rgb(0, 0, 0));
 }
 
-.box-lateral-img{
+.box-lateral-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  position: fixed;
-  z-index: 0;
 }
 
-.box-leaderboard{
-color: goldenrod;
-width: 100%;
-height: 100%;
-padding-top: 25%;
-display: flex;
-position: relative;
-z-index: 1;
-justify-content: center;
-font-family:Ringbearer ;
-font-weight: 100;
-font-size: 17px;
-filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
-
-}
-
-.leaderboard{
-  display: flex;
-  z-index: 1;
+.box-leaderboard {
   position: absolute;
-  color: aliceblue;
-  justify-content: space-between;
-  width: 93%;
-  height: 77%;
-  padding: 50px;
-  margin-top: 5%;
-  font-family: 'Uncial Antiqua', cursive;
-  font-weight: 100;
-  font-size: 11px;
-  padding-left: 35px;
-  
-
-  
-}
-.listboard{
+  inset: 16% 14% 10%;
   display: flex;
-  z-index: 1;
-  position: absolute;
-  color: aliceblue;
-  gap: 10px;
   flex-direction: column;
-  width: 85%;
-  height: 77%;
-  padding: 60px;
-  margin-top: 20%;
-  font-family: 'Uncial Antiqua', cursive;
+  align-items: stretch;
+  gap: 8px;
+  color: goldenrod;
+  font-family: var(--font-display);
+  filter: drop-shadow(0px 7px 5px rgb(0, 0, 0));
+  overflow: hidden;
+}
+
+.box-leaderboard h2 {
+  text-align: center;
   font-weight: 100;
-  font-size: 11px;
-  padding-left: 35px;
-  
+  font-size: clamp(18px, 1.6vw, 26px);
+}
+
+.ranking-mode {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.ranking-empty {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: aliceblue;
+  text-align: center;
+}
+
+.listboard {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: aliceblue;
+  font-family: var(--font-title);
+  font-size: clamp(11px, 0.85vw, 14px);
+  overflow-y: auto;
 }
 
 .nameRanking {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 2.2em minmax(0, 1fr) auto;
+  gap: 6px;
+  align-items: baseline;
 }
 
-.fade-in {
-  z-index: 100;
-  opacity: 1;
-  transition: all 1s ease;
+.nameRanking.me {
+  color: var(--color-gold);
 }
 
-.bg-black-quiz{
-    width: 100vw;
-    height: 100vh;
-    background-color: rgb(0, 0, 0);
-    z-index: -2;
-    position: fixed;
-}
-
-.fade-out {
-  opacity: 0;
-  transition: all 1s ease;
-}
-
-@keyframes fade-in-ui {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes fade-out-ui {
-  0% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-.title-scene{
-  font-family: Ringbearer;
-  color: rgb(218, 218, 218);
-  filter: drop-shadow(5px 3px 2px rgb(0, 0, 0));
-  position: fixed;
-  top:40%;
-  z-index: 3;
-  font-size: 86px;
-  font-weight: 100;
-  width: 100%;
-  text-align: center;
-  text-justify: center;
-  letter-spacing: 40px;
-}
-
-.video-front {
-  position: absolute;
-  inset: 0;
+.ranking-name {
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ranking-score {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Título da região */
+.title-scene {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-hud);
+  pointer-events: none;
+  filter: drop-shadow(5px 3px 2px rgb(0, 0, 0));
 }
 
 .hidden-ui {
   opacity: 0;
-  animation: fade-out-ui 1s ease;
-  
-} 
-
-
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
 
 .visible-ui {
   opacity: 1;
-  animation: fade-in-ui 1s ease;
-  
+  transition: opacity 1s ease;
 }
 
-
-
-/* botão fixo (sempre clicável) */
-.toggle-overlay-btn {
+/* Botões fixos no topo */
+.toggle-overlay-btn,
+.menu-open-btn {
   position: fixed;
-  top: 18px;
-  right: 18px;
-  z-index: 99999; /* sempre acima da UI */
-  background: rgba(0,0,0,0.45);
+  top: calc(14px + env(safe-area-inset-top, 0px));
+  z-index: var(--z-hud);
+  background: rgba(0, 0, 0, 0.55);
   color: #fff;
   padding: 8px 12px;
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.15);
-  transition: transform .15s ease, background .15s;
- 
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 14px;
+  transition: transform 0.15s ease, background 0.15s, opacity 1s ease;
 }
-.toggle-overlay-btn:hover {
+
+.toggle-overlay-btn {
+  right: calc(14px + env(safe-area-inset-right, 0px));
+}
+
+.menu-open-btn {
+  left: calc(14px + env(safe-area-inset-left, 0px));
+}
+
+.menu-open-btn kbd {
+  font-family: var(--font-body);
+  font-size: 11px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  margin-left: 4px;
+}
+
+.toggle-overlay-btn:hover,
+.menu-open-btn:hover {
   transform: scale(1.05);
-  background: rgba(0,0,0,0.75);
+  background: rgba(0, 0, 0, 0.8);
 }
 
-/* wrapper do vídeo - vídeos empilhados */
-.video-wrapper {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  z-index: -2; /* abaixo da UI */
-}
-
-
-/* vídeos individuais */
-.bg-video2 {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  transition: opacity 0.8s ease-in-out;
-  opacity: 1;
-  z-index: -2;
-  
-
-}
-
-.bg-video2-play-quiz {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  opacity: 1;
-  z-index: -2;
-  animation: fadeOpacity 3s ease;
-
-}
-
-/* classes trocadas ao mudar index */
-.visible-video {
-  opacity: 1;
-  z-index: -2;
-}
-.hidden-video {
-  opacity: 0;
-  z-index: -2;
+.error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 @keyframes fadeOpacity {
-  from{opacity: 0}
-  to{opacity: 1;}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-/* animação para revelar a palavra */
-@keyframes typing {
-  from { width: 0 }
-  to { width: 15ch } /* 15 caracteres */
-}
+@media (max-width: 1023px) {
+  .quiz-page {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    padding-top: 64px;
+    gap: 12px;
+  }
 
-/* animação do cursor piscando */
-@keyframes blink {
-  50% { border-color: transparent }
-}
+  .box-question-center {
+    order: 1;
+  }
 
-.typing {
-  width: 0;
-  white-space: nowrap;        /* impede quebra de linha */
-  overflow: hidden;           /* esconde o que não couber */
-  border-right: 2px solid;    /* simula o cursor */
-  animation: typing 3s steps(15) forwards, blink 0.6s step-end infinite;
-}
+  .box-lateral {
+    order: 2;
+  }
 
-.bg-video {  
-  z-index: -1;
-}
+  .box-lateral-r {
+    order: 3;
+    aspect-ratio: auto;
+    max-height: none;
+    border-radius: 16px;
+    background: rgba(20, 12, 5, 0.85);
+    border: 2px solid rgba(201, 162, 39, 0.5);
+    padding: 16px;
+  }
 
-.fade-in {
-  opacity: 1;
-  transition: opacity 2s ease;
-}
-
-
-@media (max-width: 768px) {
-  .box-leaderboard{
+  .box-lateral-img {
     display: none;
+  }
+
+  .box-leaderboard {
+    position: static;
   }
 }
