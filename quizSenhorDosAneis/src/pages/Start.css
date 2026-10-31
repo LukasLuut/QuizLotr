@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   overflow: hidden;
 }
 
@@ -20,19 +20,22 @@
   padding-top: clamp(16px, 4vh, 40px);
 }
 
+/* logo e anel cabem juntos na altura da tela: o START fica sempre visível */
 .img-logo {
-  width: 100%;
-  height: auto;
+  width: auto;
+  max-width: 100%;
+  max-height: 36dvh;
 }
 
 .rings {
-  width: min(450px, 90vw);
-  aspect-ratio: 450 / 450;
+  width: min(450px, 90vw, 44dvh);
+  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  margin-top: clamp(8px, 4vh, 40px);
+  margin-top: clamp(8px, 2vh, 24px);
+  margin-bottom: 70px; /* espaço do botão START, que fica abaixo do anel */
 }
 
 .rings svg {
@@ -44,6 +47,7 @@
 }
 
 .loader__ring {
+  overflow: visible;
   width: 66%;
   aspect-ratio: 1;
   position: relative;
@@ -99,15 +103,26 @@
 
 .btn-start {
   position: absolute;
-  bottom: -14%;
+  bottom: -66px;
+  left: 50%;
+  translate: -50% 0;
   font-family: var(--font-title);
   z-index: 3;
   border: none;
-  font-size: clamp(20px, 5vw, 25px);
-  padding: 6px 18px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.7);
-  color: #1d1408;
+  font-size: clamp(18px, 4vw, 22px);
+  min-width: 170px;
+  height: 62px;
+  padding: 0 34px;
+  background: url(../assets/images/button/btn-marrom-dourado.png) center / 100% 100% no-repeat transparent;
+  color: var(--color-text-main);
+  text-shadow: 0 1px 2px #000;
+  transition: transform 0.2s ease;
+}
+
+.btn-start:hover,
+.btn-start:focus-visible {
+  transform: scale(1.04);
+  background-image: url(../assets/images/button/btn-dourado-2.png);
 }
 
 /* Keyframes */

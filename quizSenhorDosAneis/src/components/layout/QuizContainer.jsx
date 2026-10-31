@@ -34,7 +34,7 @@ function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, o
       </h1>
 
       {/* Mapa da jornada */}
-      <div className="quiz-image">
+      <div className={`quiz-image ${showQuestion ? "" : "quiz-image--full"}`}>
         <Map
           region={region}
           targetRegion={targetRegion}
@@ -46,7 +46,7 @@ function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, o
         />
       </div>
 
-      <div className="quiz-body">
+      <div className={`quiz-body ${showQuestion ? "" : "quiz-body--compact"}`}>
         {phase === "question-loading" && <p className="quiz-status">Consultando os sábios...</p>}
         {phase === "travel-ready" && (
           <p className="quiz-status">

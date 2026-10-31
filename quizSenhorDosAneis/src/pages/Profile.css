@@ -1,4 +1,5 @@
 .bg-black-profile {
+  isolation: isolate; /* o vídeo de fundo (z-index -1) fica acima do fundo preto */
   min-height: 100vh;
   min-height: 100dvh;
   background-color: black;
@@ -46,13 +47,22 @@
   height: 100%;
 }
 
-.profile-avatar {
+/* Conteúdo do pergaminho em coluna: foto, nome e botões nunca se sobrepõem.
+   inset em % é relativo ao próprio pergaminho; a franja rasgada de baixo fica livre. */
+.profile-content {
   position: absolute;
-  top: 10%;
-  left: 50%;
-  translate: -50% 0;
+  inset: 9% 12% 19%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2%;
+}
+
+.profile-avatar {
+  position: relative;
   width: 36%;
   aspect-ratio: 1;
+  flex: none;
   border: none;
   background: none;
   border-radius: 50%;
@@ -92,44 +102,46 @@
 }
 
 .profile-info {
-  position: absolute;
-  top: 36%;
-  left: 14%;
-  right: 14%;
   text-align: center;
   color: #2b1a0b;
+  flex: none;
+  width: 100%;
 }
 
 .profile-name {
   font-family: var(--font-display);
   font-weight: 100;
-  font-size: clamp(22px, 4.5vw, 32px);
+  font-size: clamp(20px, 3.6vw, 30px);
   line-height: 1.1;
   overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .profile-best {
   font-family: var(--font-title);
-  font-size: clamp(13px, 2.4vw, 16px);
+  font-size: clamp(13px, 2.2vw, 15px);
 }
 
+/* Botões repartem a altura que sobra; cada um mantém a proporção da madeira */
 .btn-box {
-  position: absolute;
-  top: 46%;
-  bottom: 9%;
-  left: 10%;
-  right: 10%;
-  display: flex;
-  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: grid;
+  grid-auto-rows: minmax(0, 1fr);
+  justify-items: center;
   align-items: center;
-  justify-content: center;
-  gap: 2px;
 }
 
 .btn-box .btn-menu {
-  width: 100%;
-  max-width: 300px;
-  font-size: clamp(16px, 3.4vw, 22px);
+  height: 100%;
+  max-height: 72px;
+  width: auto;
+  max-width: 100%;
+  font-size: clamp(15px, 3vw, 20px);
 }
 
 /* vídeos de fundo */
@@ -169,11 +181,13 @@
 
 /* Escolha do modo de jogo: moldura de madeira deitada, opções como placas (box-aviso) */
 .mode-modal {
-  width: min(680px, 100%);
+  /* padding em função da própria largura (% seria calculado sobre o overlay) */
+  --w: min(680px, calc(100vw - 32px));
+  width: var(--w);
   aspect-ratio: 1956 / 1287;
   max-height: calc(100dvh - 32px);
   background: url("../assets/images/box/box-lateral-girado.webp") center / 100% 100% no-repeat;
-  padding: 7% 10% 6%;
+  padding: calc(var(--w) * 0.08) calc(var(--w) * 0.1) calc(var(--w) * 0.07);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -212,7 +226,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 6% 12%;
+  padding: 0 14%;
   border: none;
   background: url("../assets/images/box/box-aviso.webp") center / 100% 100% no-repeat;
   text-align: center;
@@ -242,10 +256,10 @@
 
 @media (max-width: 560px) {
   .mode-modal {
+    --w: min(400px, calc(100vw - 32px));
     aspect-ratio: 1287 / 1956;
-    width: min(400px, 100%);
     background-image: url("../assets/images/box/box-lateral.webp");
-    padding: 18% 12%;
+    padding: calc(var(--w) * 0.2) calc(var(--w) * 0.13);
   }
 
   .mode-options {

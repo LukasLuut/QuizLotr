@@ -33,32 +33,15 @@
   }
 }
 
-.btn-next-map {
+/* "Avançar": mesmo botão de madeira do resto do jogo; aqui só a posição sobre o mapa */
+.btn-menu.btn-next-map {
   position: absolute;
   left: 50%;
   bottom: 8%;
   translate: -50% 0;
   z-index: 1000; /* acima das camadas do Leaflet */
-  border: none;
-  width: clamp(200px, 50%, 360px);
-  aspect-ratio: 487 / 120;
-  background-image: url("../assets/images/button/btn-marrom.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: transparent;
-  color: goldenrod;
-  font-family: var(--font-display);
-  font-size: clamp(18px, 2vw, 25px);
-  filter: drop-shadow(6px 10px 14px rgba(0, 0, 0, 1));
+  width: clamp(200px, 46%, 320px);
   animation: advance-in 0.5s ease both;
-  transition: transform 0.2s ease, filter 0.3s ease;
-}
-
-.btn-next-map:hover,
-.btn-next-map:focus-visible {
-  transform: translateY(-2px) scale(1.02);
-  background-image: url("../assets/images/button/btn-dourado.png");
 }
 
 @keyframes advance-in {

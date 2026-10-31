@@ -83,10 +83,10 @@
   padding: 10px 12px;
   border-radius: 12px;
   border: 1px solid var(--color-border-input);
-  background: var(--color-bg-form);
+  background: rgba(10, 6, 2, 0.7);
   color: var(--color-text-input);
-  font-size: 15px;
-  font-family: var(--font-title);
+  font-size: 16px;
+  font-family: var(--font-body);
 }
 .field input:focus {
   border-color: var(--color-border-focus);
@@ -127,18 +127,20 @@ button {
 }
 
 /* Cursor temático em toda a janela: a mão do Sauron, com a versão de clique enquanto
-   o botão do mouse está pressionado. Todo elemento herda o cursor do html (inclusive
-   botões desabilitados, campos de texto e o mapa do Leaflet, que define o próprio cursor). */
+   o botão do mouse está pressionado. O PNG pequeno (36 px) vem primeiro: o Chrome troca
+   cursores grandes pela seta padrão perto das bordas da janela. O hotspot é a ponta do dedo.
+   Todo elemento dentro do body herda o cursor do html (inclusive botões desabilitados,
+   campos de texto e o mapa do Leaflet, que define o próprio cursor). */
 html {
-  cursor: url("./assets/cursor/sauron-hand-icon-cursor-normal-final.png") 8 8, auto;
+  cursor: url("./assets/cursor/sauron-hand-normal-36.png") 5 0, url("./assets/cursor/sauron-hand-icon-cursor-normal-final.png") 17 1, auto !important;
 }
 html:active {
-  cursor: url("./assets/cursor/sauron-hand-icon-cursor-click-final.png") 8 8, auto;
+  cursor: url("./assets/cursor/sauron-hand-click-36.png") 6 3, url("./assets/cursor/sauron-hand-icon-cursor-click-final.png") 19 9, auto !important;
 }
-*,
-*::before,
-*::after,
-*:disabled,
+body,
+body *,
+body *::before,
+body *::after,
 .leaflet-container,
 .leaflet-grab,
 .leaflet-grabbing,
@@ -152,7 +154,7 @@ html:active {
   border: none;
   background: none;
   font-size: 16px;
-  color: var(--color-text-link);
+  color: var(--color-gold);
   text-decoration: underline;
   text-shadow: 1px 1px 2px var(--shadow-strong);
 }
@@ -169,6 +171,10 @@ html:active {
 }
 :focus:not(:focus-visible) {
   outline: none;
+}
+
+.nowrap {
+  white-space: nowrap;
 }
 
 .visually-hidden {

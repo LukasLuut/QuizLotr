@@ -23,7 +23,13 @@
   grid-template-columns: minmax(200px, 1fr) minmax(0, 2.6fr) minmax(200px, 1fr);
   align-items: center;
   gap: clamp(12px, 2vw, 32px);
-  padding: 24px max(16px, 2vw);
+  padding: max(24px, 4dvh) max(16px, 2vw);
+}
+
+/* as três colunas com a mesma altura do quadro central */
+.box-lateral,
+.box-lateral-r {
+  height: min(86dvh, 820px);
 }
 
 .box-lateral,
@@ -41,8 +47,6 @@
 /* Ranking sobre a moldura de madeira */
 .box-lateral-r {
   position: relative;
-  aspect-ratio: 664 / 1640;
-  max-height: calc(100dvh - 48px);
   filter: drop-shadow(0px 0px 15px rgb(0, 0, 0));
 }
 
@@ -55,7 +59,7 @@
 
 .box-leaderboard {
   position: absolute;
-  inset: 16% 14% 10%;
+  inset: 12% 13% 8%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -93,7 +97,7 @@
   gap: 8px;
   color: aliceblue;
   font-family: var(--font-title);
-  font-size: clamp(11px, 0.85vw, 14px);
+  font-size: clamp(13px, 1vw, 16px);
   overflow-y: auto;
 }
 
@@ -102,6 +106,8 @@
   grid-template-columns: 2.2em minmax(0, 1fr) auto;
   gap: 6px;
   align-items: baseline;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(245, 230, 196, 0.12);
 }
 
 .nameRanking.me {
@@ -142,16 +148,19 @@
 }
 
 /* Botões fixos no topo */
+/* "Ver paisagem" na moldura dos botões pequenos */
 .toggle-overlay-btn {
   position: fixed;
   top: calc(14px + env(safe-area-inset-top, 0px));
   z-index: var(--z-hud);
-  background: rgba(0, 0, 0, 0.55);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  font-size: 14px;
+  background: url("../assets/images/button/btn-marrom-dourado.png") center / 100% 100% no-repeat;
+  color: var(--color-text-main);
+  height: 44px;
+  padding: 0 22px;
+  border: 0;
+  font-family: var(--font-display);
+  font-size: 15px;
+  text-shadow: 0 1px 2px #000;
   transition: transform 0.15s ease, background 0.15s, opacity 1s ease;
 }
 
@@ -159,9 +168,10 @@
   right: calc(14px + env(safe-area-inset-right, 0px));
 }
 
-.toggle-overlay-btn:hover {
+.toggle-overlay-btn:hover,
+.toggle-overlay-btn:focus-visible {
   transform: scale(1.05);
-  background: rgba(0, 0, 0, 0.8);
+  background-image: url("../assets/images/button/btn-dourado-2.png");
 }
 
 .error-actions {
@@ -180,6 +190,11 @@
 }
 
 @media (max-width: 1023px) {
+  .box-lateral,
+  .box-lateral-r {
+    height: auto;
+  }
+
   .quiz-page {
     grid-template-columns: minmax(0, 1fr);
     align-content: start;

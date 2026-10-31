@@ -39,7 +39,7 @@ function Final({ summary, onRestart, onProfile }) {
       )}
 
       {showFinal && (
-        <div className="victory-overlay" role="dialog" aria-modal="true" aria-labelledby="final-title">
+        <div className={`victory-overlay ${won ? "" : "defeat"}`} role="dialog" aria-modal="true" aria-labelledby="final-title">
           {won && <video ref={videoRef} src={videoFinal} className="video-final" poster={finalPoster} muted autoPlay loop playsInline aria-hidden="true" />}
 
           {won && <img className="victory-img" src={victoryPNG} alt="" />}
@@ -47,6 +47,7 @@ function Final({ summary, onRestart, onProfile }) {
             <h2 id="final-title" className="victory-title" tabIndex={-1} ref={headingRef}>
               {won ? "O Anel foi destruído!" : "A jornada terminou"}
             </h2>
+            <div className="victory-card-body">
             <p className="victory-sub">
               {won
                 ? `Modo ${GAME_MODES[summary.mode]?.label ?? summary.mode}`
@@ -87,7 +88,6 @@ function Final({ summary, onRestart, onProfile }) {
             </dl>
 
             <table className="victory-regions">
-
               <caption>Acertos por região</caption>
               <tbody>
                 {summary.perRegion.map((r) => (
@@ -100,7 +100,7 @@ function Final({ summary, onRestart, onProfile }) {
                 ))}
               </tbody>
             </table>
-
+            </div>
           </div>
           <div className="victory-actions">
             <Button onClick={onRestart}>Jogar novamente</Button>

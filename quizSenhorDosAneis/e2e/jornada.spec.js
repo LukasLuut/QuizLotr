@@ -48,7 +48,7 @@ test("cadastro, login, uma pergunta, salvar e continuar a jornada", async ({ pag
   // F5 retoma a mesma partida
   await page.reload();
   await expect(page.locator(".quiz-options button")).toHaveCount(4, { timeout: 30_000 });
-  await expect(page.getByText(/Progresso: 1\/40/)).toBeVisible();
+  await expect(page.locator("#progress-label")).toHaveText(/Progresso\s*1\/40/);
 
   // Esc abre o menu; "Salvar e sair" volta ao perfil com a jornada para continuar
   await page.keyboard.press("Escape");

@@ -80,7 +80,9 @@ function Login() {
       <PopUpDTO message={popup?.message} variant={popup?.variant} isOpen={!!popup} />
       <main className="login-page">
         <div className="form-container">
-          <h1 className="title-login">Quiz da Terra-médiA</h1>
+          <h1 className="title-login">
+            Quiz da <span className="nowrap">Terra-médiA</span>
+          </h1>
 
           <form className="login-form" onSubmit={handleSubmit} noValidate>
             {isRegister && (

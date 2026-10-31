@@ -1,9 +1,10 @@
 /* Conquistas: painel de madeira em pé (box-lateral), lista rolável dentro da moldura */
 .achievements-modal {
-  width: min(460px, 100%, calc((100dvh - 32px) * 1287 / 1956));
+  --w: min(460px, calc(100vw - 32px), calc((100dvh - 32px) * 1287 / 1956));
+  width: var(--w);
   aspect-ratio: 1287 / 1956;
   background: url("../assets/images/box/box-lateral.webp") center / 100% 100% no-repeat;
-  padding: 15% 13% 12%;
+  padding: calc(var(--w) * 0.17) calc(var(--w) * 0.12) calc(var(--w) * 0.13);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,6 +37,9 @@
   align-content: start;
   gap: 2px;
   padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gold) transparent;
+  mask-image: linear-gradient(#000 88%, transparent);
 }
 
 .achievements-list li {

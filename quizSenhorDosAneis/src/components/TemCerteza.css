@@ -29,7 +29,7 @@
 /* Texto da confirmação */
 .confirm-box h2 {
   position: absolute;
-  top: 32%;
+  top: 36%;
   left: 50%;
   transform: translate(-50%, -50%);
   margin: 0;
@@ -45,14 +45,16 @@
 /* Container dos botões */
 .box-btn-tem-certeza {
   position: absolute;
-  bottom: 14%;
+  bottom: 16%;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 8px;
+  gap: 12px;
 }
 
 .box-btn-tem-certeza .btn {
-  width: clamp(110px, 30vw, 150px);
-  height: clamp(48px, 13vw, 60px);
+  min-width: 0;
+  width: clamp(100px, 28vw, 140px);
+  height: clamp(46px, 12vw, 58px);
+  padding: 0 18px;
 }

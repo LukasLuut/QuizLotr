@@ -137,6 +137,7 @@ function Profile() {
         <main className="profile-container">
           <div className="flag-profile">
             <img className="flagg" src={flag} alt="" />
+            <div className="profile-content">
             <button
               type="button"
               className="profile-avatar"
@@ -164,6 +165,7 @@ function Profile() {
               <Button onClick={() => setModal("edit")}>Editar Perfil</Button>
               <Button onClick={handleSair}>Sair</Button>
             </nav>
+            </div>
           </div>
         </main>
 

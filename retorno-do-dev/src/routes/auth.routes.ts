@@ -5,15 +5,16 @@ import { AuthController } from '../controllers/AuthController'
 import { validateDTO } from '../middlewares/validateDTO'
 import { CreateUserDTO } from '../dtos/CreateUserDTO'
 import { LoginUserDTO } from '../dtos/LoginUserDTO'
-import { isTest } from '../config/env'
+import { isProduction, isTest } from '../config/env'
 
 const router = Router()
 const controller = new AuthController()
 
-// Limita tentativas de login/cadastro por IP (força bruta)
+// Limita tentativas de login/cadastro por IP (força bruta). Em desenvolvimento o limite
+// é mais alto para não travar testes manuais e automatizados.
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  limit: isTest ? 1000 : 10,
+  limit: isProduction ? 10 : isTest ? 1000 : 100,
   standardHeaders: 'draft-7',
   legacyHeaders: false,
   message: { message: 'Muitas tentativas. Tente novamente em alguns minutos.' },

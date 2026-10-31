@@ -1,6 +1,6 @@
 .pop-up-dto {
-  width: min(400px, calc(100vw - 32px));
-  aspect-ratio: 400 / 110;
+  width: min(380px, calc(100vw - 32px));
+  aspect-ratio: 800 / 324;
   position: fixed;
   top: 0;
   left: 50%;
@@ -52,7 +52,7 @@
 
 .box-txt-DTO {
   position: absolute;
-  inset: 12% 14% 10%;
+  inset: 16% 12% 14%;
   display: flex;
   flex-direction: column;
   align-items: center;

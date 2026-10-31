@@ -102,7 +102,8 @@ function PlayQuiz() {
   }
 
   const inScene = phase === "scene";
-  const uiHidden = inScene || peek;
+  // no fim, o quadro some e o botão "Destruir o Anel" fica sozinho sobre o vídeo
+  const uiHidden = inScene || peek || phase === "finished";
 
   return (
     <div className="bg-black-quiz">

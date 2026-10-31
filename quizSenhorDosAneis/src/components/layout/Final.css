@@ -1,15 +1,24 @@
-/* Fundo cobrindo a tela */
+/* Fundo cobrindo a tela. safe center: se o conteúdo for maior que a tela, ele começa
+   no topo (rolável) em vez de transbordar para cima. */
 .victory-overlay {
   position: fixed;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: safe center;
+  gap: 4px;
   z-index: var(--z-overlay);
-  padding: 16px;
+  padding: 24px 16px;
   overflow-y: auto;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.45);
   animation: final-fade 0.6s ease forwards;
+}
+
+/* Derrota: sem vídeo, o jogo fica escurecido atrás */
+.victory-overlay.defeat {
+  background: rgba(5, 4, 3, 0.86);
+  backdrop-filter: blur(3px);
 }
 
 /* Vídeo de fundo */
@@ -22,23 +31,16 @@
   z-index: -1;
 }
 
-/* Resumo da partida dentro do escudo (box-conquista); o título fica na faixa vermelha do topo */
-.victory-overlay {
-  flex-direction: column;
-  gap: 4px;
-}
-
+/* Escudo (box-conquista). Nada de padding em %: as posições internas usam inset,
+   que é relativo ao próprio escudo. */
 .victory-card {
   position: relative;
-  width: min(440px, 100%, calc((100dvh - 150px) * 1287 / 1956));
+  width: min(440px, 100%, calc((100dvh - 200px) * 1287 / 1956));
+  min-width: min(300px, 100%);
   aspect-ratio: 1287 / 1956;
   flex: none;
+  container-type: inline-size;
   background: url("../../assets/images/box/box-conquista.webp") center / 100% 100% no-repeat;
-  padding: 1.2% 12% 18%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2.4%;
   color: goldenrod;
   text-align: center;
   filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.9));
@@ -46,31 +48,49 @@
 }
 
 .victory-img {
-  width: min(170px, 34vw);
+  width: min(150px, 30vw);
   height: auto;
-  margin-bottom: -28px;
+  margin-bottom: -9%;
   position: relative;
   z-index: 1;
+  flex: none;
   filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.9));
 }
 
+/* Título dentro da faixa vermelha do topo do escudo */
 .victory-title {
-  min-height: 5.6%;
+  position: absolute;
+  top: 8.6%;
+  left: 16%;
+  right: 16%;
+  height: 8.4%;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(15px, 2.6vw, 22px);
   font-family: var(--font-display);
   font-weight: 100;
+  font-size: clamp(13px, 5cqw, 21px);
+  line-height: 1.05;
   color: #ffe9b0;
   text-shadow: 1px 2px 2px #000;
   outline: none;
-  margin-top: 1.6%;
+}
+
+.victory-card-body {
+  position: absolute;
+  inset: 19.5% 14% 17%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4cqw;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .victory-sub {
-  margin-top: 4%;
-  font-size: 13px;
+  max-width: 100%;
+  font-size: clamp(12px, 3.4cqw, 14px);
   color: var(--color-text-main);
   text-shadow: 1px 1px 2px #000;
 }
@@ -79,25 +99,25 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px 12px;
+  gap: 1cqw 3cqw;
 }
 
 .victory-stat {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4px 0;
+  padding: 1cqw 0;
   border-bottom: 1px solid rgba(245, 230, 196, 0.15);
 }
 
 .victory-stat .label {
-  font-size: 11px;
+  font-size: clamp(10px, 2.6cqw, 12px);
   color: var(--color-text-muted);
   text-shadow: 1px 1px 2px #000;
 }
 
 .victory-stat .value {
-  font-size: clamp(14px, 2.2vw, 18px);
+  font-size: clamp(13px, 4.2cqw, 18px);
   font-weight: 700;
   color: var(--color-text-main);
   font-variant-numeric: tabular-nums;
@@ -107,21 +127,21 @@
 .victory-regions {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: clamp(11px, 3cqw, 13px);
   color: var(--color-text-main);
   text-shadow: 1px 1px 2px #000;
 }
 
 .victory-regions caption {
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: clamp(13px, 4cqw, 16px);
   color: var(--color-gold);
   margin-bottom: 2px;
 }
 
 .victory-regions th,
 .victory-regions td {
-  padding: 2px 4px;
+  padding: 1px 4px;
   text-align: left;
   font-weight: 400;
 }
@@ -135,10 +155,14 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 0 16px;
+  margin-top: 4px;
+  flex: none;
 }
 
 .victory-actions .btn-menu {
-  width: clamp(220px, 40vw, 280px);
+  width: clamp(250px, 40vw, 300px);
+  font-size: clamp(16px, 4vw, 18px);
 }
 
 .btn-final {
@@ -166,11 +190,22 @@
 .btn-final:hover,
 .btn-final:focus-visible {
   transform: translateY(-2px) scale(1.02);
+  color: #ffd36b;
+  text-shadow: 0 0 12px rgba(255, 120, 30, 0.8);
   background-image: url("../../assets/images/button/btn-vermelho-on-db.png");
 }
 
 .btn-final:active {
   transform: scale(0.95);
+}
+
+@media (max-width: 1023px) {
+  .btn-final {
+    bottom: auto;
+    top: 50%;
+    translate: -50% -50%;
+    width: min(92vw, 420px);
+  }
 }
 
 @keyframes final-fade {

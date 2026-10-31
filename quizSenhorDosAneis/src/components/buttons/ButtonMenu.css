@@ -1,9 +1,10 @@
-/* Botão de madeira (btn-marrom 487x120): o texto fica dentro da área lisa do centro,
-   longe das pontas ornamentadas */
+/* Botão de madeira (btn-marrom 487x120). O texto ocupa no máximo 64% da largura do
+   próprio botão (área lisa entre as pontas). Sem padding em %, que seria calculado
+   sobre o pai e mudaria conforme o lugar onde o botão aparece. */
 .btn-menu {
   width: clamp(240px, 80vw, 320px);
   aspect-ratio: 487 / 120;
-  padding: 0 19%;
+  padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -11,7 +12,7 @@
   border: none;
   transition: transform 0.2s ease, filter 0.2s ease, color 0.2s ease;
   font-family: var(--font-display);
-  font-size: clamp(15px, 3.6vw, 19px);
+  font-size: clamp(16px, 4.4vw, 20px);
   line-height: 1.05;
   letter-spacing: 0.02em;
   filter: drop-shadow(8px 12px 16px rgba(0, 0, 0, 0.95));
@@ -21,17 +22,23 @@
 
 .btn-menu .txt-btn {
   display: block;
-  max-width: 100%;
+  max-width: 64%;
   translate: 0 4%; /* centro óptico da madeira fica um pouco abaixo do centro da imagem */
   text-wrap: balance;
 }
 
-.btn-menu:hover:not(:disabled),
-.btn-menu:focus-visible {
+.btn-menu:hover:not(:disabled) {
   background-image: url(../../assets/images/button/btn-dourado.png);
   transform: translateY(-2px) scale(1.02);
   color: rgb(187, 139, 17);
   filter: drop-shadow(4px 18px 14px rgba(0, 0, 0, 1));
+}
+
+/* Foco de teclado: brilho que segue o contorno do PNG, em vez de um retângulo */
+.btn-menu:focus-visible {
+  outline: none;
+  color: rgb(214, 170, 50);
+  filter: drop-shadow(0 0 6px #f3c44b) drop-shadow(0 0 2px #f3c44b);
 }
 
 .btn-menu:disabled {

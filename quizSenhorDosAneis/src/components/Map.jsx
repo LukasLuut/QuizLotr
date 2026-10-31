@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import mapImage from "../assets/images/map.webp";
 import movingMarker from "../lib/leaflet/MovingMarker";
 import shireIconUrl from "../assets/icons/Map Icons/House.png";
+import Button from "./buttons/Button";
 import "./Map.css";
 
 const BOUNDS = [
@@ -75,9 +76,9 @@ export default function MapaTerraMedia({ region = 0, targetRegion = null, travel
       </MapContainer>
 
       {showAdvance && (
-        <button type="button" className="btn-next-map mostrar" onClick={onAdvance}>
+        <Button className="btn-next-map" onClick={onAdvance}>
           Avançar
-        </button>
+        </Button>
       )}
     </div>
   );

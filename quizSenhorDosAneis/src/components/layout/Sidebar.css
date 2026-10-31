@@ -4,7 +4,7 @@
   flex-direction: column;
   gap: 12px;
   width: 100%;
-  max-height: calc(100dvh - 48px);
+  height: 100%;
   color: aliceblue;
   filter: drop-shadow(0 0 15px rgb(0, 0, 0));
 }
@@ -47,10 +47,8 @@
 
 /* 2) Painel da partida (box-lateral, 1287x1956) */
 .match-card {
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
-  aspect-ratio: 1287 / 1956;
-  max-height: 100%;
   background: url("../../assets/images/box/box-lateral.webp") center / 100% 100% no-repeat;
   padding: 16% 15% 13%;
   display: flex;
@@ -99,10 +97,12 @@
 .lives {
   color: #e2463c;
   letter-spacing: 3px;
+  font-size: 1.25em;
 }
 
 .lives-lost {
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(0, 0, 0, 0.45);
+  text-shadow: 0 0 1px rgba(245, 230, 196, 0.5);
 }
 
 .progress p {
@@ -132,9 +132,11 @@
   text-align: center;
 }
 
+/* cronômetro preso ao pé do painel, sem buraco de madeira vazia no meio */
 .cronometro-sidebar {
-  flex: 1;
-  min-height: 70px;
+  flex: 0 0 auto;
+  margin-top: auto;
+  height: clamp(100px, 15dvh, 160px);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -157,6 +159,13 @@
   .player-card {
     flex: 1 1 260px;
     max-width: 420px;
+    aspect-ratio: auto;
+    min-height: 84px;
+    padding: 14px 7%;
+  }
+
+  .player-avatar {
+    width: 64px;
   }
 
   .match-card {
@@ -188,6 +197,6 @@
   .cronometro-sidebar {
     flex: none;
     height: 72px;
-    min-height: 0;
+    margin-top: 0;
   }
 }

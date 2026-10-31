@@ -31,32 +31,38 @@
 /* Fonte do título */
 .title-login {
   font-family: var(--font-display);
-  font-size: clamp(52px, 12vw, 100px);
+  font-size: clamp(44px, min(12vw, 11dvh), 92px);
   color: var(--color-text-heading);
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: clamp(8px, 2vh, 20px);
   text-shadow: 1px 1px 2px var(--shadow-strong);
   font-weight: 200;
   line-height: 1;
   text-wrap: balance;
 }
 
+/* Formulário dentro da moldura de madeira em pé (box-lateral) */
 .login-form {
-  width: 100%;
+  --w: min(440px, calc(100vw - 32px));
+  width: var(--w);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 22px;
+  gap: clamp(12px, 2.2vh, 20px);
+  background: url(../assets/images/box/box-lateral.webp) center / 100% 100% no-repeat;
+  padding: calc(var(--w) * 0.16) calc(var(--w) * 0.14) calc(var(--w) * 0.12);
+  filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.75));
 }
 
 .field-hint {
   font-size: 13px;
-  color: var(--color-text-muted);
+  color: #e8dcc0;
   text-shadow: 1px 1px 2px #000;
 }
 
 .login-form .btn-menu {
-  max-width: 100%;
+  width: 100%;
+  max-width: 300px;
 }
 
 .bg-video-login {

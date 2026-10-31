@@ -6,11 +6,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(18, 12, 6, 0.72);
-  border: 1px solid rgba(201, 162, 39, 0.45);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  padding: 6px 16px;
+  background: url("../assets/images/button/btn-marrom-dourado.png") center / 100% 100% no-repeat;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
 }
 
 .sound-toggle-btn {
@@ -35,5 +33,15 @@
 @media (pointer: coarse) {
   .sound-toggle-volume {
     display: none;
+  }
+}
+
+/* celular: canto superior esquerdo, sem cobrir as alternativas */
+@media (max-width: 640px) {
+  .sound-toggle {
+    bottom: auto;
+    right: auto;
+    top: calc(14px + env(safe-area-inset-top, 0px));
+    left: calc(14px + env(safe-area-inset-left, 0px));
   }
 }

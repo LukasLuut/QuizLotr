@@ -2,12 +2,14 @@
 .quiz-container {
   position: relative;
   width: 100%;
-  min-height: min(91dvh, 860px);
+  /* altura fixa: o quadro não muda de tamanho entre as fases */
+  height: min(91dvh, 860px);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.2vh;
-  padding: clamp(48px, 9%, 96px) clamp(18px, 7%, 80px) clamp(24px, 5%, 60px);
+  /* topo abaixo da pedra (12% da moldura), base acima da pedra inferior (6%) */
+  padding: clamp(56px, 12.5%, 120px) clamp(18px, 7%, 80px) clamp(40px, 7.5%, 72px);
   text-align: center;
   font-family: var(--font-title);
   filter: drop-shadow(-10px 20px 15px rgb(0, 0, 0));
@@ -21,24 +23,40 @@
   z-index: -1;
 }
 
+/* "Responda" centralizado na plaqueta verde do topo da moldura */
 .title-responda {
-  color: #c3c3c3;
+  position: absolute;
+  top: 6.05%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 40%;
+  text-align: center;
+  pointer-events: none;
+  color: #d8d8d8;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
   font-family: var(--font-display);
   font-weight: 200;
-  font-size: clamp(26px, 3vw, 40px);
+  font-size: clamp(18px, 2.4vw, 34px);
   line-height: 1;
 }
 
 .quiz-image {
   position: relative;
   width: 100%;
-  height: clamp(200px, 36dvh, 420px);
+  height: clamp(150px, 30dvh, 400px);
+  min-height: 120px;
   border: 6px solid #362312;
   border-radius: 32px;
   overflow: hidden;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 1);
-  flex: none;
+  flex: 0 1 auto;
+  transition: height 0.4s ease;
+}
+
+/* Sem pergunta na tela (carregando, entre regiões, viagem): o mapa ocupa o espaço */
+.quiz-image--full {
+  flex: 1 1 auto;
+  height: auto;
 }
 
 .quiz-body {
@@ -49,6 +67,11 @@
   align-items: center;
   gap: 10px;
   min-height: 0;
+  overflow: hidden;
+}
+
+.quiz-body--compact {
+  flex: none;
 }
 
 .quiz-status {
@@ -89,8 +112,8 @@
 }
 
 .quiz-feedback {
-  min-height: 2.6em;
-  max-width: 62ch;
+  min-height: 2.7em;
+  max-width: 60ch;
   font-family: var(--font-body);
   font-size: clamp(13px, 1.1vw, 16px);
   line-height: 1.35;
@@ -105,33 +128,61 @@
   color: #ff9d8f;
 }
 
+/* Tempo da pergunta (modo Desafio) na moldura do cronômetro */
 .question-timer {
   flex: none;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 18px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(245, 230, 196, 0.35);
+  width: 56px;
+  aspect-ratio: 1217 / 1600;
+  display: grid;
+  place-items: center;
+  padding-top: 14%;
+  background: url("../../assets/images/cronometro-border.webp") center / contain no-repeat;
+  font-family: var(--font-display);
+  font-size: 17px;
   color: var(--color-text-main);
+  text-shadow: 0 2px 3px #000;
+}
+
+.question-timer .timer-icon {
+  display: none;
 }
 
 .question-timer.urgent {
   color: #ff8a7a;
-  border-color: #ff8a7a;
+}
+
+@media (max-height: 800px) and (min-width: 1024px) {
+  .quiz-image {
+    height: 26dvh;
+  }
+
+  .quiz-question {
+    font-size: clamp(16px, 1.5vw, 22px);
+  }
 }
 
 @media (max-width: 640px) {
   .quiz-container {
-    min-height: auto;
-    padding: 56px 18px 32px;
+    height: auto;
+    padding: 64px 18px 36px;
+  }
+
+  .quiz-body {
+    min-height: 300px;
   }
 
   .quiz-image {
-    height: 32dvh;
+    height: 24dvh;
     border-width: 3px;
     border-radius: 20px;
+  }
+
+  .quiz-image--full {
+    height: 42dvh;
+  }
+
+  .quiz-body--compact {
+    min-height: 0;
   }
 
   .quiz-options {
@@ -140,6 +191,8 @@
 
   .btn-question {
     aspect-ratio: auto;
-    min-height: 54px;
+    min-height: 56px;
+    font-size: 17px;
+    padding: 8px 14%;
   }
 }

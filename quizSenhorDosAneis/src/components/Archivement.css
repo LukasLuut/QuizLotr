@@ -1,9 +1,9 @@
 .archivement-box {
   position: fixed;
-  top: calc(16px + env(safe-area-inset-top, 0px));
+  top: calc(68px + env(safe-area-inset-top, 0px)); /* abaixo de "Ver paisagem" */
   right: calc(16px + env(safe-area-inset-right, 0px));
-  width: min(260px, 60vw);
-  aspect-ratio: 350 / 500;
+  width: min(240px, 56vw);
+  aspect-ratio: 600 / 912;
   z-index: var(--z-toast);
   animation: archivement-in 0.45s ease-out both;
   pointer-events: none;
@@ -11,6 +11,16 @@
 
 .archivement-box.leaving {
   animation: archivement-out 0.4s ease-in both;
+}
+
+@media (max-width: 1023px) {
+  .archivement-box {
+    top: auto;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    right: 50%;
+    translate: 50% 0;
+    width: min(220px, 60vw);
+  }
 }
 
 @keyframes archivement-in {
