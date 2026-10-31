@@ -39,11 +39,17 @@ function message(outcome) {
   return ERROS[outcome.answered % ERROS.length];
 }
 
+// Título da explicação: pontos ganhos, erro ou tempo esgotado
+function outcomeTitle(o) {
+  if (o.timeExpired && !o.isCorrect) return "Tempo esgotado!";
+  return o.isCorrect ? "Correto! +" + o.points : "Não foi dessa vez.";
+}
+
 /**
  * Coluna do jogador em duas caixas:
  * 1) placa com a identidade (foto, nome e título);
- * 2) painel da partida: região e pontuação no topo, mensagem da última resposta,
- *    cronômetro e, embaixo, a barra de progresso.
+ * 2) painel da partida: região, pontuação e mensagem no topo; explicação da última
+ *    resposta logo acima do cronômetro; embaixo, a barra de progresso.
  */
 export default function Sidebar({ player, round, region, outcome, timerRunning }) {
   const answered = round?.answered ?? 0;
@@ -85,6 +91,15 @@ export default function Sidebar({ player, round, region, outcome, timerRunning }
           <p className={`message ${outcome ? (outcome.isCorrect ? "message-correct" : "message-wrong") : ""}`} aria-live="polite">
             {message(outcome)}
           </p>
+
+          {/* Explicação da última resposta: logo acima do cronômetro */}
+          <div className="answer-explanation" aria-live="polite">
+            {outcome && (
+              <p className={outcome.isCorrect ? "explanation-correct" : "explanation-wrong"}>
+                <strong>{outcomeTitle(outcome)}</strong> {outcome.explanation}
+              </p>
+            )}
+          </div>
 
           <div className="cronometro-sidebar">
             <Cronometro running={timerRunning} />

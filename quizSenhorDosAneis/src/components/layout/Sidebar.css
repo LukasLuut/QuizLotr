@@ -136,10 +136,9 @@
   transition: width 0.6s ease;
 }
 
-/* Mensagem da última resposta: ocupa o espaço entre a pontuação e o cronômetro */
+/* Mensagem da última resposta: logo abaixo da pontuação */
 .message {
-  flex: 1 1 auto;
-  min-height: 3em;
+  flex: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -148,6 +147,35 @@
   color: var(--color-text-main);
   text-align: center;
   text-wrap: balance;
+}
+
+/* Explicação da resposta: ocupa o espaço livre e encosta no cronômetro */
+.answer-explanation {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow-y: auto;
+  font-family: var(--font-body);
+  font-size: clamp(12px, 0.9vw, 14px);
+  line-height: 1.35;
+  text-align: center;
+  color: var(--color-text-main);
+  scrollbar-width: none;
+}
+
+.answer-explanation strong {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.explanation-correct strong {
+  color: #a8e08f;
+}
+
+.explanation-wrong strong {
+  color: #ff9d8f;
 }
 
 .message-correct {
@@ -217,6 +245,11 @@
 
   .message {
     display: none;
+  }
+
+  .answer-explanation {
+    flex: 1 1 100%;
+    order: 5;
   }
 
   .cronometro-sidebar {

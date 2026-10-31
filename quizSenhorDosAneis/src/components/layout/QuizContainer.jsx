@@ -21,7 +21,7 @@ function answerStatus(answerId, { phase, selectedId, result }) {
  * Não guarda estado do jogo; tudo vem do useGameSession.
  */
 function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, onArrive }) {
-  const { phase, question, result, region, targetRegion, fresh } = game;
+  const { phase, question, region, targetRegion, fresh } = game;
   const payload = question?.question;
   const showQuestion = SHOWS_QUESTION.has(phase) && payload;
   const locked = phase !== "answering";
@@ -86,21 +86,6 @@ function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, o
                   />
                 );
               })}
-            </div>
-
-            <div className="quiz-feedback" aria-live="polite">
-              {phase === "feedback" && result && (
-                <p className={result.isCorrect ? "feedback-correct" : "feedback-wrong"}>
-                  <strong>
-                    {result.timeExpired && !result.isCorrect
-                      ? "Tempo esgotado!"
-                      : result.isCorrect
-                        ? `Correto! +${result.points}`
-                        : "Não foi dessa vez."}
-                  </strong>{" "}
-                  {result.explanation}
-                </p>
-              )}
             </div>
           </>
         )}

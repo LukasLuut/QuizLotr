@@ -39,7 +39,14 @@ function PlayQuiz() {
 
   useEffect(() => {
     if (phase === "feedback" && result) {
-      setOutcome({ isCorrect: result.isCorrect, timeExpired: result.timeExpired, streak: result.streak, answered: result.answered });
+      setOutcome({
+        isCorrect: result.isCorrect,
+        timeExpired: result.timeExpired,
+        streak: result.streak,
+        answered: result.answered,
+        points: result.points,
+        explanation: result.explanation,
+      });
     }
   }, [phase, result]);
 

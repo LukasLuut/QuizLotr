@@ -46,12 +46,11 @@ describe("QuizContainer", () => {
     expect(onAnswer).not.toHaveBeenCalled();
   });
 
-  it("no erro, marca a escolhida e revela a correta com a explicação", () => {
+  it("no erro, marca a escolhida e revela a correta", () => {
     const result = { isCorrect: false, correctAnswerId: 1, points: 0, explanation: "Elrond, o Meio-Elfo." };
     render(<QuizContainer game={{ ...base, phase: "feedback", selectedId: 2, result }} onAnswer={vi.fn()} />);
     expect(screen.getByRole("button", { name: /Elrond.*correta/ })).toHaveClass("correct");
     expect(screen.getByRole("button", { name: /Gandalf.*incorreta/ })).toHaveClass("wrong");
-    expect(screen.getByText(/Meio-Elfo/)).toBeInTheDocument();
   });
 
   it("entre regiões mostra o botão de avançar no lugar da pergunta", async () => {
