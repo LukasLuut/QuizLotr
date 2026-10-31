@@ -153,11 +153,9 @@ function PlayQuiz() {
   const uiHidden = inScene || !!peek || phase === "finished";
   const showTitle = inScene || peek === "title" || peek === "fading";
   const rule = round?.regionRules?.[region];
-  // O Peso do Anel: quanto maior a corrupção, mais turva e sem cor fica a tela (0..1)
-  const corruption = Math.min(1, (round?.corruption ?? 0) / 100);
 
   return (
-    <div className={`bg-black-quiz ${corruption > 0 ? "has-corruption" : ""}`} style={{ "--corruption": corruption }}>
+    <div className="bg-black-quiz">
       {/* Título da região (narrador) e a regra própria do lugar */}
       {showTitle && (
         <div className="title-scene">
@@ -171,10 +169,6 @@ function PlayQuiz() {
         </div>
       )}
 
-      {/* camadas do Anel só existem com corrupção (sem custo em partida limpa) */}
-      {corruption > 0 && (
-        <div className="corruption-haze" aria-hidden="true"></div>
-      )}
 
       <button type="button" className={`toggle-overlay-btn ${uiHidden ? "hidden-ui" : "visible-ui"}`} onClick={handlePeek} disabled={uiHidden}>
         <span aria-hidden="true">👁</span> Ver paisagem
