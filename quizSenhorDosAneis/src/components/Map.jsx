@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import mapImage from "../assets/images/map.webp";
 import movingMarker from "../lib/leaflet/MovingMarker";
 import shireIconUrl from "../assets/icons/Map Icons/House.png";
+import frodoIconUrl from "../assets/icons/frodo-icon.png";
 import Button from "./buttons/Button";
 import "./Map.css";
 
@@ -13,12 +14,12 @@ const BOUNDS = [
   [4344, 5000],
 ];
 
-// Ícones criados uma vez (fora do componente): o personagem é um anel desenhado em SVG, sem depender de CDN
-const characterIcon = L.divIcon({
+// Ícones criados uma vez (fora do componente): o personagem é o Frodo (assets/icons/frodo-icon.png)
+const characterIcon = new L.Icon({
+  iconUrl: frodoIconUrl,
   className: "character-marker",
-  html: '<span class="character-ring" aria-hidden="true"></span>',
-  iconSize: [36, 36],
-  iconAnchor: [18, 30],
+  iconSize: [48, 48],
+  iconAnchor: [24, 44],
 });
 
 const shireIcon = new L.Icon({
@@ -67,8 +68,9 @@ export default function MapaTerraMedia({ region = 0, targetRegion = null, travel
         keyboard={false}
       >
         <ImageOverlay url={mapImage} bounds={BOUNDS} zIndex={1} />
+        <KeepCenterOnResize />
         {intro && <IntroZoom target={endOf(0)} />}
-        <MovingCharacter region={region} targetRegion={targetRegion} travelling={travelling} onArrive={onArrive} />
+        <MovingCharacter region={region} targetRegion={targetRegion} travelling={travelling} intro={intro} onArrive={onArrive} />
 
         <Marker position={[3210, 1520]} icon={shireIcon}>
           <Popup>Hobbington: “Lar dos Hobbits...”</Popup>
@@ -82,6 +84,25 @@ export default function MapaTerraMedia({ region = 0, targetRegion = null, travel
       )}
     </div>
   );
+}
+
+// O quadro do mapa muda de altura entre as fases; o Leaflet só percebe mudanças de
+// tamanho da janela. Aqui ele recalcula o tamanho mantendo o mesmo centro.
+function KeepCenterOnResize() {
+  const map = useMap();
+
+  useEffect(() => {
+    const container = map.getContainer();
+    const observer = new ResizeObserver(() => {
+      const center = map.getCenter();
+      map.invalidateSize({ animate: false, pan: false });
+      map.setView(center, map.getZoom(), { animate: false });
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [map]);
+
+  return null;
 }
 
 // Abertura: começa com o mapa inteiro e aproxima até o Condado
@@ -98,7 +119,7 @@ export function IntroZoom({ target }) {
 }
 
 // Personagem: parado no fim da região atual; anda pela rota quando travelling vira true
-export function MovingCharacter({ region, targetRegion, travelling, onArrive }) {
+export function MovingCharacter({ region, targetRegion, travelling, intro, onArrive }) {
   const map = useMap();
   const markerRef = useRef(null);
   const onArriveRef = useRef(onArrive);
@@ -110,7 +131,9 @@ export function MovingCharacter({ region, targetRegion, travelling, onArrive }) 
     const pos = endOf(region);
     if (markerRef.current) map.removeLayer(markerRef.current);
     markerRef.current = L.marker(pos, { icon: characterIcon, keyboard: false, interactive: false }).addTo(map);
-  }, [map, region, travelling]);
+    // Centraliza no personagem (na partida nova, a animação de abertura já faz isso)
+    if (!intro) map.setView(pos, REST_ZOOM, { animate: false });
+  }, [map, region, travelling]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Viagem até a próxima região
   useEffect(() => {

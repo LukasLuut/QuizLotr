@@ -43,7 +43,7 @@
 .quiz-image {
   position: relative;
   width: 100%;
-  height: clamp(150px, 30dvh, 400px);
+  height: clamp(150px, 28dvh, 400px);
   min-height: 120px;
   border: 6px solid #362312;
   border-radius: 32px;
