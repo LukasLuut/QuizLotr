@@ -28,6 +28,8 @@
   width: 100%;
   grid-row: 1 / -1;
   align-self: center;
+  /* 10 px de respiro em cima (margem: padding deslocaria a foto dentro do aro) */
+  margin-top: 10px;
 }
 
 .player-text {
