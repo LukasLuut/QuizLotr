@@ -16,16 +16,17 @@
   aspect-ratio: 1000 / 449;
   background: url("../../assets/images/box/box-aviso.webp") center / 100% 100% no-repeat;
   display: grid;
-  grid-template-columns: 21.76% minmax(0, 1fr); /* foto 20% menor (27,2% -> 21,76%) */
+  grid-template-columns: 23.94% minmax(0, 1fr); /* foto: 21,76% + 10% */
   grid-template-rows: 1fr auto;
   column-gap: 6%;
   row-gap: 4px;
   padding: 5.5% 9% 11%;
 }
 
-/* foto com o aro, centralizada na altura livre acima da barra */
+/* foto com o aro, centralizada na altura da placa (ocupa as duas linhas) */
 .player-avatar {
   width: 100%;
+  grid-row: 1 / -1;
   align-self: center;
 }
 
@@ -35,19 +36,19 @@
   flex-direction: column;
   justify-content: flex-start;
   gap: 3px;
-  padding-top: 10px;
+  padding-top: 20px;
 }
 
 /* O Peso do Anel */
 .corruption {
-  grid-column: 1 / -1;
+  grid-column: 2;
   align-self: end;
   padding-inline: 2%;
 }
 
 .corruption-label {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   font-family: var(--font-title);
   font-size: clamp(10px, 0.75vw, 13px);
   color: #e9b46a;

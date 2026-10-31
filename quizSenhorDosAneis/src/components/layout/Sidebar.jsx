@@ -47,7 +47,6 @@ export default function Sidebar({ player, round, region, outcome, timerRunning }
         <div className="corruption">
           <p id="corruption-label" className="corruption-label">
             <span>{corruptionLabel(corruption)}</span>
-            <span>{corruption}%</span>
           </p>
           <div className="corruption-bar" role="meter" aria-labelledby="corruption-label" aria-valuemin={0} aria-valuemax={100} aria-valuenow={corruption}>
             <div className="corruption-fill" style={{ width: `${corruption}%` }}></div>
