@@ -46,6 +46,7 @@
   grid-column: 2;
   align-self: end;
   padding-inline: 2%;
+  translate: -5px 0; /* 5 px mais para a esquerda */
 }
 
 .corruption-label {
