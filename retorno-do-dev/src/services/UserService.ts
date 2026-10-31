@@ -5,7 +5,7 @@ import { CreateUserDTO } from '../dtos/CreateUserDTO'
 import { UpdateUserDTO } from '../dtos/UpdateUserDTO'
 import { LoginUserDTO } from '../dtos/LoginUserDTO'
 import { Achievement } from '../models/Achievement'
-import { achievementByCode } from '../game/rules'
+import { achievementByCode, isPersona } from '../game/rules'
 
 export const DEFAULT_TITLE = 'Viajante do Condado'
 
@@ -28,7 +28,8 @@ export function toPublicUser(user: User): PublicUser {
     name: user.name,
     email: user.email,
     bestScore: user.bestScore,
-    avatar: user.avatar ?? null,
+    // fotos antigas (imagens enviadas) não valem mais: só personagens da lista
+    avatar: isPersona(user.avatar) ? user.avatar : null,
     title: (user.titleCode && achievementByCode(user.titleCode)?.title) || DEFAULT_TITLE,
     titleCode: user.titleCode ?? null,
     createdAt: user.createdAt,

@@ -1,8 +1,7 @@
 // src/dtos/UpdateUserDTO.ts
-import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator'
+import { IsEmail, IsIn, IsNotEmpty, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator'
 import { NAME_PATTERN, PASSWORD_RULES } from './CreateUserDTO'
-
-export const AVATAR_MAX_LENGTH = 400_000
+import { PERSONAS } from '../game/rules'
 
 // Mesmas regras do cadastro, mas todos os campos são opcionais.
 // Qualquer outro campo (id, score...) é rejeitado pelo validateDTO.
@@ -29,11 +28,9 @@ export class UpdateUserDTO {
   @Matches(PASSWORD_RULES[3][0], { message: PASSWORD_RULES[3][1] })
   password?: string
 
-  // Foto de perfil reduzida no navegador (até ~300 KB). null remove a foto.
+  // Foto de perfil: um dos personagens disponíveis (null volta à foto padrão)
   @IsOptional()
-  @IsString({ message: 'Imagem inválida' })
-  @MaxLength(AVATAR_MAX_LENGTH, { message: 'A imagem é grande demais (máx. 300 KB)' })
-  @Matches(/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/, { message: 'A imagem deve ser PNG, JPEG ou WebP' })
+  @IsIn(PERSONAS, { message: 'Escolha um dos personagens disponíveis' })
   avatar?: string | null
 
   // Código da conquista usada como título (null volta ao título padrão)

@@ -25,8 +25,8 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date
 
-  // Foto de perfil como data URL (image/png|jpeg|webp em base64), já reduzida no cliente
-  @Column({ type: 'mediumtext', nullable: true })
+  // Foto de perfil: código de um personagem (ver PERSONAS em game/rules.ts)
+  @Column({ type: 'varchar', length: 20, nullable: true })
   avatar: string | null
 
   // Título escolhido pelo jogador: código de uma conquista desbloqueada (ver game/rules.ts)

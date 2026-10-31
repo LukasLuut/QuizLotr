@@ -12,7 +12,7 @@ app.disable('x-powered-by')
 app.use(helmet())
 // Só as origens do .env (CORS_ORIGIN) podem chamar a API pelo navegador
 app.use(cors({ origin: env.corsOrigins }))
-app.use(express.json({ limit: '512kb' })) // comporta a foto de perfil
+app.use(express.json({ limit: '20kb' }))
 app.use(routes)
 app.use(notFoundHandler)
 app.use(errorHandler)

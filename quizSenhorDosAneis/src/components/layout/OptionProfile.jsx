@@ -1,5 +1,5 @@
 import "./OptionProfile.css";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../buttons/Button";
 import Modal from "../Modal";
@@ -8,7 +8,7 @@ import PopUpDTO from "../PopUpDTO";
 import Avatar from "../Avatar";
 import { useAuth } from "../../context/AuthContext";
 import { api } from "../../services/api";
-import { resizeImageToDataUrl } from "../../utils/image";
+import { DEFAULT_PERSONA, PERSONAS } from "../../config/personas";
 
 /**
  * Modal de edição do cadastro: foto, título (das conquistas desbloqueadas), nome,
@@ -22,7 +22,6 @@ function OptionProfile({ isOpen, onClose }) {
 
   const [form, setForm] = useState({ name: "", email: "", password: "", titleCode: "" });
   const [titles, setTitles] = useState([]); // conquistas desbloqueadas
-  const fileRef = useRef(null);
   const [acao, setAcao] = useState(null); // null | "update" | "delete"
   const [busy, setBusy] = useState(false);
   const [popup, setPopup] = useState(null); // { message, variant }
@@ -62,13 +61,12 @@ function OptionProfile({ isOpen, onClose }) {
     return body;
   };
 
-  const handlePhoto = async (e) => {
-    const file = e.target.files?.[0];
-    e.target.value = "";
-    if (!file) return;
+  // Foto: escolher um personagem salva na hora
+  const choosePersona = async (code) => {
+    if (busy || code === (user?.avatar || DEFAULT_PERSONA)) return;
     setBusy(true);
     try {
-      await updateUser({ avatar: await resizeImageToDataUrl(file) });
+      await updateUser({ avatar: code });
       setPopup({ message: "Foto de perfil atualizada.", variant: "success" });
     } catch (err) {
       setPopup({ message: err.message, variant: "error" });
@@ -113,37 +111,43 @@ function OptionProfile({ isOpen, onClose }) {
         <h2 id={titleId}>Atualizar Cadastro</h2>
 
         <form className="option-profile-form" onSubmit={handleSubmit} noValidate>
-          {/* Identidade: foto e título exibidos no quiz */}
-          <div className="profile-identity">
-            <button
-              type="button"
-              className="identity-avatar"
-              onClick={() => fileRef.current?.click()}
-              disabled={busy}
-              aria-label="Trocar foto de perfil"
-              title="Trocar foto de perfil"
-            >
-              <Avatar src={user?.avatar} name={user?.name} />
-              <span className="identity-avatar-hint" aria-hidden="true">
-                Trocar foto
-              </span>
-            </button>
-            <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" className="visually-hidden" tabIndex={-1} onChange={handlePhoto} />
-
-            <div className="field identity-title">
-              <label htmlFor="perfil-titulo">Título</label>
-              <select id="perfil-titulo" name="titleCode" value={form.titleCode} onChange={handleChange}>
-                <option value="">Viajante do Condado</option>
-                {titles.map((t) => (
-                  <option key={t.code} value={t.code}>
-                    {t.title}
-                  </option>
-                ))}
-              </select>
-              <span className="identity-hint">
-                {titles.length === 0 ? "Desbloqueie conquistas para ganhar novos títulos." : "Títulos vêm das suas conquistas."}
-              </span>
+          {/* Foto: só os personagens disponíveis */}
+          <fieldset className="persona-picker" disabled={busy}>
+            <legend>Foto de perfil</legend>
+            <div className="persona-options" role="radiogroup" aria-label="Foto de perfil">
+              {PERSONAS.map((p) => {
+                const selected = (user?.avatar || DEFAULT_PERSONA) === p.code;
+                return (
+                  <button
+                    key={p.code}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected}
+                    className={`persona-option ${selected ? "selected" : ""}`}
+                    onClick={() => choosePersona(p.code)}
+                    title={p.name}
+                  >
+                    <Avatar persona={p.code} name={p.name} />
+                  </button>
+                );
+              })}
             </div>
+          </fieldset>
+
+          {/* Título exibido abaixo do nome no quiz (vem das conquistas) */}
+          <div className="field identity-title">
+            <label htmlFor="perfil-titulo">Título</label>
+            <select id="perfil-titulo" name="titleCode" value={form.titleCode} onChange={handleChange}>
+              <option value="">Viajante do Condado</option>
+              {titles.map((t) => (
+                <option key={t.code} value={t.code}>
+                  {t.title}
+                </option>
+              ))}
+            </select>
+            <span className="identity-hint">
+              {titles.length === 0 ? "Desbloqueie conquistas para ganhar novos títulos." : "Títulos vêm das suas conquistas."}
+            </span>
           </div>
 
           <div className="field">

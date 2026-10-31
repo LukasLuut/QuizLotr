@@ -62,53 +62,57 @@
   }
 }
 
-/* Linha de identidade: foto (clicável) e seletor de título */
-.profile-identity {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+/* Escolha da foto: os 10 personagens em uma fileira de rostos */
+.persona-picker {
   width: 100%;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.identity-avatar {
-  position: relative;
-  width: 84px;
-  flex: none;
+.persona-picker legend {
+  font-family: var(--font-display);
+  font-weight: 100;
+  font-size: clamp(16px, 2.6vw, 20px);
+  color: var(--color-text-label);
+  text-shadow: 1px 1px 2px var(--shadow-strong);
+  margin-bottom: 6px;
+}
+
+.persona-options {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.persona-option {
   border: none;
   background: none;
   border-radius: 50%;
+  padding: 0;
+  opacity: 0.75;
+  transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
 }
 
-.identity-avatar .avatar {
+.persona-option .avatar {
   width: 100%;
-  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-.identity-avatar-hint {
-  position: absolute;
-  left: 50%;
-  bottom: -4px;
-  translate: -50% 0;
-  white-space: nowrap;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(20, 12, 5, 0.85);
-  border: 1px solid rgba(201, 162, 39, 0.7);
-  font-size: 11px;
-  color: var(--color-text-main);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.identity-avatar:hover .avatar,
-.identity-avatar:focus-visible .avatar {
-  transform: scale(1.05);
-  filter: drop-shadow(0 0 8px rgba(255, 196, 64, 0.6));
-}
-
-.identity-avatar:hover .identity-avatar-hint,
-.identity-avatar:focus-visible .identity-avatar-hint {
+.persona-option:hover,
+.persona-option:focus-visible {
   opacity: 1;
+  transform: scale(1.08);
+}
+
+.persona-option.selected {
+  opacity: 1;
+  transform: scale(1.12);
+  filter: drop-shadow(0 0 8px rgba(255, 196, 64, 0.9));
+}
+
+.persona-picker:disabled .persona-option {
+  opacity: 0.5;
 }
 
 .identity-title {
@@ -137,4 +141,12 @@
   font-size: 12px;
   color: var(--color-text-muted);
   text-shadow: 1px 1px 2px #000;
+}
+
+/* celular: duas fileiras de cinco rostos */
+@media (max-width: 760px) {
+  .persona-options {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px 14px;
+  }
 }

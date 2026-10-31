@@ -24,7 +24,7 @@ export default function Sidebar({ player, round, region, outcome, timerRunning }
   return (
     <aside className="sidebar" aria-label="Jogador e partida">
       <section className="player-card" aria-label="Jogador">
-        <Avatar src={player?.avatar} name={player?.name} className="player-avatar" />
+        <Avatar persona={player?.avatar} name={player?.name} className="player-avatar" />
         <div className="player-text">
           <h2 className="player-name">{player?.name}</h2>
           {/* título escolhido no Editar Perfil (vem das conquistas) */}

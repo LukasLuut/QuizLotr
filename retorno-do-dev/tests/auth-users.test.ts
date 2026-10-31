@@ -106,22 +106,19 @@ describe('conta do jogador', () => {
 })
 
 describe('foto de perfil', () => {
-  const tinyPng =
-    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
-
-  it('salva, devolve e remove a foto', async () => {
+  it('aceita só personagens da lista e permite voltar ao padrão', async () => {
     const p = await createPlayer()
-    const saved = await api().put('/users/me').set(auth(p.token)).send({ avatar: tinyPng })
+    const saved = await api().put('/users/me').set(auth(p.token)).send({ avatar: 'galadriel' })
     expect(saved.status).toBe(200)
-    expect(saved.body.avatar).toBe(tinyPng)
-    const removed = await api().put('/users/me').set(auth(p.token)).send({ avatar: null })
-    expect(removed.body.avatar).toBeNull()
+    expect(saved.body.avatar).toBe('galadriel')
+    const reset = await api().put('/users/me').set(auth(p.token)).send({ avatar: null })
+    expect(reset.body.avatar).toBeNull()
   })
 
-  it('rejeita o que não é imagem', async () => {
+  it('rejeita imagens enviadas e personagens desconhecidos', async () => {
     const p = await createPlayer()
-    const res = await api().put('/users/me').set(auth(p.token)).send({ avatar: 'data:text/html;base64,PHNjcmlwdD4=' })
-    expect(res.status).toBe(400)
+    expect((await api().put('/users/me').set(auth(p.token)).send({ avatar: 'data:image/png;base64,AAAA' })).status).toBe(400)
+    expect((await api().put('/users/me').set(auth(p.token)).send({ avatar: 'sauron' })).status).toBe(400)
   })
 })
 

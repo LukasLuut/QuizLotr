@@ -81,6 +81,11 @@ export function shuffle<T>(items: T[], random: () => number = Math.random): T[] 
   return a
 }
 
+// Personagens disponíveis como foto de perfil (imagens em quizSenhorDosAneis/src/assets/images/personas)
+export const PERSONAS = ['aragorn', 'arwen', 'boromir', 'frodo', 'galadriel', 'gandalf', 'gimli', 'legolas', 'pippin', 'sam'] as const
+export type Persona = (typeof PERSONAS)[number]
+export const isPersona = (value: unknown): value is Persona => typeof value === 'string' && (PERSONAS as readonly string[]).includes(value)
+
 // Conquistas -----------------------------------------------------------------
 
 export interface AchievementDef {
