@@ -88,18 +88,34 @@ export default function MapaTerraMedia({ region = 0, targetRegion = null, travel
 
 // O quadro do mapa muda de altura entre as fases; o Leaflet só percebe mudanças de
 // tamanho da janela. Aqui ele recalcula o tamanho mantendo o mesmo centro.
+// Enquanto o mapa se move (abertura, viagem), só recalcula o tamanho: um setView
+// nesse momento cancelaria a animação em andamento.
 function KeepCenterOnResize() {
   const map = useMap();
 
   useEffect(() => {
+    let moving = false;
+    const onStart = () => (moving = true);
+    const onEnd = () => (moving = false);
+    map.on("movestart zoomstart", onStart);
+    map.on("moveend zoomend", onEnd);
+
     const container = map.getContainer();
     const observer = new ResizeObserver(() => {
+      if (moving) {
+        map.invalidateSize({ animate: false, pan: false });
+        return;
+      }
       const center = map.getCenter();
       map.invalidateSize({ animate: false, pan: false });
       map.setView(center, map.getZoom(), { animate: false });
     });
     observer.observe(container);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      map.off("movestart zoomstart", onStart);
+      map.off("moveend zoomend", onEnd);
+    };
   }, [map]);
 
   return null;
@@ -111,7 +127,7 @@ export function IntroZoom({ target }) {
 
   useEffect(() => {
     map.setView([2200, 2500], -2.5, { animate: false });
-    const t = setTimeout(() => map.flyTo(target, REST_ZOOM, { duration: 6, easeLinearity: 0.25 }), 500);
+    const t = setTimeout(() => map.flyTo(target, REST_ZOOM, { duration: 7, easeLinearity: 0.25 }), 500);
     return () => clearTimeout(t);
   }, [map, target]);
 
