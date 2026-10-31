@@ -31,15 +31,15 @@
 .flag-profile {
   position: relative;
   width: 100%;
-  height: 99.6%;
+  height: 100%;
 }
 
+/* pergaminho ocupa 100% da altura da tela */
 .flagg {
   position: absolute;
-  top: 2%;
-  left: 0;
+  inset: 0;
   width: 100%;
-  height: 96%;
+  height: 100%;
 }
 
 /* Conteúdo em coluna (foto, nome, botões): nada se sobrepõe */
