@@ -82,6 +82,8 @@
 }
 
 .quiz-question-row {
+  /* respiro entre o mapa, a pergunta e as alternativas */
+  margin-block: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
