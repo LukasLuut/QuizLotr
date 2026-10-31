@@ -31,6 +31,7 @@
   translate: -50% -50%;
   width: 40%;
   text-align: center;
+  white-space: nowrap;
   pointer-events: none;
   color: #d8d8d8;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
@@ -140,7 +141,20 @@
 
 @media (max-height: 800px) and (min-width: 1024px) {
   .quiz-image {
-    height: 26dvh;
+    height: 22dvh;
+  }
+
+  /* telas baixas: menos respiro para as alternativas não cortarem na base */
+  .quiz-question-row {
+    margin-block: 6px;
+  }
+
+  .quiz-tools {
+    margin-bottom: 2px;
+  }
+
+  .quiz-options {
+    gap: 14px;
   }
 
   .quiz-question {
@@ -313,4 +327,9 @@
   background: goldenrod;
   color: #1c1208;
   font: 700 11px/17px var(--font-body);
+}
+
+/* nomes longos (Montanha da Perdição, Floresta das Trevas) cabem na plaqueta */
+.title-responda.title-long {
+  font-size: clamp(16px, 1.95vw, 28px);
 }

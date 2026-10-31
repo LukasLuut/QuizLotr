@@ -18,9 +18,9 @@ const corruptionLabel = (c) => (c >= 70 ? "O Anel te domina" : c >= 40 ? "O Anel
 
 /**
  * Coluna do jogador em duas caixas:
- * 1) placa com a identidade (foto, nome, título, habilidades e a corrupção do Anel);
- * 2) painel da partida: região, regra e pontuação no topo; fala do personagem e
- *    explicação da última resposta no meio; cronômetro e, embaixo, a barra de progresso.
+ * 1) placa do personagem (foto, nome, fala após cada resposta e a corrupção do Anel);
+ * 2) painel da partida: região, regra e pontuação no topo; explicação da última
+ *    resposta no meio; cronômetro e, embaixo, a barra de progresso.
  */
 export default function Sidebar({ player, round, region, outcome, timerRunning }) {
   const answered = round?.answered ?? 0;
@@ -35,21 +35,12 @@ export default function Sidebar({ player, round, region, outcome, timerRunning }
     <aside className="sidebar" aria-label="Jogador e partida">
       <section className="player-card" aria-label="Jogador">
         <Avatar persona={persona.code} name={player?.name} className="player-avatar" />
+        {/* nome do personagem e a fala dele depois de cada resposta */}
         <div className="player-text">
-          <h2 className="player-name">{player?.name}</h2>
-          {/* título escolhido no Editar Perfil (vem das conquistas) */}
-          <p className="span-title">{player?.title || "Viajante do Condado"}</p>
-          <ul className="player-abilities" aria-label={`Habilidades de ${persona.name}`}>
-            {persona.abilities.map((a) => (
-              <li key={a.code} className="ability" tabIndex={0} aria-label={`${a.name}: ${a.description}`}>
-                <span aria-hidden="true">{a.icon}</span>
-                <span className="ability-tip" role="tooltip">
-                  <strong>{a.name}</strong>
-                  {a.description}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <h2 className="player-name">{persona.name}</h2>
+          <p className="persona-line" key={outcome?.line} aria-live="polite">
+            {outcome?.line ? `“${outcome.line}”` : ""}
+          </p>
         </div>
 
         {/* O Peso do Anel: em 100 a partida termina */}
@@ -96,16 +87,9 @@ export default function Sidebar({ player, round, region, outcome, timerRunning }
           {/* Fala do personagem e explicação da última resposta: só mudam na próxima resposta */}
           <div className="answer-explanation" aria-live="polite">
             {outcome && (
-              <>
-                {outcome.line && (
-                  <p className="persona-line">
-                    <span className="persona-line-name">{persona.name}:</span> “{outcome.line}”
-                  </p>
-                )}
-                <p className={outcome.isCorrect || outcome.skipped || outcome.shielded ? "explanation-correct" : "explanation-wrong"}>
-                  <strong>{outcomeTitle(outcome)}</strong> {outcome.explanation}
-                </p>
-              </>
+              <p className={outcome.isCorrect || outcome.skipped || outcome.shielded ? "explanation-correct" : "explanation-wrong"}>
+                <strong>{outcomeTitle(outcome)}</strong> {outcome.explanation}
+              </p>
             )}
           </div>
 

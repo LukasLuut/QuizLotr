@@ -60,10 +60,11 @@ describe("Anel e ajudas no estado do jogo", () => {
 });
 
 describe("Sidebar 2.0", () => {
-  it("mostra habilidades, regra da região, corrupção e a fala", () => {
+  it("placa mostra o personagem e a fala; painel mostra regra e corrupção", () => {
     const outcome = { isCorrect: true, points: 1200, explanation: "Curiosidade.", line: "Bilbo ficaria orgulhoso." };
-    render(<Sidebar player={{ name: "Frodo" }} round={{ ...round, corruption: 45 }} region={0} outcome={outcome} timerRunning={false} />);
-    expect(screen.getByRole("list", { name: "Habilidades de Frodo" }).children).toHaveLength(2);
+    render(<Sidebar player={{ name: "Lukas" }} round={{ ...round, corruption: 45 }} region={0} outcome={outcome} timerRunning={false} />);
+    expect(screen.getByRole("heading", { name: "Frodo" })).toBeInTheDocument();
+    expect(screen.queryByText("Lukas")).not.toBeInTheDocument();
     expect(screen.getByText(/Paz do Condado/)).toBeInTheDocument();
     expect(screen.getByRole("meter")).toHaveAttribute("aria-valuenow", "45");
     expect(screen.getByText(/Bilbo ficaria orgulhoso/)).toBeInTheDocument();

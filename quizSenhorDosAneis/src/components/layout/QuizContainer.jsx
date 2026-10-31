@@ -30,13 +30,15 @@ function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, o
   const toolsLocked = locked || paused || helpBusy;
   const left = helpsLeft(round);
   const eliminated = new Set(assist?.eliminated || []);
+  const placeName = regionAt(phase === "travelling" && targetRegion !== null ? targetRegion : region).name;
   const vision = Object.fromEntries((assist?.palantir || []).map((p) => [p.answerId, p.percent]));
 
   return (
     <section className="quiz-container" aria-labelledby="quiz-title">
       <img className="box-question" src={boxQuestion} alt="" />
-      <h1 id="quiz-title" className="title-responda">
-        RespondA
+      {/* nome do lugar atual na plaqueta do topo (durante a viagem, o destino) */}
+      <h1 id="quiz-title" className={`title-responda ${placeName.length > 14 ? "title-long" : ""}`}>
+        {placeName}
       </h1>
 
       {/* Mapa da jornada */}
