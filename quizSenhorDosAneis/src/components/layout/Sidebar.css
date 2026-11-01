@@ -51,11 +51,22 @@
 
 .corruption-label {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
   font-family: var(--font-title);
   font-size: clamp(10px, 0.75vw, 13px);
   color: #e9b46a;
   line-height: 1.2;
+}
+
+/* "Corrupção do Anel" na fonte temática */
+.corruption-title {
+  font-family: var(--font-display);
+  color: var(--color-gold);
+  font-size: 1.15em;
+  text-shadow: 0 1px 2px #000;
+  white-space: nowrap;
 }
 
 .corruption-bar {

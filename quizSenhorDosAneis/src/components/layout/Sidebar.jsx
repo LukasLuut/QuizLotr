@@ -47,6 +47,7 @@ export default function Sidebar({ player, round, region, outcome, introLine = nu
         {/* O Peso do Anel: em 100 a partida termina */}
         <div className="corruption">
           <p id="corruption-label" className="corruption-label">
+            <span className="corruption-title">Corrupção do Anel</span>
             <span>{corruptionLabel(corruption)}</span>
           </p>
           <div className="corruption-bar" role="meter" aria-labelledby="corruption-label" aria-valuemin={0} aria-valuemax={100} aria-valuenow={corruption}>
