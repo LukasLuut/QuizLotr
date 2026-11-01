@@ -4,8 +4,6 @@ import BtnQuestion from "../buttons/BtnQuestion";
 import Map from "../Map";
 import QuestionTimer from "./QuestionTimer";
 import { regionAt } from "../../config/regions";
-import { HELPS, helpsLeft } from "../../config/helps";
-import ringIcon from "../../assets/images/circleOneRing.webp";
 
 const SHOWS_QUESTION = new Set(["answering", "submitting", "feedback"]);
 
@@ -22,13 +20,11 @@ function answerStatus(answerId, { phase, selectedId, result }) {
  * Quadro central: mapa da jornada, pergunta e alternativas.
  * Não guarda estado do jogo; tudo vem do useGameSession.
  */
-function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, onArrive, onDebugSkip, onHelp, onToggleRing }) {
-  const { phase, question, region, targetRegion, fresh, round, ringArmed, assist, helpBusy } = game;
+function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, onArrive, onDebugSkip }) {
+  const { phase, question, region, targetRegion, fresh, assist } = game;
   const payload = question?.question;
   const showQuestion = SHOWS_QUESTION.has(phase) && payload;
   const locked = phase !== "answering";
-  const toolsLocked = locked || paused || helpBusy;
-  const left = helpsLeft(round);
   const eliminated = new Set(assist?.eliminated || []);
   const placeName = regionAt(phase === "travelling" && targetRegion !== null ? targetRegion : region).name;
   const vision = Object.fromEntries((assist?.palantir || []).map((p) => [p.answerId, p.percent]));
@@ -78,37 +74,6 @@ function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, o
                   onExpire={onTimeout}
                 />
               )}
-            </div>
-
-            {/* O Peso do Anel e as ajudas temáticas */}
-            <div className="quiz-tools" role="toolbar" aria-label="Anel e ajudas">
-              <button
-                type="button"
-                className={`ring-toggle ${ringArmed ? "armed" : ""}`}
-                aria-pressed={ringArmed}
-                disabled={toolsLocked}
-                onClick={onToggleRing}
-                title="O Peso do Anel: a próxima resposta vale o dobro, mas o Anel corrompe."
-              >
-                <img src={ringIcon} alt="" />
-                <span>{ringArmed ? "Anel no dedo" : "Usar o Anel"}</span>
-              </button>
-              <div className="help-buttons">
-                {HELPS.map((h) => (
-                  <button
-                    key={h.code}
-                    type="button"
-                    className="help-btn"
-                    disabled={toolsLocked || left[h.code] <= 0}
-                    onClick={() => onHelp?.(h.code)}
-                    aria-label={`${h.name}: ${h.description} (${Math.max(0, left[h.code])} restante)`}
-                    title={`${h.name}: ${h.description}`}
-                  >
-                    <span aria-hidden="true">{h.icon}</span>
-                    {left[h.code] > 1 && <span className="help-count" aria-hidden="true">{left[h.code]}</span>}
-                  </button>
-                ))}
-              </div>
             </div>
 
             <div className="quiz-options" role="group" aria-labelledby="pergunta-atual">

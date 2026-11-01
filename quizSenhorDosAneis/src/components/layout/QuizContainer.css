@@ -149,10 +149,6 @@
     margin-block: 6px;
   }
 
-  .quiz-tools {
-    margin-bottom: 2px;
-  }
-
   .quiz-options {
     gap: 14px;
   }
@@ -230,106 +226,4 @@
     opacity: 1;
     filter: none;
   }
-}
-
-/* Anel e ajudas: uma faixa discreta entre a pergunta e as alternativas */
-.quiz-tools {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px 18px;
-  width: 100%;
-  margin-bottom: 8px;
-}
-
-.ring-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 14px 4px 6px;
-  border-radius: 999px;
-  border: 1px solid rgba(218, 165, 32, 0.45);
-  background: rgba(0, 0, 0, 0.5);
-  color: #e6d8b0;
-  font-family: var(--font-title);
-  font-size: clamp(13px, 1vw, 16px);
-  transition: box-shadow 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-}
-
-.ring-toggle img {
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
-  /* inscrição do Anel (preta na arte) pintada de dourado */
-  filter: invert(74%) sepia(70%) saturate(600%) hue-rotate(3deg) brightness(0.95);
-  transition: transform 0.4s ease, filter 0.4s ease;
-}
-
-.ring-toggle:not(:disabled):hover,
-.ring-toggle:focus-visible {
-  border-color: goldenrod;
-}
-
-.ring-toggle.armed {
-  color: #ffcf6b;
-  border-color: #ff9a3c;
-  box-shadow: 0 0 14px rgba(255, 120, 30, 0.7), inset 0 0 8px rgba(255, 120, 30, 0.4);
-}
-
-.ring-toggle.armed img {
-  transform: rotate(25deg) scale(1.1);
-  filter: invert(60%) sepia(90%) saturate(900%) hue-rotate(345deg) drop-shadow(0 0 6px #ff7a1a);
-}
-
-.ring-toggle:disabled {
-  opacity: 0.5;
-}
-
-.help-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.help-btn {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid rgba(218, 165, 32, 0.7);
-  background: radial-gradient(circle at 35% 30%, #4a3418, #1c1208 75%);
-  font-size: 19px;
-  line-height: 1;
-  display: grid;
-  place-items: center;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.8);
-  transition: transform 0.2s ease, opacity 0.3s ease, filter 0.3s ease;
-}
-
-.help-btn:not(:disabled):hover,
-.help-btn:focus-visible {
-  transform: translateY(-2px) scale(1.06);
-  border-color: goldenrod;
-}
-
-.help-btn:disabled {
-  opacity: 0.35;
-  filter: grayscale(1);
-}
-
-.help-count {
-  position: absolute;
-  right: -5px;
-  bottom: -4px;
-  min-width: 17px;
-  height: 17px;
-  border-radius: 50%;
-  background: goldenrod;
-  color: #1c1208;
-  font: 700 11px/17px var(--font-body);
-}
-
-/* nomes longos (Montanha da Perdição, Floresta das Trevas) cabem na plaqueta */
-.title-responda.title-long {
-  font-size: clamp(16px, 1.95vw, 28px);
 }

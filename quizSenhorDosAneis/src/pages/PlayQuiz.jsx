@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./PlayQuiz.css";
-import BoxWoodenR from "../assets/images/box/box-aviso-gg.webp";
 import VideoTransition from "../components/videoTransition/VideoTransition";
+import corruptionVideo from "../assets/videos/overlay-corruption.mp4";
 import Menu from "../components/layout/Menu";
 import QuizContainer from "../components/layout/QuizContainer";
 import Sidebar from "../components/layout/Sidebar";
-import Ranking from "../components/layout/Ranking";
+import ToolsPanel from "../components/layout/ToolsPanel";
 import Final from "../components/layout/Final";
 import Narrator from "../components/narrador/Narrador";
 import Archivement from "../components/Archivement";
@@ -152,6 +152,9 @@ function PlayQuiz() {
   // no fim, o quadro some e o botão "Destruir o Anel" fica sozinho sobre o vídeo
   const uiHidden = inScene || !!peek || phase === "finished";
   const showTitle = inScene || peek === "title" || peek === "fading";
+  // Overlay do Anel: invisível até 40% de corrupção, sobe até opacidade total aos 90%
+  const corruptionPct = round?.corruption ?? 0;
+  const overlayOpacity = Math.min(1, Math.max(0, (corruptionPct - 40) / 50));
   const rule = round?.regionRules?.[region];
 
   return (
@@ -201,14 +204,19 @@ function PlayQuiz() {
             onAdvance={game.startTravel}
             onArrive={game.arrived}
             onDebugSkip={game.debugSkipRegion}
-            onHelp={game.requestHelp}
-            onToggleRing={game.toggleRing}
           />
         </div>
 
+        {/* Anel, ajudas, sequência e recorde (no lugar do Hall dos Heróis) */}
         <div className="box-lateral-r">
-          <img className="box-lateral-img" src={BoxWoodenR} alt="" />
-          <Ranking mode={round?.mode} currentUserId={user?.id} refreshKey={phase === "finished" ? round?.id : 0} />
+          <ToolsPanel
+            round={round}
+            player={user}
+            locked={phase !== "answering" || menuOpen || state.helpBusy}
+            ringArmed={state.ringArmed}
+            onToggleRing={game.toggleRing}
+            onHelp={game.requestHelp}
+          />
         </div>
       </div>
 
@@ -216,7 +224,23 @@ function PlayQuiz() {
         <VideoTransition index={region} fadeDuration={1500} />
       </div>
 
+
       <Archivement queue={state.achievements} onShown={game.achievementShown} />
+
+      {/* Overlay da corrupção, na frente de tudo (menos o menu de pausa). Só existe
+          acima de 40%, para não gastar decodificando vídeo invisível */}
+      {corruptionPct > 40 && (
+        <video
+          className="corruption-overlay"
+          src={corruptionVideo}
+          style={{ opacity: overlayOpacity }}
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden="true"
+        />
+      )}
 
       {phase === "finished" && state.summary && <Final summary={state.summary} onRestart={handleRestart} onProfile={goProfile} />}
     </div>
