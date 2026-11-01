@@ -133,7 +133,7 @@ export function gameReducer(state, action) {
       return { ...state, phase: "question-loading" };
     }
     case "travel-start":
-      return state.phase === "travel-ready" ? { ...state, phase: "travelling" } : state;
+      return state.phase === "travel-ready" ? { ...state, phase: "travelling", question: null, result: null, selectedId: null } : state;
     case "arrived":
       return state.phase === "travelling" ? { ...state, phase: "scene", region: state.targetRegion, targetRegion: null } : state;
     case "achievement-shown":

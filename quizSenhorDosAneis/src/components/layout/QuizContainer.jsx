@@ -5,12 +5,15 @@ import Map from "../Map";
 import QuestionTimer from "./QuestionTimer";
 import { regionAt } from "../../config/regions";
 
-const SHOWS_QUESTION = new Set(["answering", "submitting", "feedback"]);
+// "question-loading" também mostra a pergunta (a anterior, travada, até a próxima chegar):
+// sem isso o quadro sumia e o mapa expandia por um instante entre as perguntas (piscada)
+const SHOWS_QUESTION = new Set(["answering", "submitting", "feedback", "question-loading"]);
+const SHOWS_RESULT = new Set(["feedback", "question-loading"]);
 
 // Estado visual de cada alternativa, a partir do que o servidor respondeu
 function answerStatus(answerId, { phase, selectedId, result }) {
   if (phase === "submitting") return answerId === selectedId ? "selected" : "default";
-  if (phase !== "feedback" || !result) return "default";
+  if (!SHOWS_RESULT.has(phase) || !result) return "default";
   if (answerId === result.correctAnswerId) return "correct";
   if (answerId === selectedId) return "wrong";
   return "default";
@@ -51,7 +54,7 @@ function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, o
       </div>
 
       <div className={`quiz-body ${showQuestion ? "" : "quiz-body--compact"}`}>
-        {phase === "question-loading" && <p className="quiz-status">Consultando os sábios...</p>}
+        {phase === "question-loading" && !showQuestion && <p className="quiz-status">Consultando os sábios...</p>}
         {phase === "travel-ready" && (
           <p className="quiz-status">
             Região concluída! Avance para {regionAt(targetRegion).name}.
@@ -87,7 +90,7 @@ function QuizContainer({ game, paused = false, onAnswer, onTimeout, onAdvance, o
                     status={status}
                     disabled={locked || out}
                     badge={a.id in vision ? `${vision[a.id]}%` : null}
-                    className={out ? "eliminated" : phase === "feedback" && status === "default" ? "dim" : ""}
+                    className={out ? "eliminated" : SHOWS_RESULT.has(phase) && status === "default" ? "dim" : ""}
                     onClick={() => onAnswer(a.id)}
                     aria-keyshortcuts={String(i + 1)}
                   />
