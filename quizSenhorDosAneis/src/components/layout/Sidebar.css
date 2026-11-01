@@ -265,7 +265,7 @@
   flex: 0 0 auto;
   margin-top: 0;
   padding-top: 0;
-  height: clamp(100px, 15dvh, 160px);
+  height: clamp(76px, 11dvh, 120px); /* 25% mais baixa */
   display: flex;
   align-items: flex-end;
   justify-content: center;
