@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from "./context/AuthContext";
 import { AudioProvider } from "./context/AudioContext";
@@ -10,6 +10,11 @@ import SoundToggle from "./components/SoundToggle";
 import Start from "./pages/Start";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import DemoBanner from "./components/DemoBanner";
+import { IS_DEMO } from "./config/demo";
+
+// GitHub Pages não conhece rotas como /profile (F5 daria 404): na demo os endereços usam #
+const Router = IS_DEMO ? HashRouter : BrowserRouter;
 
 // Perfil e jogo carregam sob demanda: Leaflet e os vídeos não entram no carregamento inicial
 const Profile = lazy(() => import("./pages/Profile"));
@@ -24,7 +29,7 @@ function App() {
             <Suspense fallback={<LoadingScreen />}>
               <Routes>
                 <Route path="/" element={<Start />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/login" element={IS_DEMO ? <Navigate to="/profile" replace /> : <Login />} />
                 <Route
                   path="/profile"
                   element={
@@ -47,6 +52,7 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
+            {IS_DEMO && <DemoBanner />}
           </Router>
           <SoundToggle />
         </AuthProvider>

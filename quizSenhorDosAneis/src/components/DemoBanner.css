@@ -1,0 +1,96 @@
+/* Faixa da demo: discreta, no canto inferior direito (o som fica no esquerdo) */
+.demo-banner {
+  position: fixed;
+  right: calc(12px + env(safe-area-inset-right, 0px));
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  z-index: var(--z-hud);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 24px);
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(218, 165, 32, 0.5);
+  background: rgba(20, 13, 6, 0.82);
+  color: #e6d8b0;
+  font-family: var(--font-body);
+  font-size: 12px;
+}
+
+.demo-banner-link {
+  border: none;
+  background: none;
+  padding: 0;
+  color: goldenrod;
+  font: inherit;
+  text-decoration: underline;
+}
+
+/* Sobre o projeto: na mesma moldura de madeira dos outros quadros */
+.demo-about {
+  --w: min(640px, calc(100vw - 32px));
+  width: var(--w);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  padding: calc(var(--w) * 0.09) calc(var(--w) * 0.1) calc(var(--w) * 0.1);
+  background: url("../assets/images/box/box-lateral-girado.webp") center / 100% 100% no-repeat;
+  color: #f3e8cf;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.45;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-shadow: 1px 1px 2px #000;
+  outline: none;
+}
+
+.demo-about h2 {
+  font-family: var(--font-display);
+  color: goldenrod;
+  text-align: center;
+  font-weight: 400;
+}
+
+.demo-about ul {
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.demo-about-note {
+  font-size: 13px;
+  color: #ffcf8a;
+}
+
+.demo-about kbd {
+  padding: 0 5px;
+  border-radius: 4px;
+  border: 1px solid rgba(218, 165, 32, 0.6);
+  font-family: inherit;
+}
+
+.demo-about-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* o Voltar dos quadros do menu desce 30 px; aqui fica dentro da moldura */
+.demo-about .mode-back.btn-menu {
+  translate: none;
+  margin-top: 0;
+}
+
+.demo-about-repo {
+  color: goldenrod;
+}
+
+@media (max-width: 600px) {
+  .demo-banner span {
+    display: none;
+  }
+}

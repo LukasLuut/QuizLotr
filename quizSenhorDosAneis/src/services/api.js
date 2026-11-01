@@ -1,5 +1,8 @@
 // Camada única de acesso à API. Nenhum componente chama fetch direto.
 // A URL vem de VITE_API_URL (ver .env.example).
+import { IS_DEMO } from "../config/demo";
+import { localApi } from "@demo";
+
 export const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
 const TOKEN_KEY = "token";
@@ -107,7 +110,8 @@ export async function request(path, { method = "GET", body, auth = true, signal 
   return data;
 }
 
-export const api = {
+// Na demo (VITE_DEMO=true) as mesmas chamadas são respondidas no navegador (demo/localApi.js)
+const remoteApi = {
   register: (data) => request("/auth/register", { method: "POST", body: data, auth: false }),
   login: (email, password) => request("/auth/login", { method: "POST", body: { email, password }, auth: false }),
 
@@ -131,3 +135,5 @@ export const api = {
   ranking: (mode = "normal", period = "all", signal) =>
     request(`/rounds/ranking?mode=${encodeURIComponent(mode)}&period=${encodeURIComponent(period)}`, { auth: false, signal }),
 };
+
+export const api = IS_DEMO ? localApi : remoteApi;

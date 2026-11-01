@@ -5,9 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:demo": "vite --mode demo",
     "build": "vite build",
+    "build:demo": "vite build --mode demo",
     "lint": "eslint .",
     "preview": "vite preview",
+    "preview:demo": "vite preview --mode demo",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test"

@@ -6,6 +6,7 @@ import circleOneRing from "../assets/images/circleOneRing.webp";
 import circleOneRing2 from "../assets/images/circleOneRing2.webp";
 import lordOfTheRings from "../assets/images/LordOfTheRings.png";
 import MusicaArgonath from "../assets/audio/the-argonath-song.mp3";
+import { IS_DEMO } from "../config/demo";
 
 function Start() {
   const [fade, setFade] = useState(false);
@@ -20,7 +21,8 @@ function Start() {
     // Ativa o fade e navega quando ele termina (mesma duração do CSS)
     setFade(true);
     playMusic(MusicaArgonath);
-    timer.current = setTimeout(() => navigate("/login"), 3000);
+    // demo: sem login, direto para o menu
+    timer.current = setTimeout(() => navigate(IS_DEMO ? "/profile" : "/login"), 3000);
 
     // Tela cheia é opcional: alguns navegadores recusam
     const elem = document.documentElement;

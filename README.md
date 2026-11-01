@@ -107,6 +107,22 @@ Pré-requisitos: **Node 22** (veja `.nvmrc`) e **MySQL 8**.
 | Web | `npm test` | Testes de componentes |
 | Web | `npm run lint` | ESLint |
 | Web | `npm run test:e2e` | Partida de ponta a ponta no navegador (precisa do MySQL) |
+| Web | `npm run dev:demo` | Versão demo, sem API (abre em `/QuizLotr/`) |
+| Web | `npm run build:demo` | Build da versão demo para o GitHub Pages |
+
+### 🎭 Versão demo (GitHub Pages)
+
+Roda só no navegador: sem login, nível nem ranking, todos os personagens liberados e nada
+salvo (partida e conquistas ficam no `sessionStorage` e somem ao fechar o navegador). As
+chamadas de `services/api.js` são respondidas por `src/demo/localApi.js`, que usa as mesmas
+regras (`retorno-do-dev/src/game/rules.ts`) e perguntas (`seeds/questions.ts`) do backend.
+Fora do modo demo, o alias `@demo` aponta para um módulo vazio: o gabarito nunca entra no
+site da versão completa.
+
+- Extras: partida curta (2 perguntas por região), botão **Recomeçar**, quadro **Sobre o
+  projeto** e modo apresentador (**Shift + D** na partida: resposta certa e corrupção).
+- Publicação: cada push na branch `versao-demo` roda `.github/workflows/demo-pages.yml`, que
+  reduz os vídeos para 720p (só no site) e publica no GitHub Pages.
 
 ------------------------------------------------------------------------
 

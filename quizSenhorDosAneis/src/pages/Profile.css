@@ -200,6 +200,25 @@
   text-shadow: 1px 3px 2px #000;
 }
 
+/* demo: partida curta */
+.demo-short {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 14px;
+  color: #f3e8cf;
+  text-shadow: 1px 1px 2px #000;
+  cursor: pointer;
+}
+
+.demo-short input {
+  width: 16px;
+  height: 16px;
+  accent-color: goldenrod;
+}
+
 .mode-warning {
   font-size: 14px;
   color: #ffcf8a;

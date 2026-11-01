@@ -17,6 +17,8 @@ import { useAudio } from "../context/AudioContext";
 import { clearStoredRound, useGameSession } from "../hooks/useGameSession";
 import { regionAt } from "../config/regions";
 import { pickIntro, pickLine } from "../config/lines";
+import { IS_DEMO } from "../config/demo";
+import PresenterPanel from "../components/PresenterPanel";
 
 const isTyping = (el) => el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
 
@@ -82,6 +84,22 @@ function PlayQuiz() {
   useEffect(() => {
     if (round) playMusic(regionAt(musicRegion).ambience);
   }, [musicRegion, round, playMusic]);
+
+  // Adianta o download do vídeo da próxima região, para a chegada não esperar o carregamento
+  const preload = useRef(null);
+  useEffect(() => {
+    if (!round) return;
+    const plan = round.regionPlan;
+    const next = plan.slice(round.answered).find((r) => r !== region);
+    const bg = next === undefined ? null : regionAt(next).background;
+    if (bg?.type !== "video" || preload.current?.dataset.src === bg.src) return;
+    const video = document.createElement("video");
+    video.preload = "auto";
+    video.muted = true;
+    video.dataset.src = bg.src;
+    video.src = bg.src;
+    preload.current = video;
+  }, [round, region]);
 
   // Som de acerto/erro quando o servidor responde
   useEffect(() => {
@@ -231,6 +249,7 @@ function PlayQuiz() {
 
 
       <Archivement queue={state.achievements} onShown={game.achievementShown} />
+      {IS_DEMO && <PresenterPanel game={game} />}
 
       {/* Overlay da corrupção, na frente de tudo (menos o menu de pausa). Só existe
           acima de 40%, para não gastar decodificando vídeo invisível */}

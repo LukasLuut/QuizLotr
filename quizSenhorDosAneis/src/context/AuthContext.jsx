@@ -1,17 +1,26 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { api, onUnauthorized, tokenStore } from "../services/api";
+import { IS_DEMO } from "../config/demo";
+import { resetDemo } from "@demo";
 
 const AuthContext = createContext(null);
 
 // Sessão do jogador: o usuário vem sempre de GET /users/me, então F5 em qualquer
 // rota reidrata a sessão a partir do token (nada depende de location.state).
+// Na demo não há login: a sessão do "Viajante" já começa aberta.
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [status, setStatus] = useState(() => (tokenStore.get() ? "loading" : "anonymous"));
+  const [status, setStatus] = useState(() => (IS_DEMO || tokenStore.get() ? "loading" : "anonymous"));
   const [notice, setNotice] = useState(null);
 
   const logout = useCallback((message) => {
+    if (IS_DEMO) {
+      // demo: "sair" recomeça do zero (partidas, conquistas e perfil)
+      resetDemo();
+      api.me().then(setUser);
+      return;
+    }
     tokenStore.clear();
     setUser(null);
     setStatus("anonymous");
@@ -22,7 +31,7 @@ export function AuthProvider({ children }) {
   useEffect(() => onUnauthorized(() => logout("Sua sessão expirou. Entre novamente.")), [logout]);
 
   useEffect(() => {
-    if (!tokenStore.get()) return;
+    if (!IS_DEMO && !tokenStore.get()) return;
     let alive = true;
     api
       .me()

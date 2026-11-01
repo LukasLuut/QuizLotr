@@ -1,0 +1,63 @@
+/* Modo apresentador da demo: painel discreto no canto superior esquerdo, acima do quiz */
+.presenter-panel {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: var(--z-toast);
+  width: 240px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(218, 165, 32, 0.6);
+  background: rgba(20, 13, 6, 0.92);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  color: #e6d8b0;
+  font-family: var(--font-body);
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.presenter-title {
+  font-family: var(--font-title);
+  color: goldenrod;
+  font-size: 15px;
+}
+
+.presenter-answer strong {
+  color: #fff3c4;
+}
+
+.presenter-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.presenter-actions button {
+  flex: 1;
+  padding: 6px 4px;
+  border-radius: 6px;
+  border: 1px solid rgba(218, 165, 32, 0.6);
+  background: #3a2812;
+  color: #f3e3b5;
+  font-size: 12px;
+}
+
+.presenter-actions button:disabled {
+  opacity: 0.45;
+}
+
+.presenter-corruption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.presenter-corruption input {
+  accent-color: #c0561c;
+}
+
+.presenter-hint {
+  font-size: 11px;
+  opacity: 0.6;
+}

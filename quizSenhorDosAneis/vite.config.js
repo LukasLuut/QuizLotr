@@ -1,9 +1,18 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { fileURLToPath } from 'node:url'
 
 // https://vite.dev/config/
-export default defineConfig({
+// Demo (VITE_DEMO=true) vai para o GitHub Pages em /<repositório>/ (VITE_BASE, padrão /QuizLotr/)
+export default defineConfig(({ mode }) => ({
+  base: mode === 'demo' ? process.env.VITE_BASE || '/QuizLotr/' : '/',
   plugins: [react()],
+  resolve: {
+    alias: {
+      // "@demo": servidor local só no build da demo; nas outras, um módulo vazio
+      '@demo': fileURLToPath(new URL(mode === 'demo' ? './src/demo/localApi.js' : './src/demo/noDemo.js', import.meta.url)),
+    },
+  },
   build: {
     // vídeos e áudios nunca viram base64 dentro do JS
     assetsInlineLimit: 4096,
@@ -24,4 +33,4 @@ export default defineConfig({
     css: false,
     exclude: ['e2e/**', 'node_modules/**'],
   },
-})
+}))

@@ -409,12 +409,13 @@ export class RoundService {
     const answers = await AppDataSource.getRepository(RoundAnswer).find({ where: { roundId: round.id } })
     const plan = await this.questions.regionsOf(round.questionIds)
 
-    const perRegion: RegionStats[] = REGIONS.map((name, region) => ({
+    // na ordem da viagem (em O Hobbit a ordem não é a dos índices das regiões)
+    const perRegion: RegionStats[] = [...new Set(plan)].map(region => ({
       region,
-      name,
+      name: REGIONS[region],
       correct: answers.filter(a => a.region === region && a.isCorrect).length,
       total: plan.filter(r => r === region).length,
-    })).filter(r => r.total > 0)
+    }))
 
     // A jornada bônus não entra no ranking
     const ranked = RANKED.includes(round.status) && round.journey === 'main'

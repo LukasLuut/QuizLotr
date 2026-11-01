@@ -10,6 +10,7 @@ import PersonaGrid from "../PersonaGrid";
 import { useAuth } from "../../context/AuthContext";
 import { api } from "../../services/api";
 import { DEFAULT_PERSONA, PERSONAS } from "../../config/personas";
+import { IS_DEMO } from "../../config/demo";
 
 /**
  * Modal de edição do cadastro: foto, título (das conquistas desbloqueadas), nome,
@@ -152,6 +153,9 @@ function OptionProfile({ isOpen, onClose }) {
             <input id="perfil-nome" name="name" type="text" autoComplete="nickname" value={form.name} onChange={handleChange} />
           </div>
 
+          {/* demo: sem conta, então sem e-mail, senha nem exclusão */}
+          {!IS_DEMO && (
+          <>
           <div className="field">
             <label htmlFor="perfil-email">E-mail</label>
             <input id="perfil-email" name="email" type="email" autoComplete="email" value={form.email} onChange={handleChange} />
@@ -169,14 +173,18 @@ function OptionProfile({ isOpen, onClose }) {
               onChange={handleChange}
             />
           </div>
+          </>
+          )}
 
           <div className="btn-menu-update-profile">
             <Button type="submit" disabled={busy}>
               Atualizar
             </Button>
-            <Button onClick={() => setAcao("delete")} disabled={busy}>
-              Excluir conta
-            </Button>
+            {!IS_DEMO && (
+              <Button onClick={() => setAcao("delete")} disabled={busy}>
+                Excluir conta
+              </Button>
+            )}
           </div>
         </form>
       </Modal>
@@ -184,7 +192,9 @@ function OptionProfile({ isOpen, onClose }) {
       {/* Quadro de escolha da foto: só os personagens disponíveis */}
       <Modal isOpen={pickerOpen} onClose={() => setPickerOpen(false)} labelledBy={pickerTitleId} overlayClassName="persona-overlay" className="persona-modal persona-modal--profile">
         <h2 id={pickerTitleId}>Escolha seu personagem</h2>
-        <p className="persona-hint">Nível do viajante {user?.level ?? 0}. Cada personagem traz duas habilidades; novos personagens abrem com as conquistas.</p>
+        <p className="persona-hint">
+          {IS_DEMO ? "Cada personagem traz duas habilidades." : `Nível do viajante ${user?.level ?? 0}. Cada personagem traz duas habilidades; novos personagens abrem com as conquistas.`}
+        </p>
         <PersonaGrid
           personas={PERSONAS}
           level={user?.level ?? 0}

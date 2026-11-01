@@ -18,6 +18,8 @@ import { api } from "../services/api";
 import { GAME_MODES, HOBBIT_UNLOCK_LEVEL, JOURNEYS, REGIONS } from "../config/regions";
 import { clearStoredRound } from "../hooks/useGameSession";
 import { JOURNEY_DEFAULT_PERSONA, isUnlocked, personaAt, personasOf } from "../config/personas";
+import { IS_DEMO } from "../config/demo";
+import { demoSettings } from "@demo";
 
 const shireMusic = REGIONS[0].ambience;
 // música de abertura de cada jornada
@@ -40,6 +42,7 @@ function Profile() {
   const [chosenMode, setChosenMode] = useState(null); // modo escolhido, à espera do personagem
   const [pickedPersona, setPickedPersona] = useState(null); // personagem marcado (Confirmar começa)
   const [dialFor, setDialFor] = useState(null); // habilidades abertas ao lado da foto
+  const [short, setShort] = useState(() => IS_DEMO && demoSettings.short); // demo: partida curta
   const personaTitleId = useId();
   const level = user?.level ?? 0;
   const hobbitLocked = level < HOBBIT_UNLOCK_LEVEL;
@@ -140,7 +143,13 @@ function Profile() {
   const handleSair = () => {
     clearStoredRound();
     logout();
-    navigate("/login", { replace: true });
+    // demo: recomeça do zero e volta para a tela inicial
+    navigate(IS_DEMO ? "/" : "/login", { replace: true });
+  };
+
+  const toggleShort = (e) => {
+    demoSettings.short = e.target.checked;
+    setShort(e.target.checked);
   };
 
   return (
@@ -159,7 +168,7 @@ function Profile() {
               {/* título escolhido entre as conquistas (Editar Perfil) */}
               {user?.title && <p className="profile-title">{user.title}</p>}
               {/* nível do viajante = conquistas desbloqueadas */}
-              <p className="profile-level">Nível: {level}</p>
+              {!IS_DEMO && <p className="profile-level">Nível: {level}</p>}
             </div>
             <nav className="btn-box" aria-label="Opções do jogador">
               {currentRound && (
@@ -168,7 +177,7 @@ function Profile() {
               <Button onClick={() => setModal("mode")}>Novo Jogo</Button>
               <Button onClick={() => setModal("achievements")}>Conquistas</Button>
               <Button onClick={() => setModal("edit")}>Editar Perfil</Button>
-              <Button onClick={handleSair}>Sair</Button>
+              <Button onClick={handleSair}>{IS_DEMO ? "Recomeçar" : "Sair"}</Button>
             </nav>
             </div>
           </div>
@@ -210,6 +219,12 @@ function Profile() {
               </div>
             ))}
           </div>
+          {IS_DEMO && (
+            <label className="demo-short">
+              <input type="checkbox" checked={short} onChange={toggleShort} />
+              Partida curta: 2 perguntas por região
+            </label>
+          )}
           <Button className="mode-back" onClick={() => setModal(null)}>
             Voltar
           </Button>
@@ -219,7 +234,7 @@ function Profile() {
         <Modal isOpen={modal === "persona"} onClose={() => setModal("mode")} labelledBy={personaTitleId} className="persona-modal">
           <h2 id={personaTitleId}>Escolha seu personagem</h2>
           <p className="persona-hint">
-            {JOURNEYS[journey]?.label} · {GAME_MODES[chosenMode]?.label}. Nível do viajante {level}: cada personagem traz duas habilidades.
+            {JOURNEYS[journey]?.label} · {GAME_MODES[chosenMode]?.label}. {IS_DEMO ? "Cada" : `Nível do viajante ${level}: cada`} personagem traz duas habilidades.
           </p>
           <PersonaGrid
             personas={personasOf(journey)}

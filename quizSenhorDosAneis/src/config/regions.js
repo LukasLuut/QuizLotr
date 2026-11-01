@@ -2,6 +2,7 @@
 // fundo (vídeo ou imagem) e ambiência. A ordem é a mesma do backend (game/rules.ts)
 // e das rotas do mapa (components/Map.jsx).
 import bgShire from "../assets/videos/Hobbington.mp4";
+import { IS_DEMO } from "./demo";
 import bgBri from "../assets/videos/bri.mp4";
 import bgRivendell from "../assets/videos/rivendell.mp4";
 import bgMoria from "../assets/videos/moria.mp4";
@@ -72,7 +73,10 @@ export const regionAt = (index) => REGIONS[Math.min(Math.max(index ?? 0, 0), REG
 export const HOBBIT_UNLOCK_LEVEL = 5;
 export const JOURNEYS = {
   main: { label: "A Sociedade do Anel", description: "Do Condado à Montanha da Perdição." },
-  hobbit: { label: "O Hobbit", description: "Lá e de volta outra vez: do Condado a Erebor, pelos trolls, gobelins, aranhas e o dragão. Fora do ranking." },
+  hobbit: {
+    label: "O Hobbit",
+    description: `Lá e de volta outra vez: do Condado a Erebor, pelos trolls, gobelins, aranhas e o dragão.${IS_DEMO ? "" : " Fora do ranking."}`,
+  },
 };
 
 export const GAME_MODES = {

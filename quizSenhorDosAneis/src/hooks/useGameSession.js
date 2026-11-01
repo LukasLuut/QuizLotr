@@ -99,6 +99,9 @@ export function gameReducer(state, action) {
         },
       };
     }
+    // modo apresentador da demo
+    case "corruption-set":
+      return state.round ? { ...state, round: { ...state.round, corruption: action.value } } : state;
     case "answer-sent":
       return state.phase === "answering" ? { ...state, phase: "submitting", selectedId: action.answerId } : state;
     case "answer-result": {
@@ -281,6 +284,7 @@ export function useGameSession({ mode = "normal", journey = "main", persona, res
     arrived: useCallback(() => dispatch({ type: "arrived" }), []),
     achievementShown: useCallback((code) => dispatch({ type: "achievement-shown", code }), []),
     retry: useCallback(() => dispatch({ type: "retry" }), []),
+    setCorruption: useCallback((value) => dispatch({ type: "corruption-set", value }), []),
     restart,
   };
 }
