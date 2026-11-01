@@ -11,19 +11,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* a fonte acompanha o tamanho do círculo (cqw = % da largura da moldura) */
+  container-type: inline-size;
 }
 
 .contador {
   margin-top: 13%;
-  font-size: clamp(22px, 2.4vw, 35px);
+  font-size: 34cqw;
+  line-height: 1;
+  white-space: nowrap;
   filter: drop-shadow(0px 5px 5px rgb(0, 0, 0));
 }
 
-/* Quando os minutos aparecem, o arco cresce um pouco para o texto mais largo caber */
+/* A partir de 1 minuto (m:ss, texto mais largo) o círculo cresce e o número encolhe
+   um pouco em relação a ele, para caber dentro do anel */
 .conometro-box {
   transition: transform 0.4s ease;
+  transform-origin: center bottom;
 }
 
 .conometro-box.com-minutos {
-  transform: scale(1.18);
+  transform: scale(1.35);
+}
+
+.com-minutos .contador {
+  font-size: 22cqw;
 }
