@@ -23,6 +23,11 @@
     top: 10px;
 }
 
+/* logo 20% menor que o tamanho natural (500 px) */
+.img-logo{
+  width: min(400px, 100%);
+}
+
 .rings svg{
   width:500px;
   height:450px;
@@ -63,7 +68,7 @@
   justify-content: center;
   transition: all 0.3s ease;
   position: absolute;
-  bottom: -350px;
+  bottom: -380px;
 }
 
 /* Hover do texto circular */
@@ -109,10 +114,9 @@
     z-index: 1;
     border: none;
     font-size: 25px;
-    /* aparência padrão de botão da versão original */
     padding: 1px 6px;
-    background-color: buttonface;
-    color: buttontext;
+    background: none;
+    color: #000;
 }
 
 /* Keyframes */

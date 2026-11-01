@@ -1,4 +1,4 @@
-// Banco de perguntas por região (0 = Condado ... 7 = Montanha da Perdição; 8-10 = O Hobbit).
+// Banco de perguntas por região (0 = Condado ... 7 = Montanha da Perdição; 8-15 = O Hobbit).
 // Gerado a partir do seed original, com correções de lore e perguntas novas.
 export interface SeedQuestion {
   region: number
@@ -1377,7 +1377,8 @@ export const QUESTIONS: SeedQuestion[] = [
       }
     ]
   },
-  // Jornada bônus "O Hobbit" (8 = Montanhas Sombrias, 9 = Floresta das Trevas, 10 = Erebor)
+  // Jornada bônus "O Hobbit" (8 = Montanhas Sombrias, 9 = Floresta das Trevas, 10 = Erebor,
+  // 11 = O Condado, 12 = Bosque dos Trolls, 13 = Valfenda, 14 = Casa de Beorn, 15 = Cidade do Lago)
   ...hobbit([
     [8, 1, 'Que objeto Bilbo encontra no chão de uma caverna sob as Montanhas Sombrias?', ['Um anel de ouro', 'Uma espada élfica', 'Uma pedra preciosa', 'Um mapa antigo'], 0, 'Perdido no escuro, Bilbo encontra o Um Anel, que o Gollum havia deixado cair.'],
     [8, 2, 'Qual é a última pergunta de Bilbo no jogo de enigmas com o Gollum?', ['O que tem raízes que ninguém vê?', 'O que é que eu tenho no meu bolso?', 'O que não tem pernas e anda?', 'Qual é o meu nome?'], 1, 'Bilbo, sem enigmas, pergunta o que tem no bolso: o Anel. O Gollum não sabe responder.'],
@@ -1394,6 +1395,47 @@ export const QUESTIONS: SeedQuestion[] = [
     [10, 2, 'Que cidade Smaug destrói depois de sair da Montanha Solitária?', ['Valle', 'Cidade do Lago (Esgaroth)', 'Bri', 'Minas Tirith'], 1, 'Furioso, Smaug ataca Esgaroth, a Cidade do Lago, onde acaba abatido por Bard.'],
     [10, 2, 'Como se chama a batalha que encerra a aventura de O Hobbit?', ['Batalha dos Campos de Pelennor', 'Batalha dos Cinco Exércitos', 'Batalha do Abismo de Helm', 'Batalha de Dagorlad'], 1, 'Elfos, homens e anões enfrentam orcs e wargs diante de Erebor, na Batalha dos Cinco Exércitos.'],
     [10, 3, 'O que Bilbo faz com a Arkenstone para tentar evitar a guerra?', ['Esconde no Condado', 'Entrega a Bard e Thranduil', 'Joga no Lago', 'Devolve a Smaug'], 1, 'Bilbo entrega a Arkenstone a Bard e Thranduil, para que a troquem por uma parte justa do tesouro.'],
+    [11, 1, 'Quantos anões chegam a Bolsão para a aventura?', ['Sete', 'Treze', 'Doze', 'Nove'], 1, 'Treze anões, liderados por Thorin Escudo-de-Carvalho, se reúnem na toca de Bilbo.'],
+    [11, 1, 'Que marca Gandalf deixa na porta verde de Bolsão?', ['Um desenho de anel', 'Um mapa pintado', 'Um sinal secreto riscado com o cajado', 'Uma estrela élfica'], 2, 'Gandalf risca um sinal na porta para mostrar aos anões onde mora o "ladrão" que procuram.'],
+    [11, 2, 'Para que função Gandalf indica Bilbo à Companhia de Thorin?', ['Ladrão (saqueador)', 'Cozinheiro', 'Guia', 'Curandeiro'], 0, 'Gandalf apresenta Bilbo como o ladrão da Companhia, alguém capaz de entrar sem ser visto.'],
+    [11, 2, 'Qual é o primeiro anão a bater à porta de Bolsão?', ['Thorin', 'Balin', 'Bombur', 'Dwalin'], 3, 'Dwalin chega primeiro, depois Balin; Thorin só aparece mais tarde, com outros anões.'],
+    [11, 1, 'Que objetos de Thrór, avô de Thorin, mostram o caminho para a porta secreta da Montanha?', ['Uma espada e um escudo', 'Um anel e uma coroa', 'Um mapa e uma chave', 'Um chifre e um cajado'], 2, 'O mapa de Thrór e a chave guardada por Gandalf indicam a porta escondida da Montanha Solitária.'],
+    [11, 2, 'Qual é o nome do pai de Bilbo?', ['Bungo Bolseiro', 'Drogo Bolseiro', 'Largo Bolseiro', 'Fosco Bolseiro'], 0, 'Bilbo é filho de Bungo Bolseiro e Beladona Tûk.'],
+    [11, 3, 'Na pressa de partir, o que Bilbo esquece em Bolsão?', ['A espada', 'O lenço de bolso', 'O mapa', 'A cota de mithril'], 1, 'Bilbo corre até a taverna do Dragão Verde sem chapéu, sem bengala e sem lenço de bolso.'],
+    [12, 1, 'Em que os trolls se transformam ao nascer do sol?', ['Em cinzas', 'Em árvores', 'Em sombras', 'Em pedra'], 3, 'A luz do sol transforma os trolls em pedra, e eles ficam ali até hoje.'],
+    [12, 2, 'Como se chamam os três trolls que capturam os anões?', ['Tom, Bert e William', 'Uglúk, Grishnákh e Shagrat', 'Azog, Bolg e Gorbag', 'Glaurung, Ancalagon e Scatha'], 0, 'Os trolls Tom, Bert e William (Guilherme) discutem sobre como cozinhar os anões.'],
+    [12, 2, 'O que Bilbo tenta fazer ao chegar perto da fogueira dos trolls?', ['Lutar com a espada', 'Apagar o fogo', 'Furtar a bolsa de um deles', 'Negociar com eles'], 2, 'Bilbo tenta furtar a bolsa de William, mas a bolsa fala e o denuncia.'],
+    [12, 2, 'Que arma Bilbo pega na toca dos trolls?', ['Um arco', 'Um machado', 'Uma lança', 'Uma pequena faca élfica'], 3, 'A faca élfica, do tamanho de uma espada para um hobbit, mais tarde ganha o nome de Ferroada.'],
+    [12, 1, 'Quem salva a Companhia dos trolls?', ['Elrond', 'Gandalf', 'Beorn', 'Thorin'], 1, 'Gandalf imita as vozes dos trolls e os faz brigar entre si até o sol nascer.'],
+    [12, 3, 'Que ponte a Companhia cruza antes de chegar às terras dos trolls?', ['A Ponte do Brandevin', 'A Última Ponte', 'A Ponte de Khazad-dûm', 'A Ponte de Osgiliath'], 1, 'Depois da Última Ponte, sobre o Fontegris, a estrada entra nas terras ermas dos trolls.'],
+    [12, 2, 'Por que a Companhia se aproxima da fogueira no bosque?', ['Seguiam o mapa de Thrór', 'Queriam caçar trolls', 'Estavam molhados e famintos', 'Gandalf mandou'], 2, 'Na chuva, com fome e sem Gandalf, os anões mandam Bilbo ver de onde vinha a luz.'],
+    [13, 2, 'Que segredo Elrond descobre no mapa de Thrór?', ['Letras da lua', 'Um feitiço de fogo', 'O nome do dragão', 'Um caminho para Mordor'], 0, 'As letras da lua só aparecem sob uma lua da mesma forma e estação em que foram escritas.'],
+    [13, 2, 'Elrond diz que Orcrist e Glamdring foram forjadas em que cidade antiga?', ['Minas Tirith', 'Moria', 'Númenor', 'Gondolin'], 3, 'As duas espadas foram feitas em Gondolin para as guerras contra os orcs.'],
+    [13, 3, 'Segundo as letras da lua, quando a fechadura da porta secreta pode ser vista?', ['No solstício de verão', 'No aniversário de Bilbo', 'No Dia de Durin', 'Na primeira neve'], 2, 'Ao pôr do sol do Dia de Durin, com o tordo batendo na pedra, a última luz revela a fechadura.'],
+    [13, 1, 'Quem recebe a Companhia em Valfenda?', ['Elrond', 'Thranduil', 'Celeborn', 'Círdan'], 0, 'Elrond, senhor de Valfenda, hospeda a Companhia e examina o mapa e as espadas.'],
+    [13, 2, 'Como Valfenda é chamada em O Hobbit?', ['A Casa dos Reis', 'A Última Casa Amiga', 'O Porto Cinzento', 'O Salão do Fogo'], 1, 'Valfenda é a Última Casa Amiga a leste do Mar.'],
+    [13, 2, 'Como os elfos de Valfenda recebem a Companhia?', ['Com flechas de aviso', 'De portões fechados', 'Em silêncio, escondidos', 'Cantando e brincando com os anões'], 3, 'Os elfos cantam nas árvores e riem das barbas dos anões e do pônei de Bilbo.'],
+    [13, 2, 'Quanto tempo a Companhia descansa em Valfenda?', ['Cerca de duas semanas', 'Uma noite', 'Um ano', 'Três meses'], 0, 'A Companhia fica pelo menos catorze dias na casa de Elrond antes de enfrentar as montanhas.'],
+    [8, 2, 'Quem é o chefe dos gobelins que Gandalf mata na fuga da Cidade dos Gobelins?', ['Azog', 'Bolg', 'O Grande Gobelim', 'Gothmog'], 2, 'Gandalf mata o Grande Gobelim com Glamdring e guia os anões para fora no escuro.'],
+    [8, 1, 'Como a Companhia é capturada pelos gobelins?', ['Atravessando um rio', 'Numa emboscada na estrada', 'Perdida na neve', 'Dormindo numa caverna durante uma tempestade'], 3, 'Abrigados da tempestade numa caverna, eles são levados por uma fenda que se abre no fundo.'],
+    [14, 1, 'Que animais servem Beorn em sua casa?', ['Lobos e corvos', 'Cavalos, cães e ovelhas', 'Águias e ursos', 'Aranhas e morcegos'], 1, 'Os animais de Beorn põem a mesa, trazem a comida e cuidam da casa.'],
+    [14, 2, 'Como Gandalf apresenta a Companhia a Beorn sem irritá-lo?', ['Todos de uma vez', 'Aos pares, no meio da história', 'Por uma carta', 'Disfarçados de elfos'], 1, 'Gandalf conta a aventura e faz os anões aparecerem dois a dois, para Beorn não se zangar com tantos visitantes.'],
+    [14, 2, 'Em que rocha do Anduin as Águias deixam a Companhia?', ['O Argonath', 'Amon Hen', 'A Carrocha', 'A Pedra de Erech'], 2, 'A Carrocha é uma ilhota de pedra no Anduin, perto da casa de Beorn.'],
+    [14, 1, 'O que há na mesa de Beorn?', ['Mel, pão e creme', 'Carne de cervo', 'Peixe do rio', 'Lembas'], 0, 'Beorn não come os animais: sua mesa tem mel das suas abelhas, pão e creme.'],
+    [14, 2, 'O que Beorn empresta à Companhia para chegar à floresta?', ['Barcos', 'Uma carroça', 'Arcos', 'Pôneis'], 3, 'Beorn empresta pôneis até a orla da Floresta das Trevas, e eles são devolvidos lá.'],
+    [14, 2, 'Que aviso Beorn dá sobre o rio da Floresta das Trevas?', ['Segui-lo até o lago', 'Atravessá-lo a nado', 'Não beber nem se banhar nele', 'Pescar só à noite'], 2, 'O rio encantado traz sono e esquecimento a quem toca suas águas.'],
+    [14, 3, 'Onde Gandalf se separa da Companhia?', ['Na entrada da Floresta das Trevas', 'Em Valfenda', 'Na Cidade do Lago', 'Nas Montanhas Sombrias'], 0, 'No portão da floresta, Gandalf parte para assuntos urgentes no sul.'],
+    [9, 2, 'Qual anão cai no rio encantado e dorme por dias?', ['Bofur', 'Bombur', 'Kíli', 'Dori'], 1, 'Bombur cai no rio encantado e mergulha num sono profundo; os outros precisam carregá-lo.'],
+    [9, 1, 'Como Bilbo engana as aranhas para salvar os anões?', ['Escondido num barril', 'Com uma tocha', 'Chamando os elfos', 'Usando o Anel para ficar invisível'], 3, 'Invisível, Bilbo confunde as aranhas e corta as teias que prendiam os anões.'],
+    [15, 1, 'Qual é o nome da Cidade do Lago?', ['Esgaroth', 'Valle', 'Erebor', 'Annúminas'], 0, 'Esgaroth é a cidade dos homens do lago, construída sobre estacas.'],
+    [15, 2, 'Por qual rio os barris levam os anões até o Lago Longo?', ['O Anduin', 'O Rio Corrente', 'O Rio da Floresta', 'O Brandevin'], 2, 'Dos salões do Rei Élfico, os barris descem o Rio da Floresta até o Lago Longo.'],
+    [15, 2, 'Quem governa a Cidade do Lago quando a Companhia chega?', ['Bard', 'Girion', 'Dáin', 'O Mestre'], 3, 'A cidade é governada pelo Mestre, que pensa mais em comércio e ouro do que em canções.'],
+    [15, 2, 'Que antiga canção o povo do lago lembra ao ver Thorin?', ['A queda de Gondolin', 'A volta do Rei sob a Montanha', 'O retorno do Rei de Gondor', 'A balada de Beren e Lúthien'], 1, 'As canções diziam que o Rei sob a Montanha voltaria e o ouro correria pelos rios.'],
+    [15, 2, 'Que ave conta a Bard o ponto fraco de Smaug?', ['Um corvo', 'Um tordo', 'Uma águia', 'Uma coruja'], 1, 'O velho tordo ouviu Bilbo falar da falha na armadura de Smaug e levou o recado a Bard.'],
+    [15, 3, 'Bard descende de qual antigo senhor?', ['Thrór, rei de Erebor', 'Isildur', 'Girion, senhor de Valle', 'Elendil'], 2, 'Bard é herdeiro de Girion, senhor de Valle, cidade destruída por Smaug.'],
+    [15, 1, 'Sobre que lago fica a cidade dos homens do lago?', ['Lago Longo', 'Lago Evendim', 'Kheled-zâram', 'Mar de Núrnen'], 0, 'A cidade de madeira fica no Lago Longo, ao sul da Montanha Solitária.'],
+    [10, 2, 'Como Bilbo descobre o ponto fraco de Smaug?', ['Lendo o mapa de Thrór', 'Ouvindo o tordo', 'Por Gandalf', 'Conversando com o dragão, invisível'], 3, 'Bilbo elogia Smaug, que exibe o peito coberto de joias, e vê uma falha do lado esquerdo.'],
+    [10, 2, 'Quem se torna Rei sob a Montanha após a morte de Thorin?', ['Fíli', 'Balin', 'Dáin Pé-de-Ferro', 'Bard'], 2, 'Thorin, Fíli e Kíli morrem na batalha; Dáin, primo de Thorin, assume o reino.'],
   ]),
 ]
 

@@ -1,14 +1,19 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import "./Modal.css";
 
 // Pilha de modais abertos: o Esc fecha só o de cima, mesmo com o foco fora dele
 const openModals = [];
+
+// duração da saída (igual a modal-out em Modal.css): o modal fica montado até ela acabar
+const EXIT_MS = 180;
 
 const FOCUSABLE = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /**
  * Modal acessível: role="dialog", foco preso dentro, Esc fecha
  * e o foco volta para o elemento que abriu o modal.
+ * Surge (fundo esmaece, caixa cresce de leve) e, ao fechar, some antes de desmontar.
  */
 function Modal({ isOpen, onClose, labelledBy, className = "", overlayClassName = "modal-overlay", closeOnOverlay = true, closeOnEscape = true, children }) {
   const closeOnEscapeRef = useRef(closeOnEscape);
@@ -16,6 +21,15 @@ function Modal({ isOpen, onClose, labelledBy, className = "", overlayClassName =
   const dialogRef = useRef(null);
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
+  const [rendered, setRendered] = useState(isOpen);
+  if (isOpen && !rendered) setRendered(true);
+
+  // fechou: espera a animação de saída e desmonta
+  useEffect(() => {
+    if (isOpen || !rendered) return;
+    const timer = setTimeout(() => setRendered(false), EXIT_MS);
+    return () => clearTimeout(timer);
+  }, [isOpen, rendered]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -59,11 +73,15 @@ function Modal({ isOpen, onClose, labelledBy, className = "", overlayClassName =
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!rendered) return null;
+  const phase = isOpen ? "modal-in" : "modal-out";
 
   return createPortal(
     <div
-      className={overlayClassName}
+      className={`${overlayClassName} ${phase}`}
+      // saindo: fora da árvore acessível e sem receber cliques
+      aria-hidden={!isOpen || undefined}
+      inert={!isOpen || undefined}
       onMouseDown={(e) => {
         if (closeOnOverlay && e.target === e.currentTarget) onCloseRef.current?.();
       }}

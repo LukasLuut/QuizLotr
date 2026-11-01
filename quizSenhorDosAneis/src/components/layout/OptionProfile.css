@@ -165,6 +165,14 @@
   filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.8));
 }
 
+/* foto do perfil (todos os personagens): 20% maior que o quadro padrão */
+.persona-modal--profile {
+  /* a altura acompanha a largura (~1,2x com 4 fileiras): em telas baixas encolhe para caber */
+  --w: min(768px, calc(100vw - 32px), calc((100dvh - 62px) / 1.2));
+  /* +15 px de respiro em todos os lados */
+  padding: calc(var(--w) * 0.09 + 15px) calc(var(--w) * 0.1 + 15px) calc(var(--w) * 0.1 + 15px);
+}
+
 .persona-modal h2 {
   font-family: var(--font-display);
   font-weight: 100;
@@ -192,8 +200,9 @@
   transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
 }
 
-.persona-option .avatar {
-  width: 100%;
+.persona-option .avatar,
+.persona-option .dial-host {
+  width: 100%; /* o dial-host tem container-type: sem largura explícita ele encolheria a 0 */
 }
 
 .persona-name {
@@ -229,14 +238,38 @@
 }
 
 .persona-abilities {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 13px;
   line-height: 1;
   color: #e6c77a;
   white-space: nowrap;
 }
 
+.persona-abilities .ability-img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
 .persona-option.locked {
   opacity: 1;
+}
+
+/* habilidades abertas: a opção sobe por cima das vizinhas (fotos bloqueadas têm filtro) */
+.persona-option.dial-shown {
+  position: relative;
+  z-index: 5;
+  opacity: 1;
+  transform: none;
+}
+
+.persona-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  translate: 0 -30px; /* Voltar e Confirmar 30 px mais para cima */
 }
 
 .persona-option.locked .avatar {

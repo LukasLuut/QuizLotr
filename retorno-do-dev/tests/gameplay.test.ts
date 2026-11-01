@@ -121,6 +121,20 @@ describe('personagens e nível do viajante', () => {
     expect(round.body.helpsAllowed.lembas).toBe(2)
   })
 
+  it('personagem escolhido na partida: da jornada e liberado', async () => {
+    const p = await createPlayer()
+    const sam = await api().post('/rounds').set(auth(p.token)).send({ persona: 'sam' })
+    expect(sam.status).toBe(201)
+    expect(sam.body.persona).toBe('sam')
+    expect((await api().post('/rounds').set(auth(p.token)).send({ persona: 'aragorn' })).status).toBe(403)
+    expect((await api().post('/rounds').set(auth(p.token)).send({ persona: 'smaug' })).status).toBe(400)
+
+    await grantLevel(p.user.id, 5)
+    expect((await api().post('/rounds').set(auth(p.token)).send({ journey: 'main', persona: 'bilbo' })).status).toBe(400)
+    const hobbit = await api().post('/rounds').set(auth(p.token)).send({ journey: 'hobbit' })
+    expect(hobbit.body.persona).toBe('bilbo')
+  })
+
   it('Sam começa o Desafio com uma vida a mais', async () => {
     const p = await createPlayer()
     await api().put('/users/me').set(auth(p.token)).send({ avatar: 'sam' }).expect(200)
@@ -135,8 +149,8 @@ describe('personagens e nível do viajante', () => {
     await grantLevel(p.user.id, 5)
     const round = await api().post('/rounds').set(auth(p.token)).send({ journey: 'hobbit' })
     expect(round.status).toBe(201)
-    expect(round.body.total).toBe(12)
-    expect([...new Set(round.body.regionPlan)]).toEqual([8, 9, 10])
+    expect(round.body.total).toBe(40)
+    expect([...new Set(round.body.regionPlan)]).toEqual([11, 12, 13, 8, 14, 9, 15, 10])
     expect(round.body.regionRules[8].name).toBe('Enigmas no Escuro')
 
     let last: any

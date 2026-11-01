@@ -1,0 +1,145 @@
+/* Habilidades em "speed dial" (Luut Automator, speed_dial.py): aberto, a foto desliza
+   10 px para o lado e as opções saem DE TRÁS dela (do centro, com metade do tamanho)
+   e assentam ao lado, em coluna centrada na altura da foto; 300 ms ease-in-out, ida e volta.
+   O host é a foto: cqw das opções = largura dela (para sair do centro). */
+.dial-host {
+  position: relative;
+  display: block;
+  container-type: inline-size;
+}
+
+.dial-host .avatar {
+  width: 100%;
+  transition: translate 300ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+/* opções por cima do que vem depois no DOM */
+.dial-host.dial-open {
+  z-index: 2;
+}
+
+.dial-host.dial-open .avatar {
+  translate: -10px 0;
+}
+
+.dial-host.dial-left.dial-open .avatar {
+  translate: 10px 0;
+}
+
+.ability-dial {
+  --h: 58px; /* altura de cada opção */
+  --gap: 6px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+.ability-box {
+  position: absolute;
+  /* final: 12 px depois da borda direita da foto, coluna centrada no centro dela */
+  left: calc(50cqw + 12px);
+  top: calc((var(--i) - (var(--n) - 1) / 2) * (var(--h) + var(--gap)) - var(--h) / 2);
+  height: var(--h);
+  width: max-content;
+  max-width: 270px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px 0 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(218, 165, 32, 0.45);
+  background: linear-gradient(180deg, #2e2010, #1a1108);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+  text-align: left;
+  /* recolhida: de volta ao centro da foto, com metade do tamanho */
+  translate: calc(-50cqw - 12px - 50%) calc((var(--n) - 1) / 2 * (var(--h) + var(--gap)) - var(--i) * (var(--h) + var(--gap)));
+  scale: 0.5;
+  opacity: 0;
+  visibility: hidden;
+  /* recolhendo: viaja inteira de volta e só some ao chegar atrás da foto */
+  transition:
+    translate 300ms cubic-bezier(0.42, 0, 0.58, 1),
+    scale 300ms cubic-bezier(0.42, 0, 0.58, 1),
+    opacity 100ms linear 200ms,
+    visibility 0s linear 300ms;
+}
+
+/* espelhado: sem espaço à direita, as opções abrem do lado esquerdo da foto */
+.dial-left .ability-box {
+  left: auto;
+  right: calc(50cqw + 12px);
+  translate: calc(50cqw + 12px + 50%) calc((var(--n) - 1) / 2 * (var(--h) + var(--gap)) - var(--i) * (var(--h) + var(--gap)));
+}
+
+.dial-host.dial-open .ability-box {
+  translate: 0 0;
+  scale: 1;
+  opacity: 1;
+  visibility: visible;
+  /* abrindo: opaca já no começo do caminho */
+  transition:
+    translate 300ms cubic-bezier(0.42, 0, 0.58, 1),
+    scale 300ms cubic-bezier(0.42, 0, 0.58, 1),
+    opacity 100ms linear,
+    visibility 0s;
+}
+
+.ability-icon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(218, 165, 32, 0.7);
+  background: radial-gradient(circle at 35% 30%, #4a3418, #1c1208 75%);
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.ability-icon .ability-img {
+  width: 68%;
+  height: 68%;
+  object-fit: contain;
+}
+
+.ability-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ability-name {
+  font-family: var(--font-title);
+  font-size: 15px;
+  color: goldenrod;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.ability-desc {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.25;
+  color: #e6d8b0;
+}
+
+/* movimento reduzido: sem deslizar nem crescer, só aparece */
+@media (prefers-reduced-motion: reduce) {
+  .dial-host .avatar,
+  .ability-box,
+  .dial-host.dial-open .ability-box {
+    transition: none;
+  }
+
+  .dial-host.dial-open .avatar {
+    translate: none;
+  }
+}

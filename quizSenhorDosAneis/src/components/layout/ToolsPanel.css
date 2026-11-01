@@ -5,7 +5,7 @@
   position: relative;
   top: 5%;
   background: url("../../assets/images/box/box-lateral.webp") center / 100% 100% no-repeat;
-  padding: 16% 14% calc(13% + 15px); /* +15 px de respiro na base */
+  padding: 16% 14% calc(13% + 45px); /* +45 px de respiro na base */
   display: flex;
   color: aliceblue;
 }
@@ -49,6 +49,7 @@
   color: #e6d8b0;
   font-family: var(--font-title);
   font-size: clamp(14px, 1.1vw, 18px);
+  margin-bottom: 15px;
   transition: box-shadow 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
@@ -56,8 +57,6 @@
   width: 36px;
   height: 36px;
   object-fit: contain;
-  /* inscrição do Anel (preta na arte) pintada de dourado */
-  filter: invert(74%) sepia(70%) saturate(600%) hue-rotate(3deg) brightness(0.95);
   transition: transform 0.4s ease;
 }
 
@@ -80,12 +79,69 @@
   opacity: 0.5;
 }
 
-.tools-note {
-  font-family: var(--font-body);
+/* O Peso do Anel, logo abaixo do botão */
+.corruption {
+  width: 100%;
+}
+
+/* "Corrupção do Anel" na fonte temática */
+.corruption-label {
+  font-family: var(--font-display);
   font-size: clamp(11px, 0.8vw, 13px);
-  line-height: 1.3;
-  color: var(--color-text-muted);
+  color: var(--color-gold);
+  line-height: 1;
   text-align: center;
+  text-shadow: 0 1px 2px #000;
+  white-space: nowrap;
+}
+
+.corruption-track {
+  position: relative;
+  margin-top: 4px;
+}
+
+.corruption-bar {
+  height: 10px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 160, 80, 0.3);
+  overflow: hidden;
+}
+
+.corruption-fill {
+  width: var(--pct);
+  height: 100%;
+  background: linear-gradient(90deg, #c08a2a, #e2611c 60%, #8b0d0d);
+  box-shadow: 0 0 8px rgba(255, 90, 20, 0.8);
+  transition: width 0.8s ease;
+}
+
+/* Chama girada 90° no sentido horário (a ponta aponta para onde a barra cresce), centrada na
+   altura da barra e com a base sobre a ponta do preenchimento; anda junto com ele */
+.corruption-flame {
+  position: absolute;
+  top: 50%;
+  left: var(--pct);
+  width: 48px;
+  height: 48px;
+  /* âncora na base da chama: no SVG (2000x2000) ela fica em x≈52,5%, y≈87,5% (fim do desenho);
+     girada 90° no sentido horário, a base cai 37,5% à esquerda do centro e 2,5% abaixo dele.
+     Centro em left + 50% → precisa de −12,5% em x para a base ficar em --pct; −52,5% em y
+     deixa a base na linha do meio da barra; −2 px enterra a base no preenchimento (mescla das cores) */
+  translate: calc(-12.5% - 2px) -52.5%;
+  rotate: 90deg;
+  /* gradiente só na chama: vermelho do fim do preenchimento na base (onde encosta na barra)
+     até laranja vivo na ponta. "to top" porque o gradiente gira junto com a chama (base embaixo
+     no SVG original); o desenho ocupa de ~15% a ~85% da altura do SVG */
+  background: linear-gradient(to top, #8b0d0d 18%, #ff8a00 80%);
+  mask: var(--flame) center / contain no-repeat;
+  pointer-events: none;
+  opacity: 0;
+  transition: left 0.8s ease, opacity 0.4s ease;
+}
+
+.corruption-flame.lit {
+  opacity: 1;
 }
 
 /* Ajudas */
@@ -133,15 +189,22 @@
 }
 
 .help-icon {
-  width: 34px;
-  height: 34px;
+  width: 51px;
+  height: 51px;
   border-radius: 50%;
   border: 2px solid rgba(218, 165, 32, 0.7);
   background: radial-gradient(circle at 35% 30%, #4a3418, #1c1208 75%);
   display: grid;
   place-items: center;
-  font-size: 16px;
+  font-size: 24px;
   line-height: 1;
+}
+
+/* ícone desenhado dentro do círculo (PNGs de assets/icons) */
+.help-icon img {
+  width: 68%;
+  height: 68%;
+  object-fit: contain;
 }
 
 .help-text {
@@ -198,19 +261,6 @@
 
 .tools-mult {
   color: var(--color-gold);
-}
-
-.tools-persona {
-  font-family: var(--font-body);
-  font-size: clamp(10px, 0.72vw, 12px);
-  line-height: 1.3;
-  color: var(--color-text-muted);
-  text-align: center;
-}
-
-.tools-persona strong {
-  color: goldenrod;
-  font-weight: 600;
 }
 
 /* Tablet e celular: faixa larga com a moldura deitada */

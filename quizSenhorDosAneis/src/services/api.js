@@ -116,7 +116,8 @@ export const api = {
   deleteMe: () => request("/users/me", { method: "DELETE" }),
   achievements: () => request("/users/me/achievements"),
 
-  startRound: (mode = "normal", journey = "main") => request("/rounds", { method: "POST", body: { mode, journey } }),
+  startRound: (mode = "normal", journey = "main", persona = undefined) =>
+    request("/rounds", { method: "POST", body: { mode, journey, ...(persona ? { persona } : {}) } }),
   currentRound: () => request("/rounds/current"),
   roundState: (id) => request(`/rounds/${id}`),
   question: (id, signal) => request(`/rounds/${id}/question`, { signal }),

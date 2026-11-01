@@ -238,36 +238,6 @@
   opacity: 1;
 }
 
-/* Regra da região, abaixo do título na cena de chegada */
-.scene-rule {
-  max-width: min(640px, 90vw);
-  margin-top: 8px;
-  padding: 10px 22px;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(218, 165, 32, 0.5);
-  color: #e6d8b0;
-  font-family: var(--font-title);
-  font-size: clamp(15px, 1.3vw, 20px);
-  text-align: center;
-  animation: scene-rule-in 0.8s 1.2s ease-out both;
-}
-
-.scene-rule strong {
-  display: block;
-  color: goldenrod;
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 1.25em;
-}
-
-@keyframes scene-rule-in {
-  from {
-    opacity: 0;
-    translate: 0 10px;
-  }
-}
-
 /* Overlay da corrupção do Anel: na frente de tudo, logo abaixo do menu de pausa.
    O fundo preto do vídeo fica transparente com "screen"; a opacidade vem do JSX. */
 .corruption-overlay {

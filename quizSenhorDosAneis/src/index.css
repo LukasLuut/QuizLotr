@@ -127,15 +127,15 @@ button {
 }
 
 /* Cursor temático em toda a janela: a mão do Sauron, com a versão de clique enquanto
-   o botão do mouse está pressionado. O PNG de 48 px vem primeiro: o Chrome troca
+   o botão do mouse está pressionado. O PNG de 64 px (33% maior que o antigo de 48) vem primeiro: o Chrome troca
    cursores grandes pela seta padrão perto das bordas da janela. O hotspot é a ponta do dedo.
    Todo elemento dentro do body herda o cursor do html (inclusive botões desabilitados,
    campos de texto e o mapa do Leaflet, que define o próprio cursor). */
 html {
-  cursor: url("./assets/cursor/sauron-hand-normal-48.png") 7 0, url("./assets/cursor/sauron-hand-icon-cursor-normal-final.png") 17 1, auto !important;
+  cursor: url("./assets/cursor/sauron-hand-normal-64.png") 9 0, url("./assets/cursor/sauron-hand-icon-cursor-normal-final.png") 17 1, auto !important;
 }
 html:active {
-  cursor: url("./assets/cursor/sauron-hand-click-48.png") 8 4, url("./assets/cursor/sauron-hand-icon-cursor-click-final.png") 19 9, auto !important;
+  cursor: url("./assets/cursor/sauron-hand-click-64.png") 10 5, url("./assets/cursor/sauron-hand-icon-cursor-click-final.png") 19 9, auto !important;
 }
 body,
 body *,

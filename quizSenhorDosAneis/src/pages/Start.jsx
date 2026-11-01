@@ -48,12 +48,12 @@ function Start() {
             </defs>
             <text className="circle-text">
               <textPath href="#circlePath" startOffset="50%" textAnchor="middle" textLength="750" lengthAdjust="spacingAndGlyphs">
-                &quot;One Ring to rule them all, One Ring to find them, One Ring to bring them all, and in the darkness bind them.&quot;
+                &quot;Um Anel para a todos governar, Um Anel para encontrá-los, Um Anel para a todos trazer e na escuridão aprisioná-los.&quot;
               </textPath>
             </text>
           </svg>
           <button type="button" className="btn-start" onClick={handleStart}>
-            START
+            INICIAR
           </button>
         </div>
       </div>

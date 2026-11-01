@@ -1,7 +1,7 @@
 // src/game/rules.ts
 // Regras do jogo em funções puras: a pontuação é sempre calculada aqui, no servidor.
 
-// Regiões, na ordem do mapa. 0-7: jornada principal; 8-10: jornada bônus "O Hobbit"
+// Regiões. 0-7: jornada principal; 8-15: jornada bônus "O Hobbit" (ordem em JOURNEY_PLAN)
 export const REGIONS = [
   'O Condado',
   'Bri',
@@ -14,11 +14,16 @@ export const REGIONS = [
   'Montanhas Sombrias',
   'Floresta das Trevas',
   'Erebor',
+  'O Condado',
+  'Bosque dos Trolls',
+  'Valfenda',
+  'Casa de Beorn',
+  'Cidade do Lago',
 ] as const
 
 export const MORIA_REGION = 3
 
-// Quantas perguntas são sorteadas de cada região por partida (jornada principal)
+// Quantas perguntas são sorteadas de cada região por partida
 export const QUESTIONS_PER_REGION = 5
 
 export const GAME_MODES = ['normal', 'desafio'] as const
@@ -93,7 +98,8 @@ export type Journey = (typeof JOURNEYS)[number]
 // Regiões e perguntas por região de cada jornada
 export const JOURNEY_PLAN: Record<Journey, { regions: number[]; perRegion: number }> = {
   main: { regions: [0, 1, 2, 3, 4, 5, 6, 7], perRegion: QUESTIONS_PER_REGION },
-  hobbit: { regions: [8, 9, 10], perRegion: 4 },
+  // Lá e de volta outra vez: Condado, trolls, Valfenda, Montanhas Sombrias, Beorn, Floresta, Cidade do Lago, Erebor
+  hobbit: { regions: [11, 12, 13, 8, 14, 9, 15, 10], perRegion: QUESTIONS_PER_REGION },
 }
 
 // Nível do viajante necessário para a jornada bônus
@@ -128,6 +134,11 @@ export const REGION_RULES: Record<number, RegionRule> = {
   8: { name: 'Enigmas no Escuro', description: 'Responda em até 8 s, ou o Gollum leva 200 pontos.', slowPenalty: { seconds: 8, points: 200 } },
   9: { name: 'Teias da Floresta', description: 'As aranhas não perdoam: errar custa 300 pontos.', wrongPenalty: 300 },
   10: { name: 'Tesouro de Smaug', description: 'Acertos valem o dobro, mas a cobiça faz o Anel corromper 50% a mais.', pointsFactor: 2, ringCorruptionFactor: 1.5 },
+  11: { name: 'Uma Festa Inesperada', description: 'Os anões chegam sem avisar, mas a casa é sua: errar não quebra a sequência de acertos.', keepStreakOnError: true },
+  12: { name: 'Até o Amanhecer', description: 'Gandalf distrai os trolls até o sol nascer: a última pergunta da região vale o triplo.', lastQuestionFactor: 3 },
+  13: { name: 'Letras da Lua', description: 'Elrond revela os segredos do mapa: acertos valem 20% a mais.', pointsFactor: 1.2 },
+  14: { name: 'Paciência de Beorn', description: 'Conte a história depressa: o bônus de velocidade vale o dobro.', speedBonusFactor: 2 },
+  15: { name: 'O Rei sob a Montanha', description: 'A cidade festeja: acertos valem 30% a mais, mas cada erro corrompe +10.', pointsFactor: 1.3, wrongCorruption: 10 },
 }
 
 export const regionRule = (region: number): RegionRule => REGION_RULES[region] ?? { name: '', description: '' }
@@ -151,7 +162,11 @@ export const LEMBAS_CORRUPTION_RELIEF = 25
 // Personagens e habilidades ---------------------------------------------------
 
 // Imagens em quizSenhorDosAneis/src/assets/images/personas
-export const PERSONAS = ['frodo', 'sam', 'gandalf', 'pippin', 'legolas', 'gimli', 'aragorn', 'boromir', 'arwen', 'galadriel'] as const
+// Sociedade do Anel + personagens de O Hobbit (liberados pelo nível do viajante)
+export const PERSONAS = [
+  'frodo', 'sam', 'gandalf', 'legolas', 'gimli', 'aragorn', 'galadriel', 'eowyn', 'saruman', 'sauron', 'gandalf-hobbit', 'azog',
+  'bilbo', 'balin', 'kili', 'fili', 'bard', 'radagast', 'thranduil', 'thorin',
+] as const
 export type Persona = (typeof PERSONAS)[number]
 export const isPersona = (value: unknown): value is Persona => typeof value === 'string' && (PERSONAS as readonly string[]).includes(value)
 export const DEFAULT_PERSONA: Persona = 'gandalf'
@@ -163,7 +178,7 @@ export interface PersonaMods {
   streakCap?: number // limite do multiplicador de sequência
   ringCorruptionFactor?: number
   ringPointsFactor?: number
-  corruptionGrowthFactor?: number // toda corrupção cresce menos
+  corruptionGrowthFactor?: number // multiplica toda corrupção que cresce (< 1 alivia, > 1 piora)
   pointsFactor?: number
   regionPointsFactor?: Record<number, number>
   extraHelps?: Partial<Record<Help, number>>
@@ -174,6 +189,7 @@ export interface PersonaMods {
 
 export interface PersonaInfo {
   name: string
+  journey: Journey // jornada em que o personagem pode ser escolhido
   unlockLevel: number
   abilities: { code: string; name: string; description: string }[]
   mods: PersonaMods
@@ -182,6 +198,7 @@ export interface PersonaInfo {
 export const PERSONA_INFO: Record<Persona, PersonaInfo> = {
   frodo: {
     name: 'Frodo',
+    journey: 'main',
     unlockLevel: 0,
     abilities: [
       { code: 'portador', name: 'Portador do Anel', description: 'O Anel corrompe 40% menos.' },
@@ -191,6 +208,7 @@ export const PERSONA_INFO: Record<Persona, PersonaInfo> = {
   },
   sam: {
     name: 'Sam',
+    journey: 'main',
     unlockLevel: 0,
     abilities: [
       { code: 'leal', name: 'Coração Leal', description: '+1 vida no modo Desafio.' },
@@ -200,6 +218,7 @@ export const PERSONA_INFO: Record<Persona, PersonaInfo> = {
   },
   gandalf: {
     name: 'Gandalf',
+    journey: 'main',
     unlockLevel: 0,
     abilities: [
       { code: 'istar', name: 'Sabedoria de Istar', description: '+1 Conselho de Gandalf por partida.' },
@@ -207,17 +226,9 @@ export const PERSONA_INFO: Record<Persona, PersonaInfo> = {
     ],
     mods: { extraHelps: { conselho: 1 }, pointsFactor: 1.1 },
   },
-  pippin: {
-    name: 'Pippin',
-    unlockLevel: 2,
-    abilities: [
-      { code: 'tuk', name: 'Tolo de um Tûk', description: '+1 Passolargo por partida.' },
-      { code: 'curioso', name: 'Olhar Curioso', description: '+1 Visão do Palantír por partida.' },
-    ],
-    mods: { extraHelps: { passolargo: 1, palantir: 1 } },
-  },
   legolas: {
     name: 'Legolas',
+    journey: 'main',
     unlockLevel: 4,
     abilities: [
       { code: 'olhos', name: 'Olhos de Elfo', description: '+5 s por pergunta no modo Desafio.' },
@@ -227,6 +238,7 @@ export const PERSONA_INFO: Record<Persona, PersonaInfo> = {
   },
   gimli: {
     name: 'Gimli',
+    journey: 'main',
     unlockLevel: 6,
     abilities: [
       { code: 'teimosia', name: 'Teimosia Anã', description: 'O 1º erro de cada região não zera a sequência.' },
@@ -236,6 +248,7 @@ export const PERSONA_INFO: Record<Persona, PersonaInfo> = {
   },
   aragorn: {
     name: 'Aragorn',
+    journey: 'main',
     unlockLevel: 8,
     abilities: [
       { code: 'herdeiro', name: 'Herdeiro de Isildur', description: 'A sequência multiplica os pontos até 2,5x.' },
@@ -243,26 +256,9 @@ export const PERSONA_INFO: Record<Persona, PersonaInfo> = {
     ],
     mods: { streakCap: 2.5, extraHelps: { lembas: 1 } },
   },
-  boromir: {
-    name: 'Boromir',
-    unlockLevel: 10,
-    abilities: [
-      { code: 'escudo', name: 'Escudo de Gondor', description: 'O 1º erro da partida não custa vida, pontos nem corrupção.' },
-      { code: 'forca', name: 'Força de Gondor', description: 'Acertos valem 10% a mais.' },
-    ],
-    mods: { firstErrorShield: true, pointsFactor: 1.1 },
-  },
-  arwen: {
-    name: 'Arwen',
-    unlockLevel: 12,
-    abilities: [
-      { code: 'evenstar', name: 'Graça de Evenstar', description: 'O Lembas também zera a corrupção.' },
-      { code: 'vau', name: 'Fuga pelo Vau', description: '+3 s por pergunta no modo Desafio.' },
-    ],
-    mods: { lembasClearsCorruption: true, extraSeconds: 3 },
-  },
   galadriel: {
     name: 'Galadriel',
+    journey: 'main',
     unlockLevel: 15,
     abilities: [
       { code: 'nenya', name: 'Nenya', description: 'O Anel corrompe 50% menos.' },
@@ -270,9 +266,143 @@ export const PERSONA_INFO: Record<Persona, PersonaInfo> = {
     ],
     mods: { ringCorruptionFactor: 0.5, extraHelps: { conselho: 1 } },
   },
+  eowyn: {
+    name: 'Éowyn',
+    journey: 'main',
+    unlockLevel: 2,
+    abilities: [
+      { code: 'escudeira', name: 'Donzela-Escudeira', description: 'O 1º erro da partida não custa vida, pontos nem corrupção.' },
+      { code: 'rohirrim', name: 'Cavalga com Rohan', description: '+3 s por pergunta no modo Desafio.' },
+    ],
+    mods: { firstErrorShield: true, extraSeconds: 3 },
+  },
+  saruman: {
+    name: 'Saruman',
+    journey: 'main',
+    unlockLevel: 10,
+    abilities: [
+      { code: 'palantir-orthanc', name: 'Palantír de Orthanc', description: '+1 Visão do Palantír por partida.' },
+      { code: 'cobica', name: 'Cobiça de Isengard', description: 'Acertos valem 20% a mais, mas a corrupção cresce 20% mais.' },
+    ],
+    mods: { extraHelps: { palantir: 1 }, pointsFactor: 1.2, corruptionGrowthFactor: 1.2 },
+  },
+  sauron: {
+    name: 'Sauron',
+    journey: 'main',
+    unlockLevel: 22,
+    abilities: [
+      { code: 'senhor-do-anel', name: 'Senhor do Anel', description: 'Acertos com o Anel valem 3x, e ele corrompe 70% menos.' },
+      { code: 'olho', name: 'O Olho Sem Pálpebra', description: '+1 Visão do Palantír por partida.' },
+    ],
+    mods: { ringPointsFactor: 3, ringCorruptionFactor: 0.3, extraHelps: { palantir: 1 } },
+  },
+  // O Hobbit
+  'gandalf-hobbit': {
+    name: 'Gandalf',
+    journey: 'hobbit',
+    unlockLevel: 5,
+    abilities: [
+      { code: 'pinhas', name: 'Pinhas em Chamas', description: 'Acertos nas Montanhas Sombrias valem 50% a mais.' },
+      { code: 'cinzento', name: 'O Cinzento', description: '+1 Conselho de Gandalf por partida.' },
+    ],
+    mods: { regionPointsFactor: { 8: 1.5 }, extraHelps: { conselho: 1 } },
+  },
+  azog: {
+    name: 'Azog',
+    journey: 'hobbit',
+    unlockLevel: 24,
+    abilities: [
+      { code: 'profanador', name: 'O Profanador', description: 'Acertos valem 25% a mais, mas a corrupção cresce 30% mais.' },
+      { code: 'warg', name: 'Caçador de Warg', description: 'Janela do bônus de velocidade 6 s maior.' },
+    ],
+    mods: { pointsFactor: 1.25, corruptionGrowthFactor: 1.3, speedWindowBonus: 6 },
+  },
+  bilbo: {
+    name: 'Bilbo',
+    journey: 'hobbit',
+    unlockLevel: 5,
+    abilities: [
+      { code: 'achado', name: 'Achado no Escuro', description: 'O Anel corrompe 30% menos.' },
+      { code: 'enigmas', name: 'Enigmas no Escuro', description: '+1 Visão do Palantír por partida.' },
+    ],
+    mods: { ringCorruptionFactor: 0.7, extraHelps: { palantir: 1 } },
+  },
+  balin: {
+    name: 'Balin',
+    journey: 'hobbit',
+    unlockLevel: 7,
+    abilities: [
+      { code: 'conselheiro', name: 'Conselheiro de Thorin', description: '+1 Conselho de Gandalf por partida.' },
+      { code: 'mazarbul', name: 'Livro de Mazarbul', description: 'Acertos em Moria valem 30% a mais.' },
+    ],
+    mods: { extraHelps: { conselho: 1 }, regionPointsFactor: { 3: 1.3 } },
+  },
+  kili: {
+    name: 'Kíli',
+    journey: 'hobbit',
+    unlockLevel: 9,
+    abilities: [
+      { code: 'arqueiro', name: 'Arqueiro Anão', description: '+3 s por pergunta no modo Desafio.' },
+      { code: 'jovem', name: 'Coragem Jovem', description: 'O 1º erro de cada região não zera a sequência.' },
+    ],
+    mods: { extraSeconds: 3, regionStreakShield: true },
+  },
+  fili: {
+    name: 'Fíli',
+    journey: 'hobbit',
+    unlockLevel: 11,
+    abilities: [
+      { code: 'laminas', name: 'Lâminas Gêmeas', description: 'Acertos valem 10% a mais.' },
+      { code: 'irmao', name: 'Irmão de Escudo', description: 'O 1º erro da partida não custa vida, pontos nem corrupção.' },
+    ],
+    mods: { pointsFactor: 1.1, firstErrorShield: true },
+  },
+  bard: {
+    name: 'Bard',
+    journey: 'hobbit',
+    unlockLevel: 13,
+    abilities: [
+      { code: 'flechanegra', name: 'Flecha Negra', description: 'Janela do bônus de velocidade 8 s maior.' },
+      { code: 'barqueiro', name: 'Barqueiro do Lago', description: '+1 Passolargo por partida.' },
+    ],
+    mods: { speedWindowBonus: 8, extraHelps: { passolargo: 1 } },
+  },
+  radagast: {
+    name: 'Radagast',
+    journey: 'hobbit',
+    unlockLevel: 16,
+    abilities: [
+      { code: 'bichos', name: 'Amigo dos Bichos', description: 'Toda corrupção cresce 25% mais devagar.' },
+      { code: 'rhosgobel', name: 'Coelhos de Rhosgobel', description: '+1 Lembas por partida.' },
+    ],
+    mods: { corruptionGrowthFactor: 0.75, extraHelps: { lembas: 1 } },
+  },
+  thranduil: {
+    name: 'Thranduil',
+    journey: 'hobbit',
+    unlockLevel: 18,
+    abilities: [
+      { code: 'reifloresta', name: 'Rei da Floresta', description: 'Acertos na Floresta das Trevas valem 50% a mais.' },
+      { code: 'imortal', name: 'Elfo Imortal', description: '+4 s por pergunta no modo Desafio.' },
+    ],
+    mods: { regionPointsFactor: { 9: 1.5 }, extraSeconds: 4 },
+  },
+  thorin: {
+    name: 'Thorin',
+    journey: 'hobbit',
+    unlockLevel: 20,
+    abilities: [
+      { code: 'reimontanha', name: 'Rei sob a Montanha', description: 'Acertos em Erebor valem 50% a mais.' },
+      { code: 'orcrist', name: 'Orcrist', description: 'Acertos valem 15% a mais.' },
+    ],
+    mods: { regionPointsFactor: { 10: 1.5 }, pointsFactor: 1.15 },
+  },
 }
 
 export const personaOrDefault = (persona: string | null | undefined): Persona => (isPersona(persona) ? persona : DEFAULT_PERSONA)
+// Personagem padrão de cada jornada (Bilbo abre junto com O Hobbit)
+export const JOURNEY_DEFAULT_PERSONA: Record<Journey, Persona> = { main: 'gandalf', hobbit: 'bilbo' }
+export const personaFitsJourney = (persona: Persona, journey: Journey) => PERSONA_INFO[persona].journey === journey
 export const personaMods = (persona: string | null | undefined): PersonaMods => PERSONA_INFO[personaOrDefault(persona)].mods
 
 // Quantas vezes cada ajuda pode ser usada na partida

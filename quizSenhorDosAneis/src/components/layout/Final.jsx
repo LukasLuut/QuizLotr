@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import "./Final.css";
-import videoFinal from "../../assets/videos/finalLotr.mp4";
-import finalPoster from "../../assets/images/posters/finalLotr.jpg";
+// vitória da Sociedade: a cena do Anel destruído (antes o fundo da Montanha da Perdição)
+import videoFinal from "../../assets/videos/destroy-the-ring.mp4";
+import finalPoster from "../../assets/images/posters/destroy-the-ring.jpg";
+import videoHobbitFinal from "../../assets/videos/hobbit-final.mp4";
+import hobbitFinalPoster from "../../assets/images/posters/hobbit-final.jpg";
 import Button from "../buttons/Button";
 import { formatarTempo } from "../../utils/format";
 import { GAME_MODES } from "../../config/regions";
@@ -42,7 +45,7 @@ function Final({ summary, onRestart, onProfile }) {
 
       {showFinal && (
         <div className={`victory-overlay ${won ? "" : "defeat"}`} role="dialog" aria-modal="true" aria-labelledby="final-title">
-          {won && !hobbit && <video ref={videoRef} src={videoFinal} className="video-final" poster={finalPoster} muted autoPlay loop playsInline aria-hidden="true" />}
+          {won && <video ref={videoRef} src={hobbit ? videoHobbitFinal : videoFinal} className="video-final" poster={hobbit ? hobbitFinalPoster : finalPoster} muted autoPlay loop playsInline aria-hidden="true" />}
 
           <div className="victory-card">
             <h2 id="final-title" className="victory-title" tabIndex={-1} ref={headingRef}>

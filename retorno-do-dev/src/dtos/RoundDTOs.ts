@@ -1,7 +1,7 @@
 // src/dtos/RoundDTOs.ts
 import { Type } from 'class-transformer'
 import { IsBoolean, IsIn, IsInt, IsOptional, Min } from 'class-validator'
-import { GAME_MODES, GameMode, HELPS, Help, JOURNEYS, Journey } from '../game/rules'
+import { GAME_MODES, GameMode, HELPS, Help, JOURNEYS, Journey, PERSONAS, Persona } from '../game/rules'
 
 export class StartRoundDTO {
   @IsOptional()
@@ -11,6 +11,11 @@ export class StartRoundDTO {
   @IsOptional()
   @IsIn(JOURNEYS, { message: `Jornada deve ser uma destas: ${JOURNEYS.join(', ')}` })
   journey?: Journey
+
+  // personagem desta partida (da jornada escolhida); sem ele, vale a foto do perfil
+  @IsOptional()
+  @IsIn(PERSONAS, { message: 'Personagem desconhecido' })
+  persona?: Persona
 }
 
 export class HelpDTO {

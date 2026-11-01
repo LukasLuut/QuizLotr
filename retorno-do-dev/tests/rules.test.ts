@@ -108,16 +108,16 @@ describe('O Peso do Anel, regiões e personagens', () => {
   it('acerto sem o Anel alivia a corrupção; com o Anel dobra (Frodo 2,5x) e corrompe', () => {
     expect(scoreAnswer(input)).toEqual({ points: 1200, corruptionDelta: -PURE_ANSWER_RELIEF })
     expect(scoreAnswer({ ...input, usedRing: true })).toEqual({ points: 3000, corruptionDelta: Math.round(RING_USE_CORRUPTION * 0.6) })
-    expect(scoreAnswer({ ...input, persona: 'pippin', usedRing: true }).points).toBe(1200 * RING_POINTS_FACTOR)
+    expect(scoreAnswer({ ...input, persona: 'aragorn', usedRing: true }).points).toBe(1200 * RING_POINTS_FACTOR)
   })
 
   it('errar com o Anel custa pontos e mais corrupção', () => {
-    expect(scoreAnswer({ ...input, isCorrect: false, usedRing: true, persona: 'pippin' })).toEqual({ points: -500, corruptionDelta: 30 })
+    expect(scoreAnswer({ ...input, isCorrect: false, usedRing: true, persona: 'aragorn' })).toEqual({ points: -500, corruptionDelta: 30 })
   })
 
   it('Olho de Sauron dobra a corrupção do Anel; Fenda pune erros', () => {
-    expect(scoreAnswer({ ...input, region: 6, persona: 'pippin', usedRing: true }).corruptionDelta).toBe(30)
-    expect(scoreAnswer({ ...input, region: 7, persona: 'pippin', isCorrect: false })).toEqual({ points: -500, corruptionDelta: 15 })
+    expect(scoreAnswer({ ...input, region: 6, persona: 'aragorn', usedRing: true }).corruptionDelta).toBe(30)
+    expect(scoreAnswer({ ...input, region: 7, persona: 'aragorn', isCorrect: false })).toEqual({ points: -500, corruptionDelta: 15 })
   })
 
   it('Escudo de Gondor anula o erro', () => {
@@ -125,12 +125,12 @@ describe('O Peso do Anel, regiões e personagens', () => {
   })
 
   it('Espelho de Galadriel triplica a última da região; Moria premia rapidez', () => {
-    expect(scoreAnswer({ ...input, region: 4, persona: 'pippin', isLastOfRegion: true }).points).toBe(3000)
-    expect(scoreAnswer({ ...input, region: 3, persona: 'pippin', elapsedSeconds: 5 }).points).toBe(1000 + speedBonus(5) + 300)
+    expect(scoreAnswer({ ...input, region: 4, persona: 'aragorn', isLastOfRegion: true }).points).toBe(3000)
+    expect(scoreAnswer({ ...input, region: 3, persona: 'aragorn', elapsedSeconds: 5 }).points).toBe(1000 + speedBonus(5) + 300)
   })
 
   it('Correnteza corta o tempo pela metade; Legolas ganha 5 s', () => {
-    expect(questionTimeLimit('desafio', 5, 'pippin')).toBe(10)
+    expect(questionTimeLimit('desafio', 5, 'aragorn')).toBe(10)
     expect(questionTimeLimit('desafio', 5, 'legolas')).toBe(15)
     expect(questionTimeLimit('normal', 5, 'legolas')).toBeNull()
   })
@@ -142,9 +142,17 @@ describe('O Peso do Anel, regiões e personagens', () => {
 
   it('ajudas extras por personagem e desbloqueio por nível', () => {
     expect(helpsAllowed('gandalf')).toEqual({ conselho: 2, palantir: 1, lembas: 1, passolargo: 1 })
-    expect(helpsAllowed('pippin')).toMatchObject({ palantir: 2, passolargo: 2 })
+    expect(helpsAllowed('aragorn')).toMatchObject({ lembas: 2 })
     expect(isPersonaUnlocked('frodo', 0)).toBe(true)
     expect(isPersonaUnlocked('galadriel', 14)).toBe(false)
+  })
+
+  it('personagens de O Hobbit: ajudas extras e desbloqueio', () => {
+    expect(helpsAllowed('bilbo')).toMatchObject({ palantir: 2 })
+    expect(helpsAllowed('radagast')).toMatchObject({ lembas: 2 })
+    expect(isPersonaUnlocked('bilbo', 5)).toBe(true)
+    expect(isPersonaUnlocked('thorin', 19)).toBe(false)
+    expect(isPersonaUnlocked('thorin', 20)).toBe(true)
   })
 
   it('24 conquistas com códigos únicos', () => {

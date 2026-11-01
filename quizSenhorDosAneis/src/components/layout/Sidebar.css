@@ -10,26 +10,78 @@
 }
 
 /* 1) Placa de metal e madeira (box-aviso, 1000x449) */
-/* foto à esquerda; nome, título e habilidades à direita, puxados para cima;
-   a barra do Anel corre um pouco acima da base da placa */
+/* foto à esquerda; nome e fala à direita, puxados para cima */
 .player-card {
   aspect-ratio: 1000 / 449;
   background: url("../../assets/images/box/box-aviso.webp") center / 100% 100% no-repeat;
   display: grid;
   grid-template-columns: 28.73% minmax(0, 1fr); /* foto: 23,94% + 20% */
-  grid-template-rows: 1fr auto;
+  grid-template-rows: 1fr;
   column-gap: 6%;
   row-gap: 4px;
   padding: 5.5% 9% 11%;
 }
 
-/* foto com o aro, centralizada na altura da placa (ocupa as duas linhas) */
+/* foto com o aro, centralizada na altura da placa (ocupa as duas linhas); é o botão
+   que abre as habilidades */
 .player-avatar {
   width: 100%;
   grid-row: 1 / -1;
   align-self: center;
   /* 10 px de respiro em cima (margem: padding deslocaria a foto dentro do aro) */
   margin-top: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.player-avatar:focus-visible {
+  outline: 2px solid goldenrod;
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+/* Habilidades abertas (AbilityDial): a coluna sobe por cima do quiz */
+.sidebar.dial-active {
+  position: relative;
+  z-index: var(--z-hud);
+}
+
+/* véu leve sobre o resto (a placa do personagem fica clara) */
+.ability-veil {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-hud) - 1);
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 300ms cubic-bezier(0.42, 0, 0.58, 1), visibility 0s linear 300ms;
+}
+
+.ability-veil.open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 300ms cubic-bezier(0.42, 0, 0.58, 1), visibility 0s;
+}
+
+/* o painel da partida (mesma coluna) também fica sob o véu */
+.match-card {
+  position: relative;
+}
+
+.match-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.dial-active .match-card::after {
+  opacity: 1;
 }
 
 .player-text {
@@ -39,48 +91,6 @@
   justify-content: flex-start;
   gap: 3px;
   padding-top: 20px;
-}
-
-/* O Peso do Anel */
-.corruption {
-  grid-column: 2;
-  align-self: end;
-  padding-inline: 2%;
-  translate: -5px 0; /* 5 px mais para a esquerda */
-}
-
-.corruption-label {
-  display: flex;
-  justify-content: flex-end; /* colado no canto direito */
-  font-family: var(--font-title);
-  font-size: clamp(10px, 0.75vw, 13px);
-  color: #e9b46a;
-  line-height: 1; /* sem sobra de linha: só 1 px até a barra */
-}
-
-/* "Corrupção do Anel" na fonte temática */
-.corruption-title {
-  font-family: var(--font-display);
-  color: var(--color-gold);
-  font-size: 1em;
-  text-shadow: 0 1px 2px #000;
-  white-space: nowrap;
-}
-
-.corruption-bar {
-  height: 7px;
-  margin-top: 1px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(255, 160, 80, 0.3);
-  overflow: hidden;
-}
-
-.corruption-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #c08a2a, #e2611c 60%, #8b0d0d);
-  box-shadow: 0 0 8px rgba(255, 90, 20, 0.8);
-  transition: width 0.8s ease;
 }
 
 .player-name {

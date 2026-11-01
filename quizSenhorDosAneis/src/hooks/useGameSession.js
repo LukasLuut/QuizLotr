@@ -149,10 +149,10 @@ export function gameReducer(state, action) {
 
 /**
  * Sessão de jogo ligada à API de partidas.
- * mode: "normal" | "desafio" e journey: "main" | "hobbit" (só para partida nova);
+ * mode: "normal" | "desafio", journey: "main" | "hobbit" e persona (só para partida nova);
  * resume: tenta continuar a partida ativa.
  */
-export function useGameSession({ mode = "normal", journey = "main", resume = false, paused = false } = {}) {
+export function useGameSession({ mode = "normal", journey = "main", persona, resume = false, paused = false } = {}) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
   const init = useRef(null);
   const busy = useRef(false); // trava síncrona contra clique duplo
@@ -165,7 +165,7 @@ export function useGameSession({ mode = "normal", journey = "main", resume = fal
         const current = await api.currentRound();
         const stored = readStoredRound();
         if (current && (resume || stored === current.id)) return { round: current, fresh: false };
-        const round = await api.startRound(mode, journey);
+        const round = await api.startRound(mode, journey, persona);
         return { round, fresh: true };
       })();
     }
@@ -183,7 +183,7 @@ export function useGameSession({ mode = "normal", journey = "main", resume = fal
     return () => {
       alive = false;
     };
-  }, [mode, journey, resume, state.phase === "loading"]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [mode, journey, persona, resume, state.phase === "loading"]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const roundId = state.round?.id;
 
@@ -263,13 +263,13 @@ export function useGameSession({ mode = "normal", journey = "main", resume = fal
   const restart = useCallback(async () => {
     try {
       if (roundId && state.round?.status === "active") await api.abandon(roundId);
-      const round = await api.startRound(state.round?.mode || mode, state.round?.journey || journey);
+      const round = await api.startRound(state.round?.mode || mode, state.round?.journey || journey, state.round?.persona || persona);
       storeRound(round.id);
       dispatch({ type: "round-loaded", round, fresh: true });
     } catch (err) {
       dispatch({ type: "error", message: err.message, retryPhase: "loading" });
     }
-  }, [roundId, state.round, mode, journey]);
+  }, [roundId, state.round, mode, journey, persona]);
 
   return {
     state,

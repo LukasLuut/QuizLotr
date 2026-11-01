@@ -8,7 +8,7 @@ const roundId = (req: Request) => Number((req as any).validated.params.id)
 
 export class RoundController {
   async start(req: Request, res: Response) {
-    res.status(201).json(await service.start(req.user!.id, req.body.mode, req.body.journey))
+    res.status(201).json(await service.start(req.user!.id, req.body.mode, req.body.journey, req.body.persona))
   }
 
   async current(req: Request, res: Response) {

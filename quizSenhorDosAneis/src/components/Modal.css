@@ -1,0 +1,59 @@
+/* Surgimento e fechamento dos modais (Modal.jsx põe modal-in / modal-out no fundo).
+   Entrada: fundo esmaece e a caixa sobe 12 px crescendo de 0,94 (ease-out, 260 ms).
+   Saída: mais curta (180 ms = EXIT_MS), a caixa encolhe e some (ease-in). */
+.modal-in {
+  animation: modal-backdrop-in 220ms ease-out both;
+}
+
+.modal-in > [role="dialog"] {
+  animation: modal-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.modal-out {
+  animation: modal-backdrop-out 180ms ease-in both;
+  pointer-events: none;
+}
+
+.modal-out > [role="dialog"] {
+  animation: modal-out 180ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+@keyframes modal-backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-backdrop-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+    scale: 0.94;
+  }
+}
+
+@keyframes modal-out {
+  to {
+    opacity: 0;
+    translate: 0 8px;
+    scale: 0.96;
+  }
+}
+
+/* movimento reduzido: só esmaece */
+@media (prefers-reduced-motion: reduce) {
+  .modal-in > [role="dialog"],
+  .modal-out > [role="dialog"] {
+    animation-name: modal-backdrop-in;
+  }
+
+  .modal-out > [role="dialog"] {
+    animation-name: modal-backdrop-out;
+  }
+}

@@ -21,7 +21,8 @@ const characterIcon = new L.Icon({
   iconAnchor: [24, 44],
 });
 
-// Rotas entre as regiões. paths[r] termina na região r (0 = Condado ... 7 = Montanha da Perdição).
+// Rotas entre as regiões. paths[r] termina na região r e começa na anterior da mesma jornada
+// (Sociedade: 0 = Condado ... 7 = Montanha da Perdição; O Hobbit: 11, 12, 13, 8, 14, 9, 15, 10).
 const PATHS = [
   [[3185, 1485]], // 0 - Condado
   [[3185, 1485], [3133, 1497], [3110, 1544], [3126, 1614], [3169, 1674], [3158, 1752], [3182, 1797]], // 1 - Bri
@@ -31,10 +32,15 @@ const PATHS = [
   [[2656, 2715], [2600, 2781], [2531, 2804], [2462, 2904], [2447, 2957], [2392, 2935], [2350, 2957], [2364, 3028], [2324, 3033], [2279, 2995], [2247, 3060], [2211, 3058], [2132, 3022], [2026, 3044], [1981, 3076]], // 5 - Argonath
   [[1981, 3076], [2028, 3121], [2071, 3202], [2033, 3285], [1975, 3367]], // 6 - Mordor
   [[1975, 3367], [1917, 3442], [1872, 3487], [1823, 3512], [1747, 3497], [1718, 3543], [1748, 3622]], // 7 - Montanha da Perdição
-  // Jornada bônus "O Hobbit"
-  [[3240, 2620]], // 8 - Montanhas Sombrias (início)
-  [[3240, 2620], [3260, 2680], [3270, 2800], [3256, 2980], [3240, 3150], [3256, 3350], [3300, 3420]], // 9 - Floresta das Trevas
-  [[3300, 3420], [3380, 3440], [3432, 3380], [3520, 3440], [3582, 3462]], // 10 - Erebor
+  // Jornada bônus "O Hobbit", seguindo o livro sobre o mapa
+  [[3216, 2515], [3260, 2550], [3310, 2580], [3345, 2610], [3354, 2620]], // 8 - Montanhas Sombrias: de Valfenda pelo Passo Alto até a Cidade dos Gobelins
+  [[3294, 2890], [3340, 2905], [3380, 2925], [3395, 3000], [3400, 3080], [3394, 3150]], // 9 - Floresta das Trevas: Portão da Floresta e a trilha élfica até o Rio Encantado
+  [[3458, 3417], [3480, 3428], [3500, 3430], [3545, 3423]], // 10 - Erebor: pelo Rio Corrente, passando por Valle
+  [[3187, 1482]], // 11 - O Condado: Bolsão, na Vila dos Hobbits (início)
+  [[3187, 1482], [3172, 1505], [3184, 1530], [3196, 1560], [3205, 1592], [3210, 1640], [3212, 1690], [3211, 1720], [3200, 1745], [3184, 1765], [3180, 1791], [3186, 1840], [3181, 1875], [3169, 1920], [3166, 1950], [3169, 1995], [3179, 2035], [3191, 2080], [3204, 2120], [3214, 2160], [3219, 2225], [3214, 2275], [3216, 2305], [3232, 2330], [3248, 2360]], // 12 - Bosque dos Trolls: Estrada Leste, Bri, Última Ponte
+  [[3248, 2360], [3230, 2400], [3212, 2450], [3194, 2500], [3216, 2515]], // 13 - Valfenda: pelo Vau do Bruinen
+  [[3354, 2620], [3345, 2665], [3366, 2703], [3322, 2853], [3294, 2890]], // 14 - Casa de Beorn: Ninho das Águias, Carrocha
+  [[3394, 3150], [3430, 3200], [3465, 3240], [3482, 3263], [3470, 3300], [3462, 3350], [3458, 3400], [3458, 3417]], // 15 - Cidade do Lago: Salões do Rei Élfico e os barris pelo Rio da Floresta
 ];
 
 const endOf = (region) => {

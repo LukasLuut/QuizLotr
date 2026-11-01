@@ -26,6 +26,9 @@ import {
   helpsAllowed,
   isPersona,
   isPersonaUnlocked,
+  JOURNEY_DEFAULT_PERSONA,
+  Persona,
+  personaFitsJourney,
   isTimeExpired,
   levelFromAchievements,
   personaMods,
@@ -120,16 +123,24 @@ export class RoundService {
 
   // Inicia uma partida nova. Partidas ativas anteriores do jogador são abandonadas
   // (não entram no ranking), então F5 ou "Reiniciar" nunca somam pontos de duas partidas.
-  async start(userId: number, mode: GameMode = 'normal', journey: Journey = 'main'): Promise<RoundState> {
+  async start(userId: number, mode: GameMode = 'normal', journey: Journey = 'main', chosen?: Persona): Promise<RoundState> {
     const user = await AppDataSource.getRepository(User).findOne({ where: { id: userId } })
     if (!user) throw new NotFoundError('Usuário não encontrado')
     const level = await this.levelOf(userId)
     if (journey === 'hobbit' && level < HOBBIT_UNLOCK_LEVEL) {
       throw new ForbiddenError(`A jornada O Hobbit abre no nível ${HOBBIT_UNLOCK_LEVEL} do viajante`)
     }
-    // Personagem bloqueado (foto antiga) joga com o padrão
-    let persona = personaOrDefault(user.avatar)
-    if (!isPersonaUnlocked(persona, level)) persona = personaOrDefault(null)
+    // Personagem escolhido para a partida: precisa estar liberado e ser da jornada
+    let persona: Persona
+    if (chosen) {
+      if (!personaFitsJourney(chosen, journey)) throw new BadRequestError('Este personagem não faz parte desta jornada')
+      if (!isPersonaUnlocked(chosen, level)) throw new ForbiddenError('Personagem ainda bloqueado para o seu nível')
+      persona = chosen
+    } else {
+      // sem escolha: a foto do perfil, se servir; senão o padrão da jornada
+      persona = personaOrDefault(user.avatar)
+      if (!isPersonaUnlocked(persona, level) || !personaFitsJourney(persona, journey)) persona = JOURNEY_DEFAULT_PERSONA[journey]
+    }
 
     const questionIds = await this.questions.drawForRound(journey)
     const baseLives = MODE_RULES[mode].lives

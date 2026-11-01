@@ -6,6 +6,8 @@ import prologue from "../assets/videos/Prologue.mp4";
 import bgVideo from "../assets/videos/boromir.mp4";
 import bgPoster from "../assets/images/posters/boromir.jpg";
 import Button from "../components/buttons/Button";
+import BtnQuestion from "../components/buttons/BtnQuestion";
+import PersonaGrid from "../components/PersonaGrid";
 import Modal from "../components/Modal";
 import OptionProfile from "../components/layout/OptionProfile";
 import AchievementsModal from "../components/AchievementsModal";
@@ -15,10 +17,11 @@ import { useAudio } from "../context/AudioContext";
 import { api } from "../services/api";
 import { GAME_MODES, HOBBIT_UNLOCK_LEVEL, JOURNEYS, REGIONS } from "../config/regions";
 import { clearStoredRound } from "../hooks/useGameSession";
+import { JOURNEY_DEFAULT_PERSONA, isUnlocked, personaAt, personasOf } from "../config/personas";
 
 const shireMusic = REGIONS[0].ambience;
 // música de abertura de cada jornada
-const JOURNEY_MUSIC = { main: shireMusic, hobbit: REGIONS[8].ambience };
+const JOURNEY_MUSIC = { main: shireMusic, hobbit: REGIONS[11].ambience };
 
 function Profile() {
   const { user, logout } = useAuth();
@@ -31,11 +34,18 @@ function Profile() {
   const [playTransitionVideo, setPlayTransitionVideo] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
   const [showSkip, setShowSkip] = useState(false);
-  const [modal, setModal] = useState(null); // null | "edit" | "achievements" | "mode"
+  const [modal, setModal] = useState(null); // null | "edit" | "achievements" | "mode" | "persona"
   const [currentRound, setCurrentRound] = useState(null);
   const [journey, setJourney] = useState("main");
+  const [chosenMode, setChosenMode] = useState(null); // modo escolhido, à espera do personagem
+  const [pickedPersona, setPickedPersona] = useState(null); // personagem marcado (Confirmar começa)
+  const [dialFor, setDialFor] = useState(null); // habilidades abertas ao lado da foto
+  const personaTitleId = useId();
   const level = user?.level ?? 0;
   const hobbitLocked = level < HOBBIT_UNLOCK_LEVEL;
+  const profilePersona = personaAt(user?.avatar);
+  const suggestedPersona =
+    profilePersona.journey === journey && isUnlocked(profilePersona, level) ? profilePersona.code : JOURNEY_DEFAULT_PERSONA[journey];
   const pendingNav = useRef(null);
   const videoRef = useRef(null);
   const timers = useRef([]);
@@ -62,11 +72,37 @@ function Profile() {
     navigate("/playquiz", { state: pendingNav.current });
   };
 
-  // Novo jogo: escolhe o modo, escurece a tela e toca o prólogo
-  const startNewGame = (mode) => {
+  // Novo jogo: jornada e modo → personagem da jornada → escurece a tela e toca o prólogo
+  const chooseMode = (mode) => {
+    setChosenMode(mode);
+    setPickedPersona(suggestedPersona);
+    setDialFor(null);
+    setModal("persona");
+  };
+
+  // habilidades abertas: clicar fora do personagem recolhe
+  useEffect(() => {
+    if (!dialFor) return;
+    const onDown = (e) => {
+      if (!e.target.closest(".persona-option.dial-shown")) setDialFor(null);
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [dialFor]);
+
+  // clicar marca o personagem e abre as habilidades; clicar de novo nele recolhe
+  const pickPersona = (code) => {
+    if (code === pickedPersona) setDialFor((open) => (open ? null : code));
+    else {
+      setPickedPersona(code);
+      setDialFor(code);
+    }
+  };
+
+  const startNewGame = (persona) => {
     setModal(null);
     clearStoredRound();
-    pendingNav.current = { mode, journey, resume: false };
+    pendingNav.current = { mode: chosenMode, journey, persona, resume: false };
     setFadeToBlack(true);
     playMusic(null);
     later(() => setPlayTransitionVideo(true), 3000);
@@ -120,9 +156,10 @@ function Profile() {
             </div>
             <div className="profile-info">
               <h1 className="profile-name">{user?.name}</h1>
+              {/* título escolhido entre as conquistas (Editar Perfil) */}
+              {user?.title && <p className="profile-title">{user.title}</p>}
               {/* nível do viajante = conquistas desbloqueadas */}
-              <p className="profile-level">Nível do viajante: {level}</p>
-              <p className="profile-best">Melhor pontuação: {user?.bestScore ?? 0}</p>
+              <p className="profile-level">Nível: {level}</p>
             </div>
             <nav className="btn-box" aria-label="Opções do jogador">
               {currentRound && (
@@ -153,7 +190,7 @@ function Profile() {
                   role="radio"
                   aria-checked={journey === key}
                   disabled={locked}
-                  className={`journey-option ${journey === key ? "selected" : ""}`}
+                  className={`mode-option journey-option ${journey === key ? "selected" : ""}`}
                   onClick={() => setJourney(key)}
                 >
                   <span className="mode-option-title">{j.label}</span>
@@ -162,17 +199,44 @@ function Profile() {
               );
             })}
           </div>
+          {/* modo de jogo: mesmo botão das alternativas do quiz; a descrição fica embaixo */}
           <div className="mode-options">
             {Object.entries(GAME_MODES).map(([key, m]) => (
-              <button key={key} type="button" className="mode-option" onClick={() => startNewGame(key)}>
-                <span className="mode-option-title">{m.label}</span>
-                <span className="mode-option-desc">{m.description}</span>
-              </button>
+              <div key={key} className="mode-choice">
+                <BtnQuestion texto={m.label} onClick={() => chooseMode(key)} aria-describedby={`${modeTitleId}-${key}`} />
+                <p id={`${modeTitleId}-${key}`} className="mode-option-desc">
+                  {m.description}
+                </p>
+              </div>
             ))}
           </div>
-          <Button variant="plain" onClick={() => setModal(null)}>
+          <Button className="mode-back" onClick={() => setModal(null)}>
             Voltar
           </Button>
+        </Modal>
+
+        {/* Personagem da partida: só os da jornada escolhida */}
+        <Modal isOpen={modal === "persona"} onClose={() => setModal("mode")} labelledBy={personaTitleId} className="persona-modal">
+          <h2 id={personaTitleId}>Escolha seu personagem</h2>
+          <p className="persona-hint">
+            {JOURNEYS[journey]?.label} · {GAME_MODES[chosenMode]?.label}. Nível do viajante {level}: cada personagem traz duas habilidades.
+          </p>
+          <PersonaGrid
+            personas={personasOf(journey)}
+            level={level}
+            selected={pickedPersona}
+            onPick={pickPersona}
+            dialFor={dialFor}
+            labelledBy={personaTitleId}
+          />
+          <div className="persona-actions">
+            <Button className="mode-back" onClick={() => setModal("mode")}>
+              Voltar
+            </Button>
+            <Button className="mode-back" onClick={() => startNewGame(pickedPersona)} disabled={!pickedPersona}>
+              Confirmar
+            </Button>
+          </div>
         </Modal>
 
         <div className={`fade-overlay-black ${fadeToBlack ? "active" : ""}`} aria-hidden="true"></div>

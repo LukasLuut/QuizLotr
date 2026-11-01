@@ -25,9 +25,9 @@ function PlayQuiz() {
   const navigate = useNavigate();
   const { user, refreshUser } = useAuth();
   const { playMusic, playSfx } = useAudio();
-  const { mode = "normal", journey = "main", resume = false } = location.state || {};
+  const { mode = "normal", journey = "main", persona: chosenPersona, resume = false } = location.state || {};
   const [menuOpen, setMenuOpen] = useState(false);
-  const game = useGameSession({ mode, journey, resume, paused: menuOpen });
+  const game = useGameSession({ mode, journey, persona: chosenPersona, resume, paused: menuOpen });
   const { state } = game;
   const { phase, round, region, result } = state;
 
@@ -38,16 +38,26 @@ function PlayQuiz() {
   const [outcome, setOutcome] = useState(null);
   const roundId = round?.id;
 
-  // fala do personagem: sorteada a cada resposta, sem repetir a anterior
+  // fala do personagem: sorteada a cada resposta, sem repetir nenhuma já dita na partida
   const lastLine = useRef(null);
+  const usedLines = useRef(new Set());
   const persona = round?.persona;
   // fala de abertura: uma por partida, até a primeira resposta
   const introLine = useMemo(() => (roundId ? pickIntro(persona) : null), [roundId, persona]);
 
+  // partida nova: nenhuma fala dita ainda
+  useEffect(() => {
+    usedLines.current = new Set();
+    lastLine.current = null;
+  }, [roundId]);
+
   useEffect(() => {
     if (phase === "feedback" && result) {
-      const line = result.skipped ? null : pickLine(persona, result, lastLine.current);
-      if (line) lastLine.current = line;
+      const line = result.skipped ? null : pickLine(persona, result, usedLines.current, lastLine.current);
+      if (line) {
+        lastLine.current = line;
+        usedLines.current.add(line);
+      }
       setOutcome({
         isCorrect: result.isCorrect,
         timeExpired: result.timeExpired,
@@ -157,20 +167,13 @@ function PlayQuiz() {
   // Overlay do Anel: invisível até 40% de corrupção, sobe até opacidade total aos 90%
   const corruptionPct = round?.corruption ?? 0;
   const overlayOpacity = Math.min(1, Math.max(0, (corruptionPct - 40) / 50));
-  const rule = round?.regionRules?.[region];
 
   return (
     <div className="bg-black-quiz">
-      {/* Título da região (narrador) e a regra própria do lugar */}
+      {/* Título da região (narrador) */}
       {showTitle && (
         <div className="title-scene">
           <Narrator text={regionAt(region).title} active={peek !== "fading"} />
-          {inScene && rule?.name && (
-            <p className="scene-rule">
-              <strong>{rule.name}</strong>
-              {rule.description}
-            </p>
-          )}
         </div>
       )}
 

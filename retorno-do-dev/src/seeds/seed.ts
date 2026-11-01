@@ -4,12 +4,13 @@ import { Question } from '../models/Question'
 import { Answer } from '../models/Answer'
 import { QUESTIONS } from './questions'
 
-// Insere as perguntas das regiões que ainda não têm nenhuma (idempotente: pode rodar várias
-// vezes, e um banco antigo recebe só as regiões novas, como as da jornada O Hobbit)
+// Insere as perguntas que ainda não estão no banco, pela região + texto (idempotente: pode rodar
+// várias vezes, e um banco antigo recebe só as novas, como as regiões novas de O Hobbit)
 export async function seedQuestions(ds: DataSource) {
-  const rows = await ds.getRepository(Question).createQueryBuilder('q').select('DISTINCT q.region', 'region').getRawMany<{ region: number }>()
-  const filled = new Set(rows.map(r => Number(r.region)))
-  const missing = QUESTIONS.filter(q => !filled.has(q.region))
+  const rows = await ds.getRepository(Question).find({ select: { region: true, question: true } })
+  const key = (region: number, question: string) => `${region}|${question}`
+  const saved = new Set(rows.map(r => key(r.region, r.question)))
+  const missing = QUESTIONS.filter(q => !saved.has(key(q.region, q.question)))
   if (missing.length === 0) return 0
 
   await ds.transaction(async manager => {

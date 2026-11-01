@@ -1,6 +1,7 @@
 // ToolsPanel.jsx
 import "./ToolsPanel.css";
-import ringIcon from "../../assets/images/circleOneRing.webp";
+import ringIcon from "../../assets/icons/o-um-anel.png";
+import fireIcon from "../../assets/icons/fire.svg";
 import { HELPS, helpsLeft } from "../../config/helps";
 import { personaAt } from "../../config/personas";
 
@@ -10,14 +11,11 @@ const streakMultiplier = (streak, persona) => {
   return Math.min(cap, 1 + 0.1 * (Math.max(streak, 1) - 1));
 };
 
-const RING_FACTOR = { frodo: 2.5 };
-const RING_CORRUPTION = { frodo: 9, galadriel: 8 }; // 15 com o fator de cada personagem
-
 const fmt = (n) => n.toLocaleString("pt-BR", { maximumFractionDigits: 1 });
 
 /**
  * Coluna da direita: o que o jogador pode USAR na partida.
- * Topo: o Anel; meio: as ajudas temáticas; base: sequência e recorde.
+ * Topo: o Anel e a corrupção dele; meio: as ajudas temáticas; base: sequência e recorde.
  */
 export default function ToolsPanel({ round, player, locked, ringArmed, onToggleRing, onHelp }) {
   const persona = personaAt(round?.persona || player?.avatar);
@@ -25,8 +23,7 @@ export default function ToolsPanel({ round, player, locked, ringArmed, onToggleR
   const streak = round?.streak ?? 0;
   const score = round?.score ?? 0;
   const best = player?.bestScore ?? 0;
-  const ringFactor = RING_FACTOR[persona.code] ?? 2;
-  const ringCost = RING_CORRUPTION[persona.code] ?? 15;
+  const corruption = round?.corruption ?? 0;
   const hobbit = round?.journey === "hobbit";
 
   return (
@@ -47,9 +44,25 @@ export default function ToolsPanel({ round, player, locked, ringArmed, onToggleR
             <img src={ringIcon} alt="" />
             <span>{ringArmed ? "Anel no dedo" : "Usar o Anel"}</span>
           </button>
-          <p className="tools-note">
-            Acerto vale ×{fmt(ringFactor)}, mas corrompe +{ringCost}.
-          </p>
+          {/* O Peso do Anel: em 100 a partida termina */}
+          <div className="corruption">
+            <p id="corruption-label" className="corruption-label">
+              Corrupção do Anel
+            </p>
+            {/* a chama (fire.svg, animada) deitada na ponta do preenchimento; fica fora da
+                barra porque ela corta o que passa da borda */}
+            <div className="corruption-track" style={{ "--pct": `${corruption}%` }}>
+              <div className="corruption-bar" role="meter" aria-labelledby="corruption-label" aria-valuemin={0} aria-valuemax={100} aria-valuenow={corruption}>
+                <div className="corruption-fill"></div>
+              </div>
+              {/* o SVG vira máscara: a forma (e a animação) dele, pintada com a cor da barra */}
+              <span
+                className={`corruption-flame ${corruption > 0 ? "lit" : ""}`}
+                style={{ "--flame": `url(${fireIcon})` }}
+                aria-hidden="true"
+              ></span>
+            </div>
+          </div>
         </section>
 
         {/* Ajudas temáticas */}
@@ -70,7 +83,7 @@ export default function ToolsPanel({ round, player, locked, ringArmed, onToggleR
                     aria-label={`${h.name}: ${h.description} (${remaining} restante)`}
                   >
                     <span className="help-icon" aria-hidden="true">
-                      {h.icon}
+                      <img src={h.icon} alt="" />
                     </span>
                     <span className="help-text">
                       <span className="help-name">{h.name}</span>
@@ -101,10 +114,6 @@ export default function ToolsPanel({ round, player, locked, ringArmed, onToggleR
             </div>
           )}
         </dl>
-
-        <p className="tools-persona">
-          <strong>{persona.name}:</strong> {persona.abilities.map((a) => a.description).join(" ")}
-        </p>
       </div>
     </aside>
   );

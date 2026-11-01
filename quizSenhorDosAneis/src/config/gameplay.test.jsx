@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import Sidebar from "../components/layout/Sidebar";
+import ToolsPanel from "../components/layout/ToolsPanel";
 import { gameReducer, initialState } from "../hooks/useGameSession";
 import { CORRUPTED_LINES, LINES, pickLine } from "./lines";
 import { PERSONAS } from "./personas";
@@ -42,6 +43,26 @@ describe("falas dos personagens", () => {
     for (let i = 0; i < 20; i++) expect(pickLine("sam", { isCorrect: true }, first)).not.toBe(first);
     expect(CORRUPTED_LINES).toContain(pickLine("sam", { isCorrect: false, corruption: 90 }));
   });
+
+  it("40 falas de acerto e 40 de erro por personagem, sem repetir, curtas para a placa", () => {
+    for (const p of PERSONAS) {
+      for (const key of ["correct", "wrong"]) {
+        const pool = LINES[p.code][key];
+        expect(pool.length).toBeGreaterThanOrEqual(40);
+        expect(new Set(pool).size).toBe(pool.length);
+        for (const l of pool) expect(l.length).toBeLessThanOrEqual(70);
+      }
+    }
+  });
+
+  it("não repete fala dentro da partida", () => {
+    const used = new Set();
+    for (let i = 0; i < 40; i++) {
+      const l = pickLine("gimli", { isCorrect: true }, used);
+      expect(used.has(l)).toBe(false);
+      used.add(l);
+    }
+  });
 });
 
 describe("Anel e ajudas no estado do jogo", () => {
@@ -60,13 +81,18 @@ describe("Anel e ajudas no estado do jogo", () => {
 });
 
 describe("Sidebar 2.0", () => {
-  it("placa mostra o personagem e a fala; painel mostra regra e corrupção", () => {
+  it("placa mostra o personagem e a fala; painel mostra a regra", () => {
     const outcome = { isCorrect: true, points: 1200, explanation: "Curiosidade.", line: "Bilbo ficaria orgulhoso." };
     render(<Sidebar player={{ name: "Lukas" }} round={{ ...round, corruption: 45 }} region={0} outcome={outcome} timerRunning={false} />);
     expect(screen.getByRole("heading", { name: "Frodo" })).toBeInTheDocument();
     expect(screen.queryByText("Lukas")).not.toBeInTheDocument();
     expect(screen.getByText(/Paz do Condado/)).toBeInTheDocument();
-    expect(screen.getByRole("meter")).toHaveAttribute("aria-valuenow", "45");
+    expect(screen.queryByRole("meter")).not.toBeInTheDocument();
     expect(screen.getByText(/Bilbo ficaria orgulhoso/)).toBeInTheDocument();
+  });
+
+  it("painel da direita mostra a corrupção do Anel embaixo do botão", () => {
+    render(<ToolsPanel round={{ ...round, corruption: 45 }} player={{ name: "Lukas" }} locked={false} ringArmed={false} />);
+    expect(screen.getByRole("meter", { name: "Corrupção do Anel" })).toHaveAttribute("aria-valuenow", "45");
   });
 });
