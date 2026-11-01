@@ -263,6 +263,8 @@
 /* cronômetro logo acima da barra de progresso, no pé do painel */
 .cronometro-sidebar {
   flex: 0 0 auto;
+  margin-top: 0;
+  padding-top: 0;
   height: clamp(100px, 15dvh, 160px);
   display: flex;
   align-items: flex-end;
@@ -270,6 +272,8 @@
 }
 
 .cronometro-sidebar .conometro-box {
+  margin-top: 0;
+  padding-top: 0;
   width: auto;
   height: 100%;
   max-height: 170px;
