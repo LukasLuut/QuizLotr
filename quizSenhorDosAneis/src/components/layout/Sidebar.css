@@ -266,6 +266,7 @@
   margin-top: 0;
   padding-top: 0;
   height: clamp(76px, 11dvh, 120px); /* 25% mais baixa */
+  translate: 0 15px; /* cronômetro 15 px mais para baixo */
   display: flex;
   align-items: flex-end;
   justify-content: center;
