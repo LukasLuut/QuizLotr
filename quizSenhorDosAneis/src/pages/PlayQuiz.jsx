@@ -206,7 +206,6 @@ function PlayQuiz() {
             onTimeout={game.timeout}
             onAdvance={game.startTravel}
             onArrive={game.arrived}
-            onDebugSkip={game.debugSkipRegion}
           />
         </div>
 

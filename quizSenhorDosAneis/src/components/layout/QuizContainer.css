@@ -194,24 +194,6 @@
   }
 }
 
-/* Botão de teste (só em desenvolvimento) */
-.debug-skip {
-  margin-top: 4px;
-  padding: 6px 16px;
-  border-radius: 8px;
-  border: 1px dashed rgba(255, 200, 120, 0.7);
-  background: rgba(0, 0, 0, 0.55);
-  color: #ffd99a;
-  font-family: var(--font-display);
-  font-size: 15px;
-  letter-spacing: 0.04em;
-}
-
-.debug-skip:hover,
-.debug-skip:focus-visible {
-  background: rgba(0, 0, 0, 0.8);
-}
-
 /* Moria: a pergunta surge do escuro */
 .quiz-question--dark {
   animation: from-the-dark 2.2s ease-out both;
