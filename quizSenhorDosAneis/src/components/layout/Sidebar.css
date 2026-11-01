@@ -142,7 +142,10 @@
 
 /* Fala do personagem na placa, depois de cada resposta */
 .persona-line {
-  min-height: 2.6em;
+  /* altura fixa de 3 linhas (3 x 1.3em): a placa não muda de tamanho com falas
+     maiores ou menores */
+  height: 3.9em;
+  flex: none;
   font-family: var(--font-body);
   font-style: italic;
   font-size: clamp(14px, 1.05vw, 17px);
