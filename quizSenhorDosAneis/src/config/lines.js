@@ -292,3 +292,22 @@ export function pickLine(persona, { isCorrect, usedRing, corruption = 0 }, previ
   const options = pool.length > 1 ? pool.filter((l) => l !== previous) : pool;
   return options[Math.floor(Math.random() * options.length)];
 }
+
+// Fala de abertura de cada personagem (antes da primeira resposta), sorteada por partida
+export const INTRO_LINES = {
+  frodo: ["Vou levar o Anel a Mordor... embora eu não saiba o caminho.", "O Condado parece tão longe já.", "Bilbo sempre dizia que é perigoso sair pela porta."],
+  sam: ["Não vou deixar o senhor, Sr. Frodo. Vamos juntos!", "Se eu der mais um passo, será o mais longe de casa que já estive.", "Trouxe panelas, cordas e um pouco de sal. Vamos lá!"],
+  gandalf: ["Um mago nunca se atrasa. Comecemos.", "Tudo o que temos de decidir é o que fazer com o tempo que nos é dado.", "A estrada segue sempre em frente. Pense antes de responder."],
+  pippin: ["Já tomamos o café da manhã? E o segundo?", "Que aventura! Eu acho. Para onde vamos mesmo?", "Merry, segura minha mão... digo, vamos nessa!"],
+  legolas: ["Meus olhos já veem o caminho à frente.", "As árvores sussurram. Estou pronto.", "Vamos ver quem acerta mais, Gimli."],
+  gimli: ["Que venham as perguntas! Meu machado está pronto.", "Ninguém vence um anão em teimosia.", "Contem comigo, pela barba de Durin!"],
+  aragorn: ["Se pela vida ou pela morte eu puder proteger vocês, assim farei.", "Nosso caminho é longo. Sigamos.", "Fiquem perto de mim. A estrada é perigosa."],
+  boromir: ["Pela glória de Gondor, comecemos!", "Um dia de batalha não se vence parado.", "Gondor espera por nós. Avante!"],
+  arwen: ["Que a graça dos elfos guie seus passos.", "Há esperança enquanto a Sociedade estiver unida.", "O rio guardará o caminho. Vamos."],
+  galadriel: ["Esta tarefa foi designada a você. Se não encontrar o caminho, ninguém encontrará.", "Que a luz esteja com você onde as outras luzes se apagarem.", "O espelho mostra o que foi, o que é e o que pode vir a ser."],
+};
+
+export function pickIntro(persona) {
+  const pool = INTRO_LINES[persona] || INTRO_LINES.gandalf;
+  return pool[Math.floor(Math.random() * pool.length)];
+}

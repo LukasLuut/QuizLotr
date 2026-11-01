@@ -22,7 +22,7 @@ const corruptionLabel = (c) => (c >= 70 ? "O Anel te domina" : c >= 40 ? "O Anel
  * 2) painel da partida: região, regra e pontuação no topo; explicação da última
  *    resposta no meio; cronômetro e, embaixo, a barra de progresso.
  */
-export default function Sidebar({ player, round, region, outcome, timerRunning }) {
+export default function Sidebar({ player, round, region, outcome, introLine = null, timerRunning }) {
   const answered = round?.answered ?? 0;
   const total = round?.total ?? 0;
   const percent = total > 0 ? Math.round((answered / total) * 100) : 0;
@@ -38,8 +38,9 @@ export default function Sidebar({ player, round, region, outcome, timerRunning }
         {/* nome do personagem e a fala dele depois de cada resposta */}
         <div className="player-text">
           <h2 className="player-name">{persona.name}</h2>
-          <p className="persona-line" key={outcome?.line} aria-live="polite">
-            {outcome?.line ? `“${outcome.line}”` : ""}
+          {/* antes da primeira resposta, a fala de abertura */}
+          <p className="persona-line" key={outcome ? outcome.line : introLine} aria-live="polite">
+            {outcome?.line ? `“${outcome.line}”` : !outcome && introLine ? `“${introLine}”` : ""}
           </p>
         </div>
 

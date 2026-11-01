@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./PlayQuiz.css";
 import VideoTransition from "../components/videoTransition/VideoTransition";
@@ -16,7 +16,7 @@ import { useAuth } from "../context/AuthContext";
 import { useAudio } from "../context/AudioContext";
 import { clearStoredRound, useGameSession } from "../hooks/useGameSession";
 import { regionAt } from "../config/regions";
-import { pickLine } from "../config/lines";
+import { pickIntro, pickLine } from "../config/lines";
 
 const isTyping = (el) => el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
 
@@ -41,6 +41,8 @@ function PlayQuiz() {
   // fala do personagem: sorteada a cada resposta, sem repetir a anterior
   const lastLine = useRef(null);
   const persona = round?.persona;
+  // fala de abertura: uma por partida, até a primeira resposta
+  const introLine = useMemo(() => (roundId ? pickIntro(persona) : null), [roundId, persona]);
 
   useEffect(() => {
     if (phase === "feedback" && result) {
@@ -191,6 +193,7 @@ function PlayQuiz() {
             round={round}
             region={region}
             outcome={outcome}
+            introLine={introLine}
             timerRunning={!menuOpen && phase !== "finished"}
           />
         </div>
