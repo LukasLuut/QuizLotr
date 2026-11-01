@@ -13,6 +13,9 @@
   padding: 0 12%;
   transition: transform 0.2s ease, filter 0.2s ease;
   overflow: hidden;
+  /* cada alternativa na sua camada: o hover repinta só o botão, e a sombra (drop-shadow)
+     é aplicada pela GPU em vez de recalculada junto com o overlay da corrupção */
+  will-change: transform;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,6 +42,7 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease;
+  will-change: opacity;
 }
 
 /* Sempre começa visível o marrom */

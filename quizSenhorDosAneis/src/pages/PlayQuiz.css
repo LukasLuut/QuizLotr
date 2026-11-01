@@ -279,6 +279,10 @@
   object-fit: cover;
   pointer-events: none;
   mix-blend-mode: screen;
+  /* camada própria na GPU: a mistura "screen" é feita pelo compositor, sem repintar a
+     tela a cada mudança embaixo (ex.: hover das alternativas) */
+  will-change: opacity;
+  transform: translateZ(0);
   transition: opacity 1.5s ease;
 }
 
