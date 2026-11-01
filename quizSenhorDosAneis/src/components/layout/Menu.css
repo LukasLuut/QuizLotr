@@ -11,8 +11,9 @@
 
 .box-menu-dialog {
   position: relative;
-  width: min(400px, 92vw, calc((100dvh - 32px) * 1287 / 1956));
-  aspect-ratio: 1287 / 1956;
+  /* 10% mais baixa que a proporção da moldura (1287x1956 -> 1287x1760) */
+  width: min(400px, 92vw, calc((100dvh - 32px) * 1287 / 1760));
+  aspect-ratio: 1287 / 1760;
   outline: none;
 }
 
@@ -56,6 +57,7 @@
   margin-block: auto;
   display: flex;
   flex-direction: column;
+  gap: 5px; /* +5 px entre os botões */
   align-items: center;
   width: 100%;
 }
