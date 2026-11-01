@@ -48,7 +48,7 @@ export default function ToolsPanel({ round, player, locked, ringArmed, onToggleR
             <span>{ringArmed ? "Anel no dedo" : "Usar o Anel"}</span>
           </button>
           <p className="tools-note">
-            Acerto vale ×{fmt(ringFactor)}, mas corrompe +{ringCost}. Usado {round?.ringUses ?? 0}x.
+            Acerto vale ×{fmt(ringFactor)}, mas corrompe +{ringCost}.
           </p>
         </section>
 
