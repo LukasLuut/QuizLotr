@@ -14,8 +14,6 @@ function outcomeTitle(o) {
   return o.points < 0 ? `Errou! ${o.points}` : "Não foi dessa vez.";
 }
 
-const corruptionLabel = (c) => (c >= 70 ? "O Anel te domina" : c >= 40 ? "O Anel sussurra" : c > 0 ? "O Anel pesa" : "Coração puro");
-
 /**
  * Coluna do jogador em duas caixas:
  * 1) placa do personagem (foto, nome, fala após cada resposta e a corrupção do Anel);
@@ -48,7 +46,6 @@ export default function Sidebar({ player, round, region, outcome, introLine = nu
         <div className="corruption">
           <p id="corruption-label" className="corruption-label">
             <span className="corruption-title">Corrupção do Anel</span>
-            <span>{corruptionLabel(corruption)}</span>
           </p>
           <div className="corruption-bar" role="meter" aria-labelledby="corruption-label" aria-valuemin={0} aria-valuemax={100} aria-valuenow={corruption}>
             <div className="corruption-fill" style={{ width: `${corruption}%` }}></div>
