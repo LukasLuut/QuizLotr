@@ -1,6 +1,9 @@
 /* Painel da direita: mesma moldura do painel da partida (box-lateral, 1287x1956) */
 .tools-panel {
-  height: 100%;
+  /* 10% mais baixa que a coluna, centralizada na altura */
+  height: 90%;
+  position: relative;
+  top: 5%;
   background: url("../../assets/images/box/box-lateral.webp") center / 100% 100% no-repeat;
   padding: 16% 14% calc(13% + 15px); /* +15 px de respiro na base */
   display: flex;
@@ -214,6 +217,7 @@
 @media (max-width: 1023px) {
   .tools-panel {
     height: auto;
+    top: 0;
     background-image: url("../../assets/images/box/box-lateral-girado.webp");
     padding: 24px 8%;
   }
