@@ -28,7 +28,7 @@ function QuestionTimer({ seconds, running, onExpire }) {
   return (
     <div className={`question-timer ${left <= 5 ? "urgent" : ""}`} role="timer" aria-live={left <= 5 ? "assertive" : "off"}>
       <span className="timer-icon" aria-hidden="true">⏳</span>
-      {left}s
+      <span className="timer-value">{left}s</span>
     </div>
   );
 }

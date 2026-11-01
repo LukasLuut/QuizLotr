@@ -118,12 +118,10 @@
 
 /* Tempo da pergunta (modo Desafio) na moldura do cronômetro */
 .question-timer {
+  position: relative;
   flex: none;
-  width: 56px;
+  width: 64px;
   aspect-ratio: 1217 / 1600;
-  display: grid;
-  place-items: center;
-  padding-top: 14%;
   background: url("../../assets/images/cronometro-border.webp") center / contain no-repeat;
   font-family: var(--font-display);
   font-size: 17px;
@@ -133,6 +131,15 @@
 
 .question-timer .timer-icon {
   display: none;
+}
+
+/* número no centro do círculo grande da moldura (o anel pequeno fica em cima) */
+.question-timer .timer-value {
+  position: absolute;
+  left: 50%;
+  top: 61%;
+  translate: -50% -50%;
+  line-height: 1;
 }
 
 .question-timer.urgent {
