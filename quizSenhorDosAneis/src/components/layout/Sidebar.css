@@ -231,7 +231,9 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* "safe": texto maior que a caixa começa do topo (rolando) em vez de ser cortado em cima */
+  justify-content: safe center;
+  padding-top: 5px;
   overflow-y: auto;
   font-family: var(--font-title);
   font-size: clamp(14px, 1.15vw, 18px);
